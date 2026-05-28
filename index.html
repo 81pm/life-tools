@@ -1,0 +1,792 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>생활편의 도구 - 계산기와 변환기를 한 곳에</title>
+  <meta name="description" content="만나이, 연봉 실수령액, 주휴수당, D-Day, 음력변환, BMI 등 생활에 필요한 계산기와 변환기를 빠르게 이용하세요." />
+  <meta name="theme-color" content="#2563eb" />
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --surface: rgba(255,255,255,.88);
+      --surface-strong: #ffffff;
+      --text: #152033;
+      --sub: #64748b;
+      --line: #e2e8f0;
+      --primary: #2563eb;
+      --primary-2: #06b6d4;
+      --primary-soft: #eaf2ff;
+      --success: #16a34a;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --shadow: 0 18px 45px rgba(15, 23, 42, .10);
+      --shadow-soft: 0 10px 24px rgba(15, 23, 42, .07);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 20% 0%, rgba(37,99,235,.16), transparent 30%),
+        radial-gradient(circle at 82% 12%, rgba(6,182,212,.14), transparent 28%),
+        linear-gradient(180deg, #eef5ff 0%, var(--bg) 42%, #ffffff 100%);
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+
+    .app {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 18px 0 calc(78px + var(--safe-bottom));
+    }
+
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 12px 0;
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 44px;
+      height: 44px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      box-shadow: 0 12px 28px rgba(37,99,235,.28);
+      flex: 0 0 auto;
+    }
+
+    .brand-text strong {
+      display: block;
+      font-size: 18px;
+      line-height: 1.15;
+      letter-spacing: -.3px;
+    }
+
+    .brand-text span {
+      display: block;
+      margin-top: 2px;
+      color: var(--sub);
+      font-size: 12px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pill-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 40px;
+      padding: 0 14px;
+      border: 1px solid rgba(226,232,240,.95);
+      border-radius: 999px;
+      background: rgba(255,255,255,.75);
+      color: #334155;
+      font-size: 13px;
+      font-weight: 800;
+      box-shadow: 0 6px 18px rgba(15,23,42,.05);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.16fr) minmax(320px, .84fr);
+      gap: 22px;
+      margin-top: 12px;
+    }
+
+    .hero-card,
+    .stat-card,
+    .search-panel,
+    .category-card,
+    .tool-card,
+    .ad-card,
+    .notice-card {
+      border: 1px solid rgba(226,232,240,.82);
+      background: var(--surface);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(18px);
+    }
+
+    .hero-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-xl);
+      padding: clamp(28px, 5vw, 52px);
+      min-height: 356px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card::before,
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      pointer-events: none;
+    }
+
+    .hero-card::before {
+      right: -90px;
+      top: -100px;
+      width: 260px;
+      height: 260px;
+      background: rgba(37,99,235,.12);
+    }
+
+    .hero-card::after {
+      right: 70px;
+      bottom: -88px;
+      width: 190px;
+      height: 190px;
+      background: rgba(6,182,212,.12);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 13px;
+      border-radius: 999px;
+      color: var(--primary);
+      background: var(--primary-soft);
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 690px;
+      font-size: clamp(34px, 5.4vw, 58px);
+      line-height: 1.08;
+      letter-spacing: -1.8px;
+    }
+
+    .hero-desc {
+      margin: 18px 0 0;
+      max-width: 650px;
+      color: var(--sub);
+      font-size: 17px;
+      line-height: 1.75;
+    }
+
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 30px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 48px;
+      padding: 0 18px;
+      border-radius: 16px;
+      font-weight: 900;
+      transition: .18s ease;
+    }
+
+    .cta.primary {
+      color: white;
+      background: linear-gradient(135deg, var(--primary), #1d4ed8);
+      box-shadow: 0 12px 26px rgba(37,99,235,.25);
+    }
+
+    .cta.secondary {
+      background: #fff;
+      color: #1e293b;
+      border: 1px solid var(--line);
+    }
+
+    .cta:hover,
+    .tool-card:hover,
+    .category-card:hover,
+    .pill-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .hero-side {
+      display: grid;
+      gap: 14px;
+    }
+
+    .search-panel {
+      border-radius: var(--radius-xl);
+      padding: 20px;
+    }
+
+    .search-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .search-title strong { font-size: 17px; }
+    .search-title span { color: var(--sub); font-size: 12px; font-weight: 700; }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 50px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: #fff;
+    }
+
+    .search-box input {
+      width: 100%;
+      border: 0;
+      outline: 0;
+      color: var(--text);
+      background: transparent;
+    }
+
+    .quick-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .tag {
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      color: #475569;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .stat-card {
+      border-radius: 20px;
+      padding: 16px;
+      background: rgba(255,255,255,.82);
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: 22px;
+      letter-spacing: -.5px;
+    }
+
+    .stat-card span {
+      display: block;
+      margin-top: 4px;
+      color: var(--sub);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 34px 0 16px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: 26px;
+      letter-spacing: -.7px;
+    }
+
+    .section-head p {
+      margin: 7px 0 0;
+      color: var(--sub);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .category-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .category-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-radius: 20px;
+      padding: 16px;
+      background: rgba(255,255,255,.8);
+      transition: .18s ease;
+    }
+
+    .category-card strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .category-card span {
+      display: block;
+      margin-top: 3px;
+      color: var(--sub);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .tool-card {
+      position: relative;
+      min-height: 210px;
+      padding: 22px;
+      border-radius: var(--radius-lg);
+      background: rgba(255,255,255,.92);
+      overflow: hidden;
+      transition: .18s ease;
+    }
+
+    .tool-card::after {
+      content: "";
+      position: absolute;
+      right: -38px;
+      bottom: -42px;
+      width: 132px;
+      height: 132px;
+      border-radius: 40px;
+      background: linear-gradient(135deg, rgba(37,99,235,.08), rgba(6,182,212,.08));
+      transform: rotate(18deg);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .icon-box {
+      width: 56px;
+      height: 56px;
+      display: grid;
+      place-items: center;
+      border-radius: 20px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      flex: 0 0 auto;
+    }
+
+    .label {
+      padding: 6px 9px;
+      border-radius: 999px;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      color: #475569;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .label.hot { color: #dc2626; background: #fff1f2; border-color: #ffe4e6; }
+    .label.new { color: #0284c7; background: #f0f9ff; border-color: #e0f2fe; }
+
+    .tool-card h3 {
+      margin: 18px 0 8px;
+      font-size: 21px;
+      letter-spacing: -.5px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tool-card p {
+      margin: 0;
+      color: var(--sub);
+      font-size: 14px;
+      line-height: 1.55;
+      min-height: 44px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tool-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 20px;
+      color: var(--primary);
+      font-size: 14px;
+      font-weight: 950;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tool-footer small {
+      color: #94a3b8;
+      font-weight: 800;
+    }
+
+    .ad-card {
+      margin-top: 24px;
+      min-height: 108px;
+      border-radius: var(--radius-lg);
+      border-style: dashed;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: var(--sub);
+      padding: 18px;
+      background: rgba(255,255,255,.8);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .notice-card {
+      margin-top: 18px;
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      color: #475569;
+      font-size: 13px;
+      line-height: 1.7;
+      background: rgba(255,255,255,.78);
+    }
+
+    footer {
+      margin-top: 28px;
+      padding: 22px 0 0;
+      border-top: 1px solid rgba(226,232,240,.9);
+      color: var(--sub);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      left: 50%;
+      bottom: calc(12px + var(--safe-bottom));
+      transform: translateX(-50%);
+      z-index: 30;
+      width: min(520px, calc(100% - 24px));
+      display: none;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      padding: 8px;
+      border: 1px solid rgba(226,232,240,.92);
+      border-radius: 24px;
+      background: rgba(255,255,255,.88);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 18px 42px rgba(15,23,42,.16);
+    }
+
+    .bottom-nav a {
+      display: grid;
+      place-items: center;
+      gap: 3px;
+      min-height: 54px;
+      border-radius: 17px;
+      color: #64748b;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .bottom-nav a.active {
+      color: var(--primary);
+      background: var(--primary-soft);
+    }
+
+    svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 2.2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    .brand-mark svg { width: 25px; height: 25px; }
+    .icon-box svg { width: 29px; height: 29px; }
+    .category-card .icon-box { width: 42px; height: 42px; border-radius: 15px; }
+    .category-card .icon-box svg { width: 23px; height: 23px; }
+    .bottom-nav svg { width: 21px; height: 21px; }
+
+    @media (max-width: 940px) {
+      .hero { grid-template-columns: 1fr; }
+      .tools-grid { grid-template-columns: repeat(2, 1fr); }
+      .category-row { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 620px) {
+      .app { width: min(100% - 22px, 1180px); padding-top: 10px; }
+      .header-actions .pill-btn:nth-child(2) { display: none; }
+      .brand-text span { display: none; }
+      .hero-card { min-height: auto; padding: 28px 22px; border-radius: 26px; }
+      .hero-desc { font-size: 15px; }
+      .hero-cta .cta { width: 100%; }
+      .stats { grid-template-columns: repeat(3, 1fr); }
+      .stat-card { padding: 13px 10px; }
+      .stat-card strong { font-size: 19px; }
+      .category-row { display: flex; overflow-x: auto; padding-bottom: 4px; scroll-snap-type: x mandatory; }
+      .category-card { min-width: 190px; scroll-snap-align: start; }
+      .tools-grid { grid-template-columns: 1fr; gap: 12px; }
+      .tool-card { min-height: 190px; padding: 20px; }
+      .section-head { display: block; margin-top: 28px; }
+      .bottom-nav { display: grid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <a href="index.html" class="brand" aria-label="생활편의 도구 홈">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M4 13.5 9.5 19 20 5"/></svg>
+        </span>
+        <span class="brand-text">
+          <strong>생활편의 도구</strong>
+          <span>빠른 계산 · 쉬운 변환 · 모바일 최적화</span>
+        </span>
+      </a>
+      <nav class="header-actions" aria-label="상단 메뉴">
+        <a class="pill-btn" href="#tools">전체 기능</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="main-title">
+        <div class="hero-card">
+          <div class="eyebrow">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 3 14h8l-1 8 10-12h-8l1-8z"/></svg>
+            매일 쓰는 생활 계산기
+          </div>
+          <h1 id="main-title">필요한 계산을<br />가장 빠르게.</h1>
+          <p class="hero-desc">
+            만나이, 연봉 실수령액, 주휴수당, D-Day, 음력변환, BMI까지.
+            복잡한 기능은 줄이고 모바일에서 바로 쓰기 좋은 도구로 구성했습니다.
+          </p>
+          <div class="hero-cta">
+            <a class="cta primary" href="#tools">전체 기능 보기 <span>→</span></a>
+            <a class="cta secondary" href="age.html">만나이 바로 계산</a>
+          </div>
+        </div>
+
+        <aside class="hero-side" aria-label="인기 기능">
+          <div class="search-panel">
+            <div class="search-title">
+              <strong>인기 기능</strong>
+              <span>많이 찾는 계산기</span>
+            </div>
+
+            <div class="quick-list" style="display:grid;gap:10px;">
+              <a class="quick-item" href="salary.html" style="display:flex;align-items:center;gap:12px;padding:14px;border-radius:18px;background:#f8fbff;border:1px solid var(--line);transition:.18s ease;">
+                <span class="icon-box" style="width:44px;height:44px;border-radius:15px;">
+                  <svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="3"/></svg>
+                </span>
+                <span>
+                  <strong style="display:block;font-size:14px;">연봉 계산</strong>
+                  <span style="display:block;margin-top:3px;color:var(--sub);font-size:12px;">실수령액 빠르게 확인</span>
+                </span>
+              </a>
+
+              <a class="quick-item" href="weekly-pay.html" style="display:flex;align-items:center;gap:12px;padding:14px;border-radius:18px;background:#f8fbff;border:1px solid var(--line);transition:.18s ease;">
+                <span class="icon-box" style="width:44px;height:44px;border-radius:15px;">
+                  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                </span>
+                <span>
+                  <strong style="display:block;font-size:14px;">주휴수당</strong>
+                  <span style="display:block;margin-top:3px;color:var(--sub);font-size:12px;">알바·시급 계산</span>
+                </span>
+              </a>
+
+              <a class="quick-item" href="dday.html" style="display:flex;align-items:center;gap:12px;padding:14px;border-radius:18px;background:#f8fbff;border:1px solid var(--line);transition:.18s ease;">
+                <span class="icon-box" style="width:44px;height:44px;border-radius:15px;">
+                  <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>
+                </span>
+                <span>
+                  <strong style="display:block;font-size:14px;">D-Day 계산</strong>
+                  <span style="display:block;margin-top:3px;color:var(--sub);font-size:12px;">시험·기념일 계산</span>
+                </span>
+              </a>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section aria-labelledby="category-title">
+        <div class="section-head">
+          <div>
+            <h2 id="category-title">카테고리</h2>
+            <p>기능이 늘어날 때 카테고리별로 확장하기 좋은 구조입니다.</p>
+          </div>
+        </div>
+
+        <div class="category-row">
+          <a class="category-card" href="#tools">
+            <span class="icon-box"><svg viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h16"/></svg></span>
+            <span><strong>전체 도구</strong><span>모든 기능 보기</span></span>
+          </a>
+          <a class="category-card" href="#money">
+            <span class="icon-box"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+            <span><strong>급여·수당</strong><span>연봉, 주휴수당</span></span>
+          </a>
+          <a class="category-card" href="#date">
+            <span class="icon-box"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg></span>
+            <span><strong>날짜·달력</strong><span>만나이, D-Day, 음력</span></span>
+          </a>
+          <a class="category-card" href="#health">
+            <span class="icon-box"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></span>
+            <span><strong>건강</strong><span>BMI 계산</span></span>
+          </a>
+        </div>
+      </section>
+
+      <section id="tools" aria-labelledby="tools-title">
+        <div class="section-head">
+          <div>
+            <h2 id="tools-title">생활편의 기능</h2>
+            <p>카드를 누르면 각 상세 계산 페이지로 이동합니다.</p>
+          </div>
+        </div>
+
+        <div class="tools-grid" id="toolGrid">
+          <a class="tool-card" id="date" href="age.html" data-keywords="만나이 나이 생년월일 생일">
+            <div class="card-top">
+              <span class="icon-box"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+              <span class="label hot">인기</span>
+            </div>
+            <h3>만나이 계산</h3>
+            <p>생년월일을 기준으로 현재 만나이와 생일 전후 나이를 계산합니다.</p>
+            <div class="tool-footer"><span>계산하러 가기 →</span><small>age.html</small></div>
+          </a>
+
+          <a class="tool-card" id="money" href="salary.html" data-keywords="연봉 실수령액 월급 세금 4대보험">
+            <div class="card-top">
+              <span class="icon-box"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M6 9v.01M18 15v.01"/></svg></span>
+              <span class="label hot">추천</span>
+            </div>
+            <h3>연봉 계산</h3>
+            <p>연봉 입력 후 월 예상 실수령액과 공제 항목을 확인합니다.</p>
+            <div class="tool-footer"><span>계산하러 가기 →</span><small>salary.html</small></div>
+          </a>
+
+          <a class="tool-card" href="weekly-pay.html" data-keywords="주휴수당 시급 알바 근무시간 최저임금">
+            <div class="card-top">
+              <span class="icon-box"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+              <span class="label hot">인기</span>
+            </div>
+            <h3>주휴수당</h3>
+            <p>시급, 근무일, 근무시간을 입력해 예상 주휴수당을 계산합니다.</p>
+            <div class="tool-footer"><span>계산하러 가기 →</span><small>weekly-pay.html</small></div>
+          </a>
+
+          <a class="tool-card" href="dday.html" data-keywords="디데이 dday 기념일 시험 여행 날짜">
+            <div class="card-top">
+              <span class="icon-box"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18M9 15h6"/></svg></span>
+              <span class="label">날짜</span>
+            </div>
+            <h3>D-Day</h3>
+            <p>기념일, 시험, 여행 등 특정 날짜까지 남은 기간을 계산합니다.</p>
+            <div class="tool-footer"><span>계산하러 가기 →</span><small>dday.html</small></div>
+          </a>
+
+          <a class="tool-card" href="lunar.html" data-keywords="음력 양력 변환 달력 생일 명절">
+            <div class="card-top">
+              <span class="icon-box"><svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span>
+              <span class="label new">확장</span>
+            </div>
+            <h3>음력변환</h3>
+            <p>양력과 음력 날짜를 변환하고 음력 생일 확인에 활용합니다.</p>
+            <div class="tool-footer"><span>변환하러 가기 →</span><small>lunar.html</small></div>
+          </a>
+
+          <a class="tool-card" id="health" href="bmi.html" data-keywords="bmi 비만도 체질량지수 키 몸무게 건강">
+            <div class="card-top">
+              <span class="icon-box"><svg viewBox="0 0 24 24"><path d="M6 3h12a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3z"/><path d="M8 14a4 4 0 0 1 8 0M12 10v4"/></svg></span>
+              <span class="label">건강</span>
+            </div>
+            <h3>BMI 계산</h3>
+            <p>키와 몸무게를 입력해 체질량지수와 비만도 구간을 확인합니다.</p>
+            <div class="tool-footer"><span>계산하러 가기 →</span><small>bmi.html</small></div>
+          </a>
+        </div>
+      </section>
+
+      <div id="ad" class="ad-card" aria-label="광고 영역">
+        <strong>광고 영역</strong><br />
+        AdSense 승인 후 이 영역에 광고 스크립트 또는 배너 코드를 삽입하면 됩니다.
+      </div>
+
+      <div class="notice-card">
+        계산 결과는 참고용입니다. 연봉, 세금, 수당 계산은 제도 변경과 개인 조건에 따라 실제 결과가 달라질 수 있습니다.
+      </div>
+    </main>
+
+    <footer>
+      <strong>생활편의 도구</strong><br />
+      빠르고 간편한 생활 계산 서비스<br /><br />
+
+      © 2026 생활편의 도구<br />
+      Designed &amp; Developed by Chulhee
+    </footer>
+  </div>
+
+  <nav class="bottom-nav" aria-label="모바일 하단 메뉴">
+    <a class="active" href="index.html"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg><span>홈</span></a>
+    <a href="#tools"><svg viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h16"/></svg><span>도구</span></a>
+    <a href="salary.html"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="3"/></svg><span>연봉</span></a>
+    <a href="dday.html"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg><span>D-Day</span></a>
+  </nav>
+
+  <script>
+    const searchInput = document.getElementById('toolSearch');
+    const toolCards = Array.from(document.querySelectorAll('.tool-card'));
+
+    if (searchInput) {
+      searchInput.addEventListener('input', function () {
+        const keyword = this.value.trim().toLowerCase();
+
+        toolCards.forEach(function (card) {
+          const text = (card.innerText + ' ' + (card.dataset.keywords || '')).toLowerCase();
+          card.style.display = !keyword || text.includes(keyword) ? '' : 'none';
+        });
+      });
+    }
+  </script>
+</body>
+</html>
