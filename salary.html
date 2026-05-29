@@ -288,7 +288,7 @@
     }
 
     function runAutoCalc(){
-      if(autoCalc.checked && getNumber(salaryInput.value) > 0) calcSalary(false);
+      if(autoCalc.checked && getNumber(salaryInput.value) > 0) calcSalary(false, false);
     }
 
     function formatNumberInput(value){
@@ -306,8 +306,9 @@
       calcSalary();
     }
 
-    function calcSalary(scroll){
+    function calcSalary(scroll, showAlert){
       if(scroll === undefined) scroll = true;
+      if(showAlert === undefined) showAlert = true;
 
       const annualSalary = getNumber(salaryInput.value);
       const monthlyTaxFree = getNumber(taxFreeInput.value);
@@ -315,10 +316,12 @@
       const children = Number(childrenCount.value);
       const selectedTaxRate = Number(taxRate.value);
 
-      if(!annualSalary || annualSalary < 1000000){
-        alert('연봉을 입력해 주세요.');
-        salaryInput.focus();
-        return;
+      if(!annualSalary){
+          if(showAlert){
+              alert('연봉을 입력해 주세요.');
+              salaryInput.focus();
+          }
+          return;
       }
 
       const monthlyGross = Math.floor(annualSalary / 12);
