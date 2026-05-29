@@ -67,8 +67,12 @@
               <select id="mode"><option value="solarToLunar">양력 → 음력</option><option value="lunarToSolar">음력 → 양력</option></select>
             </div>
             <div class="field">
-              <label for="dateInput">날짜 <span class="hint">1900~2050 권장</span></label>
-              <input id="dateInput" type="date" />
+              <label for="dateTextInput">날짜 <span class="hint">직접입력 또는 달력선택</span></label>
+              <div style="display:grid;grid-template-columns:1fr 54px;gap:8px;">
+                <input id="dateTextInput" type="text" inputmode="numeric" maxlength="10" placeholder="예: 19810529" />
+                <button type="button" class="ghost" onclick="openDatePicker()" aria-label="달력 선택" style="min-height:58px;border-radius:18px;padding:0;">📅</button>
+              </div>
+              <input id="dateInput" type="date" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;" />
             </div>
           </div>
 
@@ -132,24 +136,83 @@
 
   <nav class="bottom-nav"><a href="index.html">홈</a><a href="age.html">만나이</a><a href="dday.html">D-Day</a><a class="active" href="lunar.html">음력</a></nav>
 
-  <script src="https://cdn.jsdelivr.net/npm/korean-lunar-calendar@0.3.1/dist/korean-lunar-calendar.min.js"></script>
+  <script>
+    function loadLunarLibrary(callback){
+      const urls = [
+        'https://cdn.jsdelivr.net/npm/korean-lunar-calendar@0.3.6/dist/korean-lunar-calendar.min.js',
+        'https://unpkg.com/korean-lunar-calendar@0.3.6/dist/korean-lunar-calendar.min.js'
+      ];
+
+      let index = 0;
+
+      function tryLoad(){
+        if(index >= urls.length){
+          callback(false);
+          return;
+        }
+
+        const script = document.createElement('script');
+        script.src = urls[index];
+        script.onload = function(){ callback(true); };
+        script.onerror = function(){
+          index++;
+          tryLoad();
+        };
+        document.head.appendChild(script);
+      }
+
+      tryLoad();
+    }
+  </script>
+
   <script>
     const modeInput = document.getElementById('mode');
     const dateInput = document.getElementById('dateInput');
+    const dateTextInput = document.getElementById('dateTextInput');
     const leapInput = document.getElementById('isLeap');
     const autoCalcInput = document.getElementById('autoCalc');
     const resultBox = document.getElementById('result');
     let lastSummary = '';
+    let lunarLibraryReady = false;
 
     initToday();
+    loadLunarLibrary(function(ok){
+      lunarLibraryReady = ok;
+      if(ok && autoCalcInput.value === '1' && dateInput.value){
+        convertDate(false);
+      }
+    });
 
-    [modeInput, dateInput, leapInput, autoCalcInput].forEach(el=>{
+    [modeInput, leapInput, autoCalcInput].forEach(el=>{
       el.addEventListener('change', runAuto);
+    });
+
+    dateTextInput.addEventListener('input', function(){
+      this.value = formatDateText(this.value);
+      const parsed = parseDateText(this.value);
+      if(parsed){
+        dateInput.value = toDateInputValue(parsed);
+        runAuto();
+      }
+    });
+
+    dateTextInput.addEventListener('keydown', function(event){
+      if(event.key === 'Enter'){
+        convertDate();
+      }
+    });
+
+    dateInput.addEventListener('change', function(){
+      if(this.value){
+        const date = parseDate(this.value);
+        dateTextInput.value = formatDateText(toCompactDate(date));
+        runAuto();
+      }
     });
 
     function initToday(){
       const today = new Date();
-      dateInput.value = toDateInputValue(today);
+      setDateValue(today);
       leapInput.disabled = modeInput.value !== 'lunarToSolar';
     }
 
@@ -159,22 +222,24 @@
 
     function runAuto(){
       leapInput.disabled = modeInput.value !== 'lunarToSolar';
-      if(autoCalcInput.value === '1' && dateInput.value) convertDate(false);
+      if(autoCalcInput.value === '1' && getSelectedDate()) convertDate(false);
     }
 
     function convertDate(scroll=true){
-      if(typeof KoreanLunarCalendar === 'undefined'){
-        alert('음력변환 라이브러리를 불러오지 못했습니다. 인터넷 연결 또는 CDN 차단 여부를 확인해 주세요.');
+      if(!lunarLibraryReady || typeof KoreanLunarCalendar === 'undefined'){
+        alert('음력변환 기능을 아직 불러오는 중입니다. 잠시 후 다시 눌러 주세요. 계속 뜨면 모바일 브라우저에서 CDN 접근이 막힌 상태입니다.');
         return;
       }
 
-      if(!dateInput.value){
-        alert('날짜를 선택해 주세요.');
+      const selected = getSelectedDate();
+
+      if(!selected){
+        alert('날짜를 8자리로 입력하거나 달력에서 선택해 주세요. 예: 19810529');
+        dateTextInput.focus();
         return;
       }
 
       const cal = new KoreanLunarCalendar();
-      const selected = parseDate(dateInput.value);
       const y = selected.getFullYear();
       const m = selected.getMonth() + 1;
       const d = selected.getDate();
@@ -210,25 +275,77 @@
       document.getElementById('gapjaText').textContent = gapja.year || '-';
       document.getElementById('dayName').textContent = dayNames[solarForDay.getDay()] + '요일';
 
-      lastSummary = dateInput.value + ' 변환 결과는 ' + resultDate + '입니다.';
+      lastSummary = dateTextInput.value + ' 변환 결과는 ' + resultDate + '입니다.';
       document.getElementById('detailText').innerHTML =
-        '선택한 날짜 <strong>' + dateInput.value + '</strong>의 변환 결과는 <strong>' +
+        '선택한 날짜 <strong>' + dateTextInput.value + '</strong>의 변환 결과는 <strong>' +
         resultDate + '</strong>입니다. 윤달 여부는 <strong>' + (isLeap ? '윤달' : '평달') + '</strong>입니다.';
 
       resultBox.style.display = 'block';
       if(scroll) resultBox.scrollIntoView({behavior:'smooth', block:'nearest'});
     }
 
+    function openDatePicker(){
+      if(dateInput.showPicker){
+        dateInput.showPicker();
+      }else{
+        dateInput.focus();
+        dateInput.click();
+      }
+    }
+
+    function formatDateText(value){
+      let v = String(value).replace(/\D/g,'').slice(0,8);
+      if(v.length >= 5 && v.length <= 6){
+        v = v.slice(0,4) + '.' + v.slice(4);
+      }else if(v.length >= 7){
+        v = v.slice(0,4) + '.' + v.slice(4,6) + '.' + v.slice(6);
+      }
+      return v;
+    }
+
+    function parseDateText(value){
+      const raw = String(value).replace(/\D/g,'');
+      if(!/^\d{8}$/.test(raw)) return null;
+
+      const y = Number(raw.slice(0,4));
+      const m = Number(raw.slice(4,6));
+      const d = Number(raw.slice(6,8));
+      const date = new Date(y, m - 1, d);
+
+      if(date.getFullYear() !== y || date.getMonth() !== m - 1 || date.getDate() !== d){
+        return null;
+      }
+
+      return date;
+    }
+
+    function getSelectedDate(){
+      const parsed = parseDateText(dateTextInput.value);
+      if(parsed) return parsed;
+      if(dateInput.value) return parseDate(dateInput.value);
+      return null;
+    }
+
+    function setDateValue(date){
+      dateInput.value = toDateInputValue(date);
+      dateTextInput.value = formatDateText(toCompactDate(date));
+    }
+
+    function toCompactDate(date){
+      return date.getFullYear() + String(date.getMonth()+1).padStart(2,'0') + String(date.getDate()).padStart(2,'0');
+    }
+
     function parseDate(value){ return new Date(value + 'T00:00:00'); }
     function toDateInputValue(date){ return date.getFullYear() + '-' + String(date.getMonth()+1).padStart(2,'0') + '-' + String(date.getDate()).padStart(2,'0'); }
 
     function resetForm(){
-      initToday();
       modeInput.value = 'solarToLunar';
       leapInput.value = 'false';
       autoCalcInput.value = '1';
+      initToday();
       resultBox.style.display = 'none';
       lastSummary = '';
+      dateTextInput.focus();
     }
 
     function shareResult(){
