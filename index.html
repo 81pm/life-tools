@@ -519,6 +519,7 @@
     .ui-icon.orange{background:var(--orange-soft);color:var(--orange)}
     .ui-icon.purple{background:var(--purple-soft);color:var(--purple)}
     .ui-icon.pink{background:var(--pink-soft);color:var(--pink)}
+    .ui-icon.blue{background:#eef5ff;color:#2563eb;}
 
     .shortcut-card strong{
       display:block;
@@ -1140,6 +1141,7 @@
       money: '<svg viewBox="0 0 24 24"><path d="M6 6h12"/><path d="M8 4l4 16 4-16"/><path d="M5 11h14"/></svg>',
       folder: '<svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>',
       calculator: '<svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h2M12 11h2M16 11h.01M8 15h2M12 15h2M16 15h.01"/></svg>',
+      target: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="M12 2v3"/><path d="M12 19v3"/><path d="M2 12h3"/><path d="M19 12h3"/></svg>`,
       calendar: '<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>',
       moon: '<svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>',
       heart: '<svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/><path d="M3.5 12H8l2-3 3 6 2-3h5.5"/></svg>'
@@ -1208,12 +1210,20 @@
         keywords: '급여 계산 연봉 주휴수당'
       },
       {
-        title: '날짜 계산',
-        desc: '만나이 · D-Day',
-        url: 'dday.html',
+        title: '만나이 계산',
+        desc: '생일 · 한국나이 · 다음 생일까지',
+        url: 'age.html',
         icon: 'calendar',
-        color: 'purple',
-        keywords: '날짜 계산 만나이 dday'
+        color: 'blue',
+        keywords: '날짜 계산 만나이'
+      },
+      {
+        title: 'D-Day 계산',
+        desc: '기념일 · 시험 · 행사까지 남은 날짜',
+        url: 'dday.html',
+        icon: 'target',
+        color: 'orange',
+        keywords: '날짜 계산 dday'
       },
       {
         title: '생활 변환',
