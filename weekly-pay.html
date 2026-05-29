@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>주휴수당 계산기 - 생활편의 도구</title>
+  <meta name="description" content="시급과 근무시간을 입력하면 주휴수당, 주급, 월 예상 급여를 빠르게 계산합니다. 기준값은 data/rates.json에서 관리됩니다." />
+  <meta name="theme-color" content="#2563eb" />
+
+  <style>
+    :root{--bg:#f4f7fb;--card:#ffffff;--text:#152033;--sub:#64748b;--line:#e2e8f0;--primary:#2563eb;--primary-dark:#1d4ed8;--primary-soft:#eaf2ff;--orange:#ea580c;--orange-soft:#fff7ed;--green:#16a34a;--green-soft:#ecfdf5;--red:#dc2626;--shadow:0 18px 45px rgba(15,23,42,.10);--shadow-soft:0 10px 24px rgba(15,23,42,.07);--radius-xl:28px;--radius-lg:22px;--safe-bottom:env(safe-area-inset-bottom,0px)}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}
+    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;color:var(--text);background:radial-gradient(circle at 18% 0%,rgba(234,88,12,.15),transparent 30%),radial-gradient(circle at 86% 12%,rgba(37,99,235,.12),transparent 28%),linear-gradient(180deg,#fff4ec 0%,var(--bg) 45%,#fff 100%)}
+    a{color:inherit;text-decoration:none}button,input,select{font:inherit}svg{width:24px;height:24px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+    .app{width:min(1120px,calc(100% - 28px));margin:0 auto;padding:18px 0 calc(92px + var(--safe-bottom))}
+    .app-header{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 0;backdrop-filter:blur(18px)}
+    .brand{display:flex;align-items:center;gap:11px;min-width:0;font-weight:900}.brand-mark{width:44px;height:44px;border-radius:16px;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,var(--primary),#06b6d4);box-shadow:0 12px 28px rgba(37,99,235,.28);flex:0 0 auto}
+    .brand-text strong{display:block;font-size:18px;line-height:1.15;letter-spacing:-.3px}.brand-text span{display:block;margin-top:2px;color:var(--sub);font-size:12px;font-weight:600}
+    .pill-btn{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 14px;border:1px solid rgba(226,232,240,.95);border-radius:999px;background:rgba(255,255,255,.78);color:#334155;font-size:13px;font-weight:850;box-shadow:0 6px 18px rgba(15,23,42,.05)}
+    .hero{position:relative;overflow:hidden;margin-top:12px;padding:clamp(28px,5vw,52px);min-height:320px;border-radius:var(--radius-xl);background:rgba(255,255,255,.9);border:1px solid rgba(226,232,240,.86);box-shadow:var(--shadow);backdrop-filter:blur(18px)}
+    .hero:before,.hero:after{content:"";position:absolute;border-radius:999px;pointer-events:none}.hero:before{right:-90px;top:-100px;width:260px;height:260px;background:rgba(234,88,12,.12)}.hero:after{right:58px;bottom:-82px;width:190px;height:190px;background:rgba(37,99,235,.10)}
+    .badge{position:relative;z-index:1;display:inline-flex;align-items:center;gap:8px;padding:9px 13px;border-radius:999px;color:var(--orange);background:var(--orange-soft);font-size:13px;font-weight:950;margin-bottom:18px}
+    h1{position:relative;z-index:1;margin:0;max-width:790px;font-size:clamp(30px,5.2vw,54px);line-height:1.12;letter-spacing:-1.7px}
+    .hero-desc{position:relative;z-index:1;margin:18px 0 0;max-width:740px;color:var(--sub);font-size:17px;line-height:1.75}
+    .layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;margin-top:22px;align-items:start}
+    .panel,.side-card,.result,.ad-card,.info-card{border:1px solid rgba(226,232,240,.86);background:rgba(255,255,255,.92);box-shadow:var(--shadow-soft);backdrop-filter:blur(18px)}
+    .panel{padding:24px;border-radius:var(--radius-xl)}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.form-grid.three{grid-template-columns:repeat(3,1fr);margin-top:14px}
+    .field label{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;color:#0f172a;font-size:14px;font-weight:950}.hint{color:var(--sub);font-size:12px;font-weight:750}
+    input,select{width:100%;height:58px;border:1px solid var(--line);border-radius:18px;padding:0 16px;color:var(--text);background:#f8fafc;font-size:18px;outline:none;transition:.16s ease}
+    select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,#64748b 50%),linear-gradient(135deg,#64748b 50%,transparent 50%);background-position:calc(100% - 20px) 25px,calc(100% - 14px) 25px;background-size:6px 6px,6px 6px;background-repeat:no-repeat}
+    input:focus,select:focus{border-color:#fdba74;background-color:#fff;box-shadow:0 0 0 4px rgba(234,88,12,.09)}
+    .money-input{position:relative}.money-input input{padding-right:54px;font-weight:950;letter-spacing:-.4px}.unit{position:absolute;right:17px;top:50%;transform:translateY(-50%);color:#64748b;font-size:14px;font-weight:900;pointer-events:none}
+    .quick-presets{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.quick-presets button{width:auto;min-height:34px;padding:0 11px;border-radius:999px;color:#475569;background:#f8fafc;border:1px solid var(--line);box-shadow:none;font-size:12px;font-weight:850}
+    .option-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;padding:14px;border:1px solid var(--line);border-radius:18px;background:#f8fafc}.option-row strong{display:block;font-size:14px}.option-row span{display:block;margin-top:3px;color:var(--sub);font-size:12px;line-height:1.45}
+    .switch{position:relative;width:54px;height:30px;flex:0 0 auto}.switch input{opacity:0;width:0;height:0}.slider{position:absolute;cursor:pointer;inset:0;background:#cbd5e1;border-radius:999px;transition:.16s}.slider:before{content:"";position:absolute;width:24px;height:24px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.16s;box-shadow:0 2px 8px rgba(15,23,42,.18)}.switch input:checked + .slider{background:var(--orange)}.switch input:checked + .slider:before{transform:translateX(24px)}
+    .actions{display:flex;gap:10px;margin-top:18px}button{min-height:54px;border:0;border-radius:18px;font-weight:950;font-size:15px;cursor:pointer;transition:.16s ease}button:hover{transform:translateY(-1px)}.actions button{flex:1 1 0;width:auto}
+    .primary{color:#fff;background:linear-gradient(135deg,var(--orange),#f97316);box-shadow:0 12px 26px rgba(234,88,12,.24)}.ghost{color:#334155;background:#f8fafc;border:1px solid var(--line)}
+    .result{display:none;margin-top:18px;padding:24px;border-radius:var(--radius-xl);background:radial-gradient(circle at 16% 8%,rgba(234,88,12,.10),transparent 35%),linear-gradient(135deg,#fff7ed,#ffffff);border-color:#fed7aa}
+    .result-main{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:center;margin-bottom:18px}.result-main span{display:block;color:var(--sub);font-size:14px;font-weight:900}.result-main strong{display:block;margin-top:6px;color:var(--orange);font-size:clamp(38px,7vw,60px);letter-spacing:-2px;line-height:1;word-break:keep-all}
+    .share-btn{width:auto;min-height:42px;padding:0 14px;border-radius:999px;color:var(--orange);background:#fff;border:1px solid #fed7aa;font-size:13px;box-shadow:none}
+    .result-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.mini{padding:16px;border-radius:18px;background:#fff;border:1px solid var(--line)}.mini span{display:block;color:var(--sub);font-size:12px;font-weight:850}.mini strong{display:block;margin-top:7px;color:#0f172a;font-size:21px;letter-spacing:-.5px}
+    .detail{margin-top:16px;padding:16px;border-radius:18px;color:#475569;background:#fff;border:1px solid var(--line);font-size:14px;line-height:1.75}
+    .side{display:grid;gap:14px}.side-card{padding:18px;border-radius:var(--radius-lg)}.side-card h2{margin:0 0 12px;font-size:17px;letter-spacing:-.3px}.side-link{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;border:1px solid var(--line);border-radius:16px;background:#f8fbff;color:#334155;font-size:14px;font-weight:900}.side-link + .side-link{margin-top:8px}
+    .rate-grid{display:grid;gap:8px}.rate-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 11px;border-radius:14px;background:#f8fafc;border:1px solid var(--line);font-size:13px}.rate-item span{color:#64748b;font-weight:850}.rate-item strong{color:#0f172a}
+    .ad-card{min-height:110px;margin-top:18px;border-radius:var(--radius-lg);border-style:dashed;display:grid;place-items:center;text-align:center;color:var(--sub);padding:18px;font-size:14px;line-height:1.6}.info-card{margin-top:18px;padding:22px;border-radius:var(--radius-lg);color:#475569;font-size:14px;line-height:1.8}.info-card h2{margin:0 0 10px;color:#0f172a;font-size:20px;letter-spacing:-.4px}
+    .formula-box{margin:14px 0;padding:16px;border-radius:18px;background:#fff;border:1px solid var(--line);color:#0f172a;font-weight:900;line-height:1.7}.faq{display:grid;gap:10px;margin-top:14px}details{padding:16px;border:1px solid var(--line);border-radius:18px;background:#fff}summary{cursor:pointer;color:#0f172a;font-weight:950}details p{margin:10px 0 0;color:#64748b;font-size:14px;line-height:1.7}
+    footer{margin-top:28px;padding:22px 0 0;border-top:1px solid rgba(226,232,240,.9);color:var(--sub);font-size:13px;line-height:1.7;text-align:center}
+    .bottom-nav{position:fixed;left:50%;bottom:calc(12px + var(--safe-bottom));transform:translateX(-50%);z-index:30;width:min(520px,calc(100% - 24px));display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:8px;border:1px solid rgba(226,232,240,.92);border-radius:24px;background:rgba(255,255,255,.90);backdrop-filter:blur(20px);box-shadow:0 18px 42px rgba(15,23,42,.16)}
+    .bottom-nav a{display:grid;place-items:center;gap:3px;min-height:54px;border-radius:17px;color:#64748b;font-size:12px;font-weight:950}.bottom-nav a.active{color:var(--primary);background:var(--primary-soft)}
+    @media(max-width:940px){.layout{grid-template-columns:1fr}.side{grid-template-columns:1fr 1fr}}
+    @media(max-width:680px){.app{width:min(100% - 22px,1120px);padding-top:10px}.brand-text span{display:none}.hero{min-height:auto;padding:28px 22px;border-radius:26px}h1{font-size:clamp(30px,9vw,40px);letter-spacing:-1.2px}.hero-desc{font-size:15px}.panel{padding:20px;border-radius:24px}.form-grid,.form-grid.three,.result-cards{grid-template-columns:1fr}.actions{flex-direction:column;gap:10px}.actions button{width:100%;min-height:54px;flex:none}.result-main{grid-template-columns:1fr}.share-btn{width:100%}.side{grid-template-columns:1fr}input,select{font-size:17px}}
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <header class="app-header">
+      <a href="index.html" class="brand" aria-label="생활편의 도구 홈">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 13.5 9.5 19 20 5"/></svg></span>
+        <span class="brand-text"><strong>생활편의 도구</strong><span>빠른 계산 · 쉬운 변환</span></span>
+      </a>
+      <a class="pill-btn" href="index.html">전체 기능</a>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="page-title">
+        <div class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>주휴수당 계산기</div>
+        <h1 id="page-title">시급과 근무시간만 입력하면<br>주휴수당을 바로 계산합니다.</h1>
+        <p class="hero-desc">
+          <span id="rateYearText">기준값</span>을 불러와 시급, 주 근무시간, 근무일수 기준으로 주휴수당, 주급, 월 예상 급여를 계산합니다.
+          기준값은 <strong>data/rates.json</strong>에서 관리됩니다.
+        </p>
+      </section>
+
+      <div class="layout">
+        <section class="panel" aria-labelledby="calc-title">
+          <h2 id="calc-title" style="position:absolute;left:-9999px;">주휴수당 입력폼</h2>
+
+          <div class="form-grid">
+            <div class="field">
+              <label for="hourlyWage">시급 <span class="hint" id="wageHint">기준 최저임금</span></label>
+              <div class="money-input"><input id="hourlyWage" type="text" inputmode="numeric" autocomplete="off" /><span class="unit">원</span></div>
+              <div class="quick-presets" aria-label="시급 빠른 입력">
+                <button type="button" id="minimumWageBtn" onclick="setWage(RATES.minimumWage)">최저임금</button>
+                <button type="button" onclick="setWage(11000)">11,000</button>
+                <button type="button" onclick="setWage(12000)">12,000</button>
+                <button type="button" onclick="setWage(15000)">15,000</button>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="weeklyHours">주 총 근무시간 <span class="hint">직접 입력</span></label>
+              <input id="weeklyHours" type="number" min="0" max="80" step="0.5" placeholder="예: 40" />
+              <div class="quick-presets" aria-label="근무시간 빠른 입력">
+                <button type="button" onclick="setWeeklyHours(15)">15시간</button>
+                <button type="button" onclick="setWeeklyHours(20)">20시간</button>
+                <button type="button" onclick="setWeeklyHours(30)">30시간</button>
+                <button type="button" onclick="setWeeklyHours(40)">40시간</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-grid three">
+            <div class="field">
+              <label for="workDays">주 근무일수 <span class="hint">1~7일</span></label>
+              <select id="workDays"><option value="1">1일</option><option value="2">2일</option><option value="3">3일</option><option value="4">4일</option><option value="5" selected>5일</option><option value="6">6일</option><option value="7">7일</option></select>
+            </div>
+            <div class="field">
+              <label for="dailyHours">하루 근무시간 <span class="hint">자동 계산 가능</span></label>
+              <input id="dailyHours" type="number" min="0" max="24" step="0.5" value="8" />
+            </div>
+            <div class="field">
+              <label for="monthWeeks">월 환산 주수 <span class="hint">평균 4.345주</span></label>
+              <select id="monthWeeks"><option value="4">4주</option><option value="4.345" selected>4.345주</option></select>
+            </div>
+          </div>
+
+          <div class="option-row">
+            <div><strong>자동 계산</strong><span>시급이나 근무시간을 바꾸면 결과를 바로 다시 계산합니다.</span></div>
+            <label class="switch" aria-label="자동 계산"><input id="autoCalc" type="checkbox" checked /><span class="slider"></span></label>
+          </div>
+
+          <div class="actions">
+            <button type="button" class="primary" onclick="calcWeeklyPay()">주휴수당 계산하기</button>
+            <button type="button" class="ghost" onclick="resetForm()">초기화</button>
+          </div>
+
+          <section id="result" class="result" aria-live="polite">
+            <div class="result-main">
+              <div><span>예상 주휴수당</span><strong id="weeklyHolidayPay">0원</strong></div>
+              <button type="button" class="share-btn" onclick="shareResult()">결과 공유</button>
+            </div>
+
+            <div class="result-cards">
+              <div class="mini"><span>주 기본급</span><strong id="weeklyBasePay">0원</strong></div>
+              <div class="mini"><span>주급 합계</span><strong id="weeklyTotalPay">0원</strong></div>
+              <div class="mini"><span>월 예상 급여</span><strong id="monthlyPay">0원</strong></div>
+            </div>
+
+            <div class="result-cards" style="margin-top:10px;">
+              <div class="mini"><span>주휴 인정시간</span><strong id="holidayHours">0시간</strong></div>
+              <div class="mini"><span>월 주휴수당</span><strong id="monthlyHolidayPay">0원</strong></div>
+              <div class="mini"><span>지급 가능 여부</span><strong id="eligibleText">-</strong></div>
+            </div>
+
+            <div class="detail" id="detailText"></div>
+          </section>
+        </section>
+
+        <aside class="side" aria-label="추천 기능과 기준 정보">
+          <section class="side-card">
+            <h2>인기 기능</h2>
+            <a class="side-link" href="salary.html">연봉 계산 <span>→</span></a>
+            <a class="side-link" href="age.html">만나이 계산 <span>→</span></a>
+            <a class="side-link" href="dday.html">D-Day 계산 <span>→</span></a>
+          </section>
+
+          <section class="side-card">
+            <h2 id="rateTitle">기준 정보</h2>
+            <div class="rate-grid">
+              <div class="rate-item"><span>최저임금</span><strong id="minWageText">-</strong></div>
+              <div class="rate-item"><span>월 환산액</span><strong id="monthlyWageText">-</strong></div>
+              <div class="rate-item"><span>월 환산시간</span><strong id="standardHoursText">-</strong></div>
+            </div>
+          </section>
+        </aside>
+      </div>
+
+      <div class="ad-card" aria-label="광고 영역"><strong>광고 영역</strong><br>AdSense 승인 후 이 위치에 광고 코드를 넣으면 됩니다.</div>
+
+      <section class="info-card">
+        <h2>주휴수당 계산 방법</h2>
+        이 페이지는 <strong>data/rates.json</strong>에 저장된 최저임금과 기준값을 불러와 계산합니다.
+        <div class="formula-box">주휴 인정시간 = 주 근무시간 ÷ 40 × 8<br>주휴수당 = 시급 × 주휴 인정시간</div>
+        <div class="faq">
+          <details><summary>주 15시간 미만이면 주휴수당이 없나요?</summary><p>일반적으로 1주 소정근로시간이 15시간 미만이면 주휴수당 대상에서 제외됩니다.</p></details>
+          <details><summary>기준값은 어디서 관리하나요?</summary><p>최저임금, 월 환산액, 월 환산시간은 data/rates.json 파일에서 관리합니다.</p></details>
+        </div>
+      </section>
+    </main>
+
+    <footer><strong>생활편의 도구</strong><br>빠르고 간편한 생활 계산 서비스<br><br>© 2026 생활편의 도구<br>Designed &amp; Developed by Chulhee</footer>
+  </div>
+
+  <nav class="bottom-nav" aria-label="모바일 하단 메뉴">
+    <a href="index.html">홈</a><a href="age.html">만나이</a><a href="salary.html">연봉</a><a class="active" href="weekly-pay.html">주휴수당</a>
+  </nav>
+
+  <script>
+    const DEFAULT_RATES = {
+      year: 2026,
+      minimumWage: 10320,
+      minimumMonthlyWage: 2156880,
+      monthlyStandardHours: 209
+    };
+
+    let RATES = DEFAULT_RATES;
+    let lastSummary = '';
+    let isSyncing = false;
+
+    const hourlyWageInput = document.getElementById('hourlyWage');
+    const weeklyHoursInput = document.getElementById('weeklyHours');
+    const workDaysSelect = document.getElementById('workDays');
+    const dailyHoursInput = document.getElementById('dailyHours');
+    const monthWeeksSelect = document.getElementById('monthWeeks');
+    const autoCalc = document.getElementById('autoCalc');
+    const resultBox = document.getElementById('result');
+
+    initRates();
+
+    async function initRates(){
+      try{
+        const res = await fetch('data/rates.json', {cache:'no-store'});
+        if(res.ok){
+          RATES = Object.assign({}, DEFAULT_RATES, await res.json());
+        }
+      }catch(e){
+        RATES = DEFAULT_RATES;
+      }
+
+      hourlyWageInput.value = Number(RATES.minimumWage || 0).toLocaleString();
+      renderRateInfo();
+      bindEvents();
+    }
+
+    function bindEvents(){
+      hourlyWageInput.addEventListener('input', function(){
+        this.value = formatNumberInput(this.value);
+        runAutoCalc();
+      });
+
+      weeklyHoursInput.addEventListener('input', function(){
+        if(isSyncing) return;
+        syncDailyFromWeekly();
+        runAutoCalc();
+      });
+
+      dailyHoursInput.addEventListener('input', function(){
+        if(isSyncing) return;
+        syncWeeklyFromDaily();
+        runAutoCalc();
+      });
+
+      [workDaysSelect, monthWeeksSelect, autoCalc].forEach(function(el){
+        el.addEventListener('change', function(){
+          if(el === workDaysSelect) syncWeeklyFromDaily();
+          runAutoCalc();
+        });
+      });
+
+      [hourlyWageInput, weeklyHoursInput, dailyHoursInput].forEach(function(input){
+        input.addEventListener('keydown', function(event){
+          if(event.key === 'Enter') calcWeeklyPay();
+        });
+      });
+    }
+
+    function renderRateInfo(){
+      document.getElementById('rateYearText').textContent = (RATES.year || '현재') + '년 기준값';
+      document.getElementById('rateTitle').textContent = (RATES.year || '현재') + '년 기준';
+      document.getElementById('wageHint').textContent = (RATES.year || '현재') + '년 최저임금';
+      document.getElementById('minWageText').textContent = won(RATES.minimumWage || 0);
+      document.getElementById('monthlyWageText').textContent = won(RATES.minimumMonthlyWage || 0);
+      document.getElementById('standardHoursText').textContent = (RATES.monthlyStandardHours || 209) + '시간';
+    }
+
+    function runAutoCalc(){
+      if(autoCalc.checked && getNumber(hourlyWageInput.value) > 0 && Number(weeklyHoursInput.value) > 0) calcWeeklyPay(false);
+    }
+
+    function formatNumberInput(value){
+      const num = value.replace(/\D/g,'');
+      if(!num) return '';
+      return Number(num).toLocaleString();
+    }
+
+    function getNumber(value){ return Number(String(value).replace(/\D/g,'')) || 0; }
+
+    function setWage(value){
+      hourlyWageInput.value = Number(value || 0).toLocaleString();
+      if(autoCalc.checked) calcWeeklyPay();
+    }
+
+    function setWeeklyHours(value){
+      weeklyHoursInput.value = value;
+      syncDailyFromWeekly();
+      if(autoCalc.checked) calcWeeklyPay();
+    }
+
+    function syncDailyFromWeekly(){
+      isSyncing = true;
+      const weekly = Number(weeklyHoursInput.value) || 0;
+      const days = Number(workDaysSelect.value) || 1;
+      if(weekly > 0) dailyHoursInput.value = trimDecimal(weekly / days);
+      isSyncing = false;
+    }
+
+    function syncWeeklyFromDaily(){
+      isSyncing = true;
+      const daily = Number(dailyHoursInput.value) || 0;
+      const days = Number(workDaysSelect.value) || 0;
+      if(daily > 0 && days > 0) weeklyHoursInput.value = trimDecimal(daily * days);
+      isSyncing = false;
+    }
+
+    function calcWeeklyPay(scroll){
+      if(scroll === undefined) scroll = true;
+
+      const hourlyWage = getNumber(hourlyWageInput.value);
+      const weeklyHours = Number(weeklyHoursInput.value);
+      const workDays = Number(workDaysSelect.value);
+      const monthWeeks = Number(monthWeeksSelect.value);
+
+      if(!hourlyWage || hourlyWage < 1000){
+        alert('시급을 입력해 주세요.');
+        hourlyWageInput.focus();
+        return;
+      }
+
+      if(!weeklyHours || weeklyHours <= 0){
+        alert('주 총 근무시간을 입력해 주세요.');
+        weeklyHoursInput.focus();
+        return;
+      }
+
+      const eligible = weeklyHours >= 15;
+      const cappedWeeklyHours = Math.min(weeklyHours, 40);
+      const holidayHours = eligible ? (cappedWeeklyHours / 40) * 8 : 0;
+      const weeklyBasePay = hourlyWage * weeklyHours;
+      const weeklyHolidayPay = hourlyWage * holidayHours;
+      const weeklyTotalPay = weeklyBasePay + weeklyHolidayPay;
+      const monthlyPay = weeklyTotalPay * monthWeeks;
+      const monthlyHolidayPay = weeklyHolidayPay * monthWeeks;
+
+      setText('weeklyHolidayPay', won(weeklyHolidayPay));
+      setText('weeklyBasePay', won(weeklyBasePay));
+      setText('weeklyTotalPay', won(weeklyTotalPay));
+      setText('monthlyPay', won(monthlyPay));
+      setText('holidayHours', trimDecimal(holidayHours) + '시간');
+      setText('monthlyHolidayPay', won(monthlyHolidayPay));
+      setText('eligibleText', eligible ? '대상 가능' : '15시간 미만');
+
+      lastSummary = '시급 ' + won(hourlyWage) + ', 주 ' + weeklyHours + '시간 근무 기준 예상 주휴수당은 ' + won(weeklyHolidayPay) + '입니다.';
+      document.getElementById('detailText').innerHTML =
+        '시급 <strong>' + won(hourlyWage) + '</strong>, 주 <strong>' + weeklyHours + '시간</strong>, 주 <strong>' +
+        workDays + '일</strong> 근무 기준 예상 주휴수당은 <strong>' + won(weeklyHolidayPay) + '</strong>입니다. ' +
+        '주휴 인정시간은 <strong>' + trimDecimal(holidayHours) + '시간</strong>이고, 주급 합계는 <strong>' +
+        won(weeklyTotalPay) + '</strong>, 월 예상 급여는 <strong>' + won(monthlyPay) + '</strong>입니다.' +
+        (eligible ? '' : '<br><br><strong style="color:#dc2626;">주 15시간 미만으로 입력되어 주휴수당 대상이 아닐 수 있습니다.</strong>');
+
+      resultBox.style.display = 'block';
+      if(scroll) resultBox.scrollIntoView({behavior:'smooth', block:'nearest'});
+    }
+
+    function won(value){ return Math.round(value).toLocaleString() + '원'; }
+    function setText(id, value){ document.getElementById(id).textContent = value; }
+    function trimDecimal(value){ return Number(value.toFixed(2)).toString(); }
+
+    function resetForm(){
+      hourlyWageInput.value = Number(RATES.minimumWage || 0).toLocaleString();
+      weeklyHoursInput.value = '';
+      workDaysSelect.value = '5';
+      dailyHoursInput.value = '8';
+      monthWeeksSelect.value = '4.345';
+      resultBox.style.display = 'none';
+      lastSummary = '';
+      weeklyHoursInput.focus();
+    }
+
+    function shareResult(){
+      if(!lastSummary){ alert('먼저 주휴수당을 계산해 주세요.'); return; }
+      if(navigator.share){
+        navigator.share({title:'주휴수당 계산 결과', text:lastSummary, url:location.href});
+      }else if(navigator.clipboard){
+        navigator.clipboard.writeText(lastSummary).then(function(){ alert('계산 결과를 복사했습니다.'); });
+      }else{
+        alert(lastSummary);
+      }
+    }
+  </script>
+</body>
+</html>

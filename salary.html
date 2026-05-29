@@ -4,748 +4,89 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>연봉 실수령액 계산기 - 생활편의 도구</title>
-  <meta name="description" content="연봉을 입력하면 2026년 4대보험 요율 기준 월 예상 실수령액, 공제액, 연간 실수령액을 빠르게 계산합니다." />
+  <meta name="description" content="연봉을 입력하면 기준 요율을 반영해 월 예상 실수령액, 공제액, 연간 실수령액을 빠르게 계산합니다." />
   <meta name="theme-color" content="#2563eb" />
 
   <style>
     :root{
-      --bg:#f4f7fb;
-      --card:#ffffff;
-      --text:#152033;
-      --sub:#64748b;
-      --line:#e2e8f0;
-      --primary:#2563eb;
-      --primary-dark:#1d4ed8;
-      --primary-soft:#eaf2ff;
-      --green:#16a34a;
-      --green-soft:#ecfdf5;
-      --orange:#ea580c;
-      --orange-soft:#fff7ed;
-      --purple:#7c3aed;
-      --purple-soft:#f5f3ff;
-      --red:#dc2626;
-      --red-soft:#fff1f2;
-      --shadow:0 18px 45px rgba(15,23,42,.10);
-      --shadow-soft:0 10px 24px rgba(15,23,42,.07);
-      --radius-xl:28px;
-      --radius-lg:22px;
-      --safe-bottom:env(safe-area-inset-bottom,0px);
+      --bg:#f4f7fb; --card:#ffffff; --text:#152033; --sub:#64748b; --line:#e2e8f0;
+      --primary:#2563eb; --primary-dark:#1d4ed8; --primary-soft:#eaf2ff;
+      --green:#16a34a; --green-soft:#ecfdf5; --orange:#ea580c; --orange-soft:#fff7ed;
+      --shadow:0 18px 45px rgba(15,23,42,.10); --shadow-soft:0 10px 24px rgba(15,23,42,.07);
+      --radius-xl:28px; --radius-lg:22px; --safe-bottom:env(safe-area-inset-bottom,0px);
     }
-
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
     body{
-      margin:0;
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(circle at 18% 0%,rgba(37,99,235,.16),transparent 30%),
-        radial-gradient(circle at 86% 12%,rgba(6,182,212,.12),transparent 28%),
-        linear-gradient(180deg,#eef5ff 0%,var(--bg) 45%,#fff 100%);
+      margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;color:var(--text);
+      background:radial-gradient(circle at 18% 0%,rgba(37,99,235,.16),transparent 30%),
+                 radial-gradient(circle at 86% 12%,rgba(6,182,212,.12),transparent 28%),
+                 linear-gradient(180deg,#eef5ff 0%,var(--bg) 45%,#fff 100%);
     }
-
-    a{color:inherit;text-decoration:none}
-    button,input,select{font:inherit}
+    a{color:inherit;text-decoration:none} button,input,select{font:inherit}
     svg{width:24px;height:24px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
-
-    .app{
-      width:min(1120px,calc(100% - 28px));
-      margin:0 auto;
-      padding:18px 0 calc(92px + var(--safe-bottom));
-    }
-
-    .app-header{
-      position:sticky;
-      top:0;
-      z-index:20;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:14px;
-      padding:12px 0;
-      backdrop-filter:blur(18px);
-    }
-
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:11px;
-      min-width:0;
-      font-weight:900;
-    }
-
-    .brand-mark{
-      width:44px;
-      height:44px;
-      border-radius:16px;
-      display:grid;
-      place-items:center;
-      color:#fff;
-      background:linear-gradient(135deg,var(--primary),#06b6d4);
-      box-shadow:0 12px 28px rgba(37,99,235,.28);
-      flex:0 0 auto;
-    }
-
-    .brand-text strong{
-      display:block;
-      font-size:18px;
-      line-height:1.15;
-      letter-spacing:-.3px;
-    }
-
-    .brand-text span{
-      display:block;
-      margin-top:2px;
-      color:var(--sub);
-      font-size:12px;
-      font-weight:600;
-    }
-
-    .pill-btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      min-height:40px;
-      padding:0 14px;
-      border:1px solid rgba(226,232,240,.95);
-      border-radius:999px;
-      background:rgba(255,255,255,.78);
-      color:#334155;
-      font-size:13px;
-      font-weight:850;
-      box-shadow:0 6px 18px rgba(15,23,42,.05);
-    }
-
-    .hero{
-      position:relative;
-      overflow:hidden;
-      margin-top:12px;
-      padding:clamp(28px,5vw,52px);
-      min-height:320px;
-      border-radius:var(--radius-xl);
-      background:rgba(255,255,255,.9);
-      border:1px solid rgba(226,232,240,.86);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(18px);
-    }
-
-    .hero:before,
-    .hero:after{
-      content:"";
-      position:absolute;
-      border-radius:999px;
-      pointer-events:none;
-    }
-
-    .hero:before{
-      right:-90px;
-      top:-100px;
-      width:260px;
-      height:260px;
-      background:rgba(22,163,74,.12);
-    }
-
-    .hero:after{
-      right:58px;
-      bottom:-82px;
-      width:190px;
-      height:190px;
-      background:rgba(37,99,235,.12);
-    }
-
-    .badge{
-      position:relative;
-      z-index:1;
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:9px 13px;
-      border-radius:999px;
-      color:var(--green);
-      background:var(--green-soft);
-      font-size:13px;
-      font-weight:950;
-      margin-bottom:18px;
-    }
-
-    h1{
-      position:relative;
-      z-index:1;
-      margin:0;
-      max-width:790px;
-      font-size:clamp(30px,5.2vw,54px);
-      line-height:1.12;
-      letter-spacing:-1.7px;
-    }
-
-    .hero-desc{
-      position:relative;
-      z-index:1;
-      margin:18px 0 0;
-      max-width:740px;
-      color:var(--sub);
-      font-size:17px;
-      line-height:1.75;
-    }
-
-    .layout{
-      display:grid;
-      grid-template-columns:minmax(0,1fr) 340px;
-      gap:18px;
-      margin-top:22px;
-      align-items:start;
-    }
-
-    .panel,
-    .side-card,
-    .result,
-    .ad-card,
-    .info-card{
-      border:1px solid rgba(226,232,240,.86);
-      background:rgba(255,255,255,.92);
-      box-shadow:var(--shadow-soft);
-      backdrop-filter:blur(18px);
-    }
-
-    .panel{
-      padding:24px;
-      border-radius:var(--radius-xl);
-    }
-
-    .form-grid{
-      display:grid;
-      grid-template-columns:1.2fr .8fr;
-      gap:14px;
-    }
-
-    .form-grid.three{
-      grid-template-columns:repeat(3,1fr);
-      margin-top:14px;
-    }
-
-    .field label{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:8px;
-      margin-bottom:8px;
-      color:#0f172a;
-      font-size:14px;
-      font-weight:950;
-    }
-
-    .hint{
-      color:var(--sub);
-      font-size:12px;
-      font-weight:750;
-    }
-
-    input,select{
-      width:100%;
-      height:58px;
-      border:1px solid var(--line);
-      border-radius:18px;
-      padding:0 16px;
-      color:var(--text);
-      background:#f8fafc;
-      font-size:18px;
-      outline:none;
-      transition:.16s ease;
-    }
-
-    select{
-      appearance:none;
-      background-image:linear-gradient(45deg,transparent 50%,#64748b 50%),linear-gradient(135deg,#64748b 50%,transparent 50%);
-      background-position:calc(100% - 20px) 25px,calc(100% - 14px) 25px;
-      background-size:6px 6px,6px 6px;
-      background-repeat:no-repeat;
-    }
-
-    input:focus,select:focus{
-      border-color:#93c5fd;
-      background-color:#fff;
-      box-shadow:0 0 0 4px rgba(37,99,235,.09);
-    }
-
-    .money-input{
-      position:relative;
-    }
-
-    .money-input input{
-      padding-right:54px;
-      font-weight:950;
-      letter-spacing:-.4px;
-    }
-
-    .unit{
-      position:absolute;
-      right:17px;
-      top:50%;
-      transform:translateY(-50%);
-      color:#64748b;
-      font-size:14px;
-      font-weight:900;
-      pointer-events:none;
-    }
-
-    .quick-presets{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      margin-top:12px;
-    }
-
-    .quick-presets button{
-      width:auto;
-      min-height:34px;
-      padding:0 11px;
-      border-radius:999px;
-      color:#475569;
-      background:#f8fafc;
-      border:1px solid var(--line);
-      box-shadow:none;
-      font-size:12px;
-      font-weight:850;
-    }
-
-    .option-row{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      margin-top:14px;
-      padding:14px;
-      border:1px solid var(--line);
-      border-radius:18px;
-      background:#f8fafc;
-    }
-
-    .option-row strong{
-      display:block;
-      font-size:14px;
-    }
-
-    .option-row span{
-      display:block;
-      margin-top:3px;
-      color:var(--sub);
-      font-size:12px;
-      line-height:1.45;
-    }
-
-    .switch{
-      position:relative;
-      width:54px;
-      height:30px;
-      flex:0 0 auto;
-    }
-
-    .switch input{
-      opacity:0;
-      width:0;
-      height:0;
-    }
-
-    .slider{
-      position:absolute;
-      cursor:pointer;
-      inset:0;
-      background:#cbd5e1;
-      border-radius:999px;
-      transition:.16s;
-    }
-
-    .slider:before{
-      content:"";
-      position:absolute;
-      width:24px;
-      height:24px;
-      left:3px;
-      top:3px;
-      background:#fff;
-      border-radius:50%;
-      transition:.16s;
-      box-shadow:0 2px 8px rgba(15,23,42,.18);
-    }
-
-    .switch input:checked + .slider{
-      background:var(--primary);
-    }
-
-    .switch input:checked + .slider:before{
-      transform:translateX(24px);
-    }
-
-    .actions{
-      display:flex;
-      gap:10px;
-      margin-top:18px;
-    }
-
-    button{
-      min-height:54px;
-      border:0;
-      border-radius:18px;
-      font-weight:950;
-      font-size:15px;
-      cursor:pointer;
-      transition:.16s ease;
-    }
-
-    button:hover{transform:translateY(-1px)}
-
-    .actions button{
-      flex:1 1 0;
-      width:auto;
-    }
-
-    .primary{
-      color:#fff;
-      background:linear-gradient(135deg,var(--primary),var(--primary-dark));
-      box-shadow:0 12px 26px rgba(37,99,235,.24);
-    }
-
-    .ghost{
-      color:#334155;
-      background:#f8fafc;
-      border:1px solid var(--line);
-    }
-
-    .result{
-      display:none;
-      margin-top:18px;
-      padding:24px;
-      border-radius:var(--radius-xl);
-      background:
-        radial-gradient(circle at 16% 8%,rgba(22,163,74,.10),transparent 35%),
-        linear-gradient(135deg,#f0fdf4,#ffffff);
-      border-color:#dcfce7;
-    }
-
-    .result-main{
-      display:grid;
-      grid-template-columns:minmax(0,1fr) auto;
-      gap:18px;
-      align-items:center;
-      margin-bottom:18px;
-    }
-
-    .result-main span{
-      display:block;
-      color:var(--sub);
-      font-size:14px;
-      font-weight:900;
-    }
-
-    .result-main strong{
-      display:block;
-      margin-top:6px;
-      color:var(--green);
-      font-size:clamp(38px,7vw,60px);
-      letter-spacing:-2px;
-      line-height:1;
-      word-break:keep-all;
-    }
-
-    .share-btn{
-      width:auto;
-      min-height:42px;
-      padding:0 14px;
-      border-radius:999px;
-      color:var(--green);
-      background:#fff;
-      border:1px solid #bbf7d0;
-      font-size:13px;
-      box-shadow:none;
-    }
-
-    .result-cards{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:10px;
-    }
-
-    .mini{
-      padding:16px;
-      border-radius:18px;
-      background:#fff;
-      border:1px solid var(--line);
-    }
-
-    .mini span{
-      display:block;
-      color:var(--sub);
-      font-size:12px;
-      font-weight:850;
-    }
-
-    .mini strong{
-      display:block;
-      margin-top:7px;
-      color:#0f172a;
-      font-size:21px;
-      letter-spacing:-.5px;
-    }
-
-    .deduct-list{
-      margin-top:12px;
-      overflow:hidden;
-      border:1px solid var(--line);
-      border-radius:18px;
-      background:#fff;
-    }
-
-    .deduct-row{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding:13px 15px;
-      border-bottom:1px solid var(--line);
-      font-size:14px;
-    }
-
-    .deduct-row:last-child{border-bottom:0}
-
-    .deduct-row span{
-      color:#475569;
-      font-weight:850;
-    }
-
-    .deduct-row strong{
-      color:#0f172a;
-      font-size:15px;
-    }
-
-    .detail{
-      margin-top:16px;
-      padding:16px;
-      border-radius:18px;
-      color:#475569;
-      background:#fff;
-      border:1px solid var(--line);
-      font-size:14px;
-      line-height:1.75;
-    }
-
-    .side{
-      display:grid;
-      gap:14px;
-    }
-
-    .side-card{
-      padding:18px;
-      border-radius:var(--radius-lg);
-    }
-
-    .side-card h2{
-      margin:0 0 12px;
-      font-size:17px;
-      letter-spacing:-.3px;
-    }
-
-    .side-link{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      padding:12px;
-      border:1px solid var(--line);
-      border-radius:16px;
-      background:#f8fbff;
-      color:#334155;
-      font-size:14px;
-      font-weight:900;
-    }
-
-    .side-link + .side-link{margin-top:8px}
-
-    .rate-grid{
-      display:grid;
-      gap:8px;
-    }
-
-    .rate-item{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      padding:10px 11px;
-      border-radius:14px;
-      background:#f8fafc;
-      border:1px solid var(--line);
-      font-size:13px;
-    }
-
-    .rate-item span{color:#64748b;font-weight:850}
-    .rate-item strong{color:#0f172a}
-
-    .ad-card{
-      min-height:110px;
-      margin-top:18px;
-      border-radius:var(--radius-lg);
-      border-style:dashed;
-      display:grid;
-      place-items:center;
-      text-align:center;
-      color:var(--sub);
-      padding:18px;
-      font-size:14px;
-      line-height:1.6;
-    }
-
-    .info-card{
-      margin-top:18px;
-      padding:22px;
-      border-radius:var(--radius-lg);
-      color:#475569;
-      font-size:14px;
-      line-height:1.8;
-    }
-
-    .info-card h2{
-      margin:0 0 10px;
-      color:#0f172a;
-      font-size:20px;
-      letter-spacing:-.4px;
-    }
-
-    .faq{
-      display:grid;
-      gap:10px;
-      margin-top:14px;
-    }
-
-    details{
-      padding:16px;
-      border:1px solid var(--line);
-      border-radius:18px;
-      background:#fff;
-    }
-
-    summary{
-      cursor:pointer;
-      color:#0f172a;
-      font-weight:950;
-    }
-
-    details p{
-      margin:10px 0 0;
-      color:#64748b;
-      font-size:14px;
-      line-height:1.7;
-    }
-
-    footer{
-      margin-top:28px;
-      padding:22px 0 0;
-      border-top:1px solid rgba(226,232,240,.9);
-      color:var(--sub);
-      font-size:13px;
-      line-height:1.7;
-      text-align:center;
-    }
-
-    .bottom-nav{
-      position:fixed;
-      left:50%;
-      bottom:calc(12px + var(--safe-bottom));
-      transform:translateX(-50%);
-      z-index:30;
-      width:min(520px,calc(100% - 24px));
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:4px;
-      padding:8px;
-      border:1px solid rgba(226,232,240,.92);
-      border-radius:24px;
-      background:rgba(255,255,255,.90);
-      backdrop-filter:blur(20px);
-      box-shadow:0 18px 42px rgba(15,23,42,.16);
-    }
-
-    .bottom-nav a{
-      display:grid;
-      place-items:center;
-      gap:3px;
-      min-height:54px;
-      border-radius:17px;
-      color:#64748b;
-      font-size:12px;
-      font-weight:950;
-    }
-
-    .bottom-nav a.active{
-      color:var(--primary);
-      background:var(--primary-soft);
-    }
-
-    @media(max-width:940px){
-      .layout{grid-template-columns:1fr}
-      .side{grid-template-columns:1fr 1fr}
-    }
-
-    @media(max-width:680px){
-      .app{
-        width:min(100% - 22px,1120px);
-        padding-top:10px;
-      }
-
-      .brand-text span{display:none}
-
-      .hero{
-        min-height:auto;
-        padding:28px 22px;
-        border-radius:26px;
-      }
-
-      h1{
-        font-size:clamp(30px,9vw,40px);
-        letter-spacing:-1.2px;
-      }
-
-      .hero-desc{
-        font-size:15px;
-      }
-
-      .panel{
-        padding:20px;
-        border-radius:24px;
-      }
-
-      .form-grid,
-      .form-grid.three,
-      .result-cards{
-        grid-template-columns:1fr;
-      }
-
-      .actions{
-        flex-direction:column;
-        gap:10px;
-      }
-
-      .actions button{
-        width:100%;
-        min-height:54px;
-        flex:none;
-      }
-
-      .result-main{
-        grid-template-columns:1fr;
-      }
-
-      .share-btn{
-        width:100%;
-      }
-
-      .side{
-        grid-template-columns:1fr;
-      }
-
-      input,select{
-        font-size:17px;
-      }
-    }
+    .app{width:min(1120px,calc(100% - 28px));margin:0 auto;padding:18px 0 calc(92px + var(--safe-bottom))}
+    .app-header{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 0;backdrop-filter:blur(18px)}
+    .brand{display:flex;align-items:center;gap:11px;min-width:0;font-weight:900}
+    .brand-mark{width:44px;height:44px;border-radius:16px;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,var(--primary),#06b6d4);box-shadow:0 12px 28px rgba(37,99,235,.28);flex:0 0 auto}
+    .brand-text strong{display:block;font-size:18px;line-height:1.15;letter-spacing:-.3px}
+    .brand-text span{display:block;margin-top:2px;color:var(--sub);font-size:12px;font-weight:600}
+    .pill-btn{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 14px;border:1px solid rgba(226,232,240,.95);border-radius:999px;background:rgba(255,255,255,.78);color:#334155;font-size:13px;font-weight:850;box-shadow:0 6px 18px rgba(15,23,42,.05)}
+    .hero{position:relative;overflow:hidden;margin-top:12px;padding:clamp(28px,5vw,52px);min-height:320px;border-radius:var(--radius-xl);background:rgba(255,255,255,.9);border:1px solid rgba(226,232,240,.86);box-shadow:var(--shadow);backdrop-filter:blur(18px)}
+    .hero:before,.hero:after{content:"";position:absolute;border-radius:999px;pointer-events:none}
+    .hero:before{right:-90px;top:-100px;width:260px;height:260px;background:rgba(22,163,74,.12)}
+    .hero:after{right:58px;bottom:-82px;width:190px;height:190px;background:rgba(37,99,235,.12)}
+    .badge{position:relative;z-index:1;display:inline-flex;align-items:center;gap:8px;padding:9px 13px;border-radius:999px;color:var(--green);background:var(--green-soft);font-size:13px;font-weight:950;margin-bottom:18px}
+    h1{position:relative;z-index:1;margin:0;max-width:790px;font-size:clamp(30px,5.2vw,54px);line-height:1.12;letter-spacing:-1.7px}
+    .hero-desc{position:relative;z-index:1;margin:18px 0 0;max-width:740px;color:var(--sub);font-size:17px;line-height:1.75}
+    .layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;margin-top:22px;align-items:start}
+    .panel,.side-card,.result,.ad-card,.info-card{border:1px solid rgba(226,232,240,.86);background:rgba(255,255,255,.92);box-shadow:var(--shadow-soft);backdrop-filter:blur(18px)}
+    .panel{padding:24px;border-radius:var(--radius-xl)}
+    .form-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}
+    .form-grid.three{grid-template-columns:repeat(3,1fr);margin-top:14px}
+    .field label{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;color:#0f172a;font-size:14px;font-weight:950}
+    .hint{color:var(--sub);font-size:12px;font-weight:750}
+    input,select{width:100%;height:58px;border:1px solid var(--line);border-radius:18px;padding:0 16px;color:var(--text);background:#f8fafc;font-size:18px;outline:none;transition:.16s ease}
+    select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,#64748b 50%),linear-gradient(135deg,#64748b 50%,transparent 50%);background-position:calc(100% - 20px) 25px,calc(100% - 14px) 25px;background-size:6px 6px,6px 6px;background-repeat:no-repeat}
+    input:focus,select:focus{border-color:#93c5fd;background-color:#fff;box-shadow:0 0 0 4px rgba(37,99,235,.09)}
+    .money-input{position:relative}.money-input input{padding-right:54px;font-weight:950;letter-spacing:-.4px}
+    .unit{position:absolute;right:17px;top:50%;transform:translateY(-50%);color:#64748b;font-size:14px;font-weight:900;pointer-events:none}
+    .quick-presets{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+    .quick-presets button{width:auto;min-height:34px;padding:0 11px;border-radius:999px;color:#475569;background:#f8fafc;border:1px solid var(--line);box-shadow:none;font-size:12px;font-weight:850}
+    .option-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;padding:14px;border:1px solid var(--line);border-radius:18px;background:#f8fafc}
+    .option-row strong{display:block;font-size:14px}.option-row span{display:block;margin-top:3px;color:var(--sub);font-size:12px;line-height:1.45}
+    .switch{position:relative;width:54px;height:30px;flex:0 0 auto}.switch input{opacity:0;width:0;height:0}
+    .slider{position:absolute;cursor:pointer;inset:0;background:#cbd5e1;border-radius:999px;transition:.16s}
+    .slider:before{content:"";position:absolute;width:24px;height:24px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.16s;box-shadow:0 2px 8px rgba(15,23,42,.18)}
+    .switch input:checked + .slider{background:var(--primary)}.switch input:checked + .slider:before{transform:translateX(24px)}
+    .actions{display:flex;gap:10px;margin-top:18px}
+    button{min-height:54px;border:0;border-radius:18px;font-weight:950;font-size:15px;cursor:pointer;transition:.16s ease}
+    button:hover{transform:translateY(-1px)}.actions button{flex:1 1 0;width:auto}
+    .primary{color:#fff;background:linear-gradient(135deg,var(--primary),var(--primary-dark));box-shadow:0 12px 26px rgba(37,99,235,.24)}
+    .ghost{color:#334155;background:#f8fafc;border:1px solid var(--line)}
+    .result{display:none;margin-top:18px;padding:24px;border-radius:var(--radius-xl);background:radial-gradient(circle at 16% 8%,rgba(22,163,74,.10),transparent 35%),linear-gradient(135deg,#f0fdf4,#ffffff);border-color:#dcfce7}
+    .result-main{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:center;margin-bottom:18px}
+    .result-main span{display:block;color:var(--sub);font-size:14px;font-weight:900}
+    .result-main strong{display:block;margin-top:6px;color:var(--green);font-size:clamp(38px,7vw,60px);letter-spacing:-2px;line-height:1;word-break:keep-all}
+    .share-btn{width:auto;min-height:42px;padding:0 14px;border-radius:999px;color:var(--green);background:#fff;border:1px solid #bbf7d0;font-size:13px;box-shadow:none}
+    .result-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .mini{padding:16px;border-radius:18px;background:#fff;border:1px solid var(--line)}
+    .mini span{display:block;color:var(--sub);font-size:12px;font-weight:850}.mini strong{display:block;margin-top:7px;color:#0f172a;font-size:21px;letter-spacing:-.5px}
+    .deduct-list{margin-top:12px;overflow:hidden;border:1px solid var(--line);border-radius:18px;background:#fff}
+    .deduct-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 15px;border-bottom:1px solid var(--line);font-size:14px}
+    .deduct-row:last-child{border-bottom:0}.deduct-row span{color:#475569;font-weight:850}.deduct-row strong{color:#0f172a;font-size:15px}
+    .detail{margin-top:16px;padding:16px;border-radius:18px;color:#475569;background:#fff;border:1px solid var(--line);font-size:14px;line-height:1.75}
+    .side{display:grid;gap:14px}.side-card{padding:18px;border-radius:var(--radius-lg)}.side-card h2{margin:0 0 12px;font-size:17px;letter-spacing:-.3px}
+    .side-link{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;border:1px solid var(--line);border-radius:16px;background:#f8fbff;color:#334155;font-size:14px;font-weight:900}.side-link + .side-link{margin-top:8px}
+    .rate-grid{display:grid;gap:8px}.rate-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 11px;border-radius:14px;background:#f8fafc;border:1px solid var(--line);font-size:13px}.rate-item span{color:#64748b;font-weight:850}.rate-item strong{color:#0f172a}
+    .ad-card{min-height:110px;margin-top:18px;border-radius:var(--radius-lg);border-style:dashed;display:grid;place-items:center;text-align:center;color:var(--sub);padding:18px;font-size:14px;line-height:1.6}
+    .info-card{margin-top:18px;padding:22px;border-radius:var(--radius-lg);color:#475569;font-size:14px;line-height:1.8}.info-card h2{margin:0 0 10px;color:#0f172a;font-size:20px;letter-spacing:-.4px}
+    .faq{display:grid;gap:10px;margin-top:14px}details{padding:16px;border:1px solid var(--line);border-radius:18px;background:#fff}summary{cursor:pointer;color:#0f172a;font-weight:950}details p{margin:10px 0 0;color:#64748b;font-size:14px;line-height:1.7}
+    footer{margin-top:28px;padding:22px 0 0;border-top:1px solid rgba(226,232,240,.9);color:var(--sub);font-size:13px;line-height:1.7;text-align:center}
+    .bottom-nav{position:fixed;left:50%;bottom:calc(12px + var(--safe-bottom));transform:translateX(-50%);z-index:30;width:min(520px,calc(100% - 24px));display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:8px;border:1px solid rgba(226,232,240,.92);border-radius:24px;background:rgba(255,255,255,.90);backdrop-filter:blur(20px);box-shadow:0 18px 42px rgba(15,23,42,.16)}
+    .bottom-nav a{display:grid;place-items:center;gap:3px;min-height:54px;border-radius:17px;color:#64748b;font-size:12px;font-weight:950}.bottom-nav a.active{color:var(--primary);background:var(--primary-soft)}
+    @media(max-width:940px){.layout{grid-template-columns:1fr}.side{grid-template-columns:1fr 1fr}}
+    @media(max-width:680px){.app{width:min(100% - 22px,1120px);padding-top:10px}.brand-text span{display:none}.hero{min-height:auto;padding:28px 22px;border-radius:26px}h1{font-size:clamp(30px,9vw,40px);letter-spacing:-1.2px}.hero-desc{font-size:15px}.panel{padding:20px;border-radius:24px}.form-grid,.form-grid.three,.result-cards{grid-template-columns:1fr}.actions{flex-direction:column;gap:10px}.actions button{width:100%;min-height:54px;flex:none}.result-main{grid-template-columns:1fr}.share-btn{width:100%}.side{grid-template-columns:1fr}input,select{font-size:17px}}
   </style>
 </head>
 
@@ -753,27 +94,19 @@
   <div class="app">
     <header class="app-header">
       <a href="index.html" class="brand" aria-label="생활편의 도구 홈">
-        <span class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M4 13.5 9.5 19 20 5"/></svg>
-        </span>
-        <span class="brand-text">
-          <strong>생활편의 도구</strong>
-          <span>빠른 계산 · 쉬운 변환</span>
-        </span>
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 13.5 9.5 19 20 5"/></svg></span>
+        <span class="brand-text"><strong>생활편의 도구</strong><span>빠른 계산 · 쉬운 변환</span></span>
       </a>
       <a class="pill-btn" href="index.html">전체 기능</a>
     </header>
 
     <main>
       <section class="hero" aria-labelledby="page-title">
-        <div class="badge">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="3"/></svg>
-          연봉 실수령액 계산기
-        </div>
+        <div class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="3"/></svg>연봉 실수령액 계산기</div>
         <h1 id="page-title">연봉을 입력하면<br>월 실수령액을 바로 계산합니다.</h1>
         <p class="hero-desc">
-          2026년 4대보험 요율 기준으로 국민연금, 건강보험, 장기요양보험, 고용보험과 예상 소득세를 반영해
-          월급과 연간 실수령액을 빠르게 확인할 수 있습니다.
+          <span id="rateYearText">기준 요율</span>을 불러와 국민연금, 건강보험, 장기요양보험, 고용보험과 예상 소득세를 반영합니다.
+          기준값은 <strong>data/rates.json</strong>에서 관리됩니다.
         </p>
       </section>
 
@@ -783,14 +116,8 @@
 
           <div class="form-grid">
             <div class="field">
-              <label for="salary">
-                연봉
-                <span class="hint">세전 연봉</span>
-              </label>
-              <div class="money-input">
-                <input id="salary" type="text" inputmode="numeric" placeholder="예: 50000000" autocomplete="off" />
-                <span class="unit">원</span>
-              </div>
+              <label for="salary">연봉 <span class="hint">세전 연봉</span></label>
+              <div class="money-input"><input id="salary" type="text" inputmode="numeric" placeholder="예: 50000000" autocomplete="off" /><span class="unit">원</span></div>
               <div class="quick-presets" aria-label="연봉 빠른 입력">
                 <button type="button" onclick="setSalary(30000000)">3천</button>
                 <button type="button" onclick="setSalary(40000000)">4천</button>
@@ -801,68 +128,29 @@
             </div>
 
             <div class="field">
-              <label for="taxFree">
-                월 비과세액
-                <span class="hint">식대 등</span>
-              </label>
-              <div class="money-input">
-                <input id="taxFree" type="text" inputmode="numeric" value="200,000" autocomplete="off" />
-                <span class="unit">원</span>
-              </div>
+              <label for="taxFree">월 비과세액 <span class="hint">식대 등</span></label>
+              <div class="money-input"><input id="taxFree" type="text" inputmode="numeric" autocomplete="off" /><span class="unit">원</span></div>
             </div>
           </div>
 
           <div class="form-grid three">
             <div class="field">
-              <label for="familyCount">
-                부양가족 수
-                <span class="hint">본인 포함</span>
-              </label>
-              <select id="familyCount">
-                <option value="1">1명</option>
-                <option value="2">2명</option>
-                <option value="3">3명</option>
-                <option value="4">4명</option>
-                <option value="5">5명</option>
-                <option value="6">6명 이상</option>
-              </select>
+              <label for="familyCount">부양가족 수 <span class="hint">본인 포함</span></label>
+              <select id="familyCount"><option value="1">1명</option><option value="2">2명</option><option value="3">3명</option><option value="4">4명</option><option value="5">5명</option><option value="6">6명 이상</option></select>
             </div>
-
             <div class="field">
-              <label for="childrenCount">
-                8세 이상 20세 이하 자녀
-                <span class="hint">선택</span>
-              </label>
-              <select id="childrenCount">
-                <option value="0">0명</option>
-                <option value="1">1명</option>
-                <option value="2">2명</option>
-                <option value="3">3명 이상</option>
-              </select>
+              <label for="childrenCount">8세 이상 20세 이하 자녀 <span class="hint">선택</span></label>
+              <select id="childrenCount"><option value="0">0명</option><option value="1">1명</option><option value="2">2명</option><option value="3">3명 이상</option></select>
             </div>
-
             <div class="field">
-              <label for="taxRate">
-                소득세 반영
-                <span class="hint">간이세액 비율</span>
-              </label>
-              <select id="taxRate">
-                <option value="1">100%</option>
-                <option value="0.8">80%</option>
-                <option value="1.2">120%</option>
-              </select>
+              <label for="taxRate">소득세 반영 <span class="hint">간이세액 비율</span></label>
+              <select id="taxRate"><option value="1">100%</option><option value="0.8">80%</option><option value="1.2">120%</option></select>
             </div>
           </div>
 
           <div class="option-row">
-            <div>
-              <strong>자동 계산</strong>
-              <span>연봉이나 조건을 바꾸면 결과를 바로 다시 계산합니다.</span>
-            </div>
-            <label class="switch" aria-label="자동 계산">
-              <input id="autoCalc" type="checkbox" checked />
-              <span class="slider"></span>
-            </label>
+            <div><strong>자동 계산</strong><span>연봉이나 조건을 바꾸면 결과를 바로 다시 계산합니다.</span></div>
+            <label class="switch" aria-label="자동 계산"><input id="autoCalc" type="checkbox" checked /><span class="slider"></span></label>
           </div>
 
           <div class="actions">
@@ -872,26 +160,14 @@
 
           <section id="result" class="result" aria-live="polite">
             <div class="result-main">
-              <div>
-                <span>예상 월 실수령액</span>
-                <strong id="monthlyNet">0원</strong>
-              </div>
+              <div><span>예상 월 실수령액</span><strong id="monthlyNet">0원</strong></div>
               <button type="button" class="share-btn" onclick="shareResult()">결과 공유</button>
             </div>
 
             <div class="result-cards">
-              <div class="mini">
-                <span>월 세전급여</span>
-                <strong id="monthlyGross">0원</strong>
-              </div>
-              <div class="mini">
-                <span>월 공제합계</span>
-                <strong id="monthlyDeduct">0원</strong>
-              </div>
-              <div class="mini">
-                <span>연 실수령액</span>
-                <strong id="yearlyNet">0원</strong>
-              </div>
+              <div class="mini"><span>월 세전급여</span><strong id="monthlyGross">0원</strong></div>
+              <div class="mini"><span>월 공제합계</span><strong id="monthlyDeduct">0원</strong></div>
+              <div class="mini"><span>연 실수령액</span><strong id="yearlyNet">0원</strong></div>
             </div>
 
             <div class="deduct-list" aria-label="공제 상세">
@@ -916,67 +192,52 @@
           </section>
 
           <section class="side-card">
-            <h2>2026년 적용 요율</h2>
+            <h2 id="rateTitle">기준 요율</h2>
             <div class="rate-grid">
-              <div class="rate-item"><span>국민연금</span><strong>4.75%</strong></div>
-              <div class="rate-item"><span>건강보험</span><strong>3.595%</strong></div>
-              <div class="rate-item"><span>장기요양</span><strong>건보료의 13.14%</strong></div>
-              <div class="rate-item"><span>고용보험</span><strong>0.9%</strong></div>
+              <div class="rate-item"><span>국민연금</span><strong id="ratePension">-</strong></div>
+              <div class="rate-item"><span>건강보험</span><strong id="rateHealth">-</strong></div>
+              <div class="rate-item"><span>장기요양</span><strong id="rateCare">-</strong></div>
+              <div class="rate-item"><span>고용보험</span><strong id="rateEmployment">-</strong></div>
             </div>
           </section>
         </aside>
       </div>
 
-      <div class="ad-card" aria-label="광고 영역">
-        <strong>광고 영역</strong><br>
-        AdSense 승인 후 이 위치에 광고 코드를 넣으면 됩니다.
-      </div>
+      <div class="ad-card" aria-label="광고 영역"><strong>광고 영역</strong><br>AdSense 승인 후 이 위치에 광고 코드를 넣으면 됩니다.</div>
 
       <section class="info-card">
         <h2>연봉 실수령액 계산 기준</h2>
-        이 계산기는 세전 연봉을 12개월로 나눈 뒤, 비과세액을 제외한 보수월액을 기준으로 4대보험과 예상 세금을 계산합니다.
-        국민연금, 건강보험, 장기요양보험, 고용보험은 2026년 근로자 부담 요율을 기준으로 반영했습니다.
-        소득세는 근로소득공제, 기본공제, 근로소득세액공제를 단순화한 예상 계산이므로 실제 급여명세서와 차이가 날 수 있습니다.
-
+        이 계산기는 <strong>data/rates.json</strong>에 저장된 기준값을 불러와 계산합니다.
+        요율이나 비과세 기본값이 바뀌면 JSON 파일만 수정하면 연봉계산기와 주휴수당계산기에 함께 반영할 수 있습니다.
         <div class="faq">
-          <details>
-            <summary>월 비과세액은 무엇인가요?</summary>
-            <p>식대 등 일정 요건을 충족하는 비과세 급여를 말합니다. 비과세액은 4대보험과 과세표준 계산에서 제외될 수 있어 실수령액에 영향을 줍니다.</p>
-          </details>
-          <details>
-            <summary>왜 실제 급여명세서와 금액이 다를 수 있나요?</summary>
-            <p>회사별 급여 항목, 비과세 처리, 부양가족, 상여금, 간이세액표 적용 방식, 국민연금 상하한액 등에 따라 실제 공제액이 달라질 수 있습니다.</p>
-          </details>
-          <details>
-            <summary>소득세 80%, 100%, 120%는 뭔가요?</summary>
-            <p>근로소득 간이세액표 적용 시 원천징수세액을 80%, 100%, 120% 중 선택하는 경우를 반영하기 위한 옵션입니다.</p>
-          </details>
+          <details><summary>실제 급여명세서와 차이가 날 수 있나요?</summary><p>회사별 급여 항목, 비과세 처리, 상여금, 원천징수 방식, 부양가족 조건 등에 따라 실제 금액과 차이가 날 수 있습니다.</p></details>
+          <details><summary>요율은 어디서 관리하나요?</summary><p>현재 페이지는 data/rates.json 파일을 먼저 불러오고, 실패하면 페이지 안의 기본값으로 계산합니다.</p></details>
         </div>
       </section>
     </main>
 
-    <footer>
-      <strong>생활편의 도구</strong><br>
-      빠르고 간편한 생활 계산 서비스<br><br>
-      © 2026 생활편의 도구<br>
-      Designed &amp; Developed by Chulhee
-    </footer>
+    <footer><strong>생활편의 도구</strong><br>빠르고 간편한 생활 계산 서비스<br><br>© 2026 생활편의 도구<br>Designed &amp; Developed by Chulhee</footer>
   </div>
 
   <nav class="bottom-nav" aria-label="모바일 하단 메뉴">
-    <a href="index.html">홈</a>
-    <a href="age.html">만나이</a>
-    <a class="active" href="salary.html">연봉</a>
-    <a href="dday.html">D-Day</a>
+    <a href="index.html">홈</a><a href="age.html">만나이</a><a class="active" href="salary.html">연봉</a><a href="weekly-pay.html">주휴수당</a>
   </nav>
 
   <script>
-    const RATES = {
-      pension: 0.0475,
-      health: 0.03595,
-      careOfHealth: 0.1314,
-      employment: 0.009
+    const DEFAULT_RATES = {
+      year: 2026,
+      minimumWage: 10320,
+      minimumMonthlyWage: 2156880,
+      monthlyStandardHours: 209,
+      pensionEmployeeRate: 0.0475,
+      healthEmployeeRate: 0.03595,
+      careRateOfHealth: 0.1314,
+      employmentEmployeeRate: 0.009,
+      defaultMonthlyTaxFree: 200000
     };
+
+    let RATES = DEFAULT_RATES;
+    let lastSummary = '';
 
     const salaryInput = document.getElementById('salary');
     const taxFreeInput = document.getElementById('taxFree');
@@ -986,29 +247,50 @@
     const autoCalc = document.getElementById('autoCalc');
     const resultBox = document.getElementById('result');
 
-    let lastSummary = '';
+    initRates();
 
-    [salaryInput, taxFreeInput].forEach(function(input){
-      input.addEventListener('input', function(){
-        this.value = formatNumberInput(this.value);
-        runAutoCalc();
-      });
-
-      input.addEventListener('keydown', function(event){
-        if(event.key === 'Enter'){
-          calcSalary();
+    async function initRates(){
+      try{
+        const res = await fetch('data/rates.json', {cache:'no-store'});
+        if(res.ok){
+          RATES = Object.assign({}, DEFAULT_RATES, await res.json());
         }
-      });
-    });
+      }catch(e){
+        RATES = DEFAULT_RATES;
+      }
 
-    [familyCount, childrenCount, taxRate, autoCalc].forEach(function(el){
-      el.addEventListener('change', runAutoCalc);
-    });
+      taxFreeInput.value = Number(RATES.defaultMonthlyTaxFree || 0).toLocaleString();
+      renderRateInfo();
+      bindEvents();
+    }
+
+    function bindEvents(){
+      [salaryInput, taxFreeInput].forEach(function(input){
+        input.addEventListener('input', function(){
+          this.value = formatNumberInput(this.value);
+          runAutoCalc();
+        });
+        input.addEventListener('keydown', function(event){
+          if(event.key === 'Enter') calcSalary();
+        });
+      });
+
+      [familyCount, childrenCount, taxRate, autoCalc].forEach(function(el){
+        el.addEventListener('change', runAutoCalc);
+      });
+    }
+
+    function renderRateInfo(){
+      document.getElementById('rateYearText').textContent = (RATES.year || '현재') + '년 기준 요율';
+      document.getElementById('rateTitle').textContent = (RATES.year || '현재') + '년 적용 요율';
+      document.getElementById('ratePension').textContent = percent(RATES.pensionEmployeeRate);
+      document.getElementById('rateHealth').textContent = percent(RATES.healthEmployeeRate);
+      document.getElementById('rateCare').textContent = '건보료의 ' + percent(RATES.careRateOfHealth);
+      document.getElementById('rateEmployment').textContent = percent(RATES.employmentEmployeeRate);
+    }
 
     function runAutoCalc(){
-      if(autoCalc.checked && getNumber(salaryInput.value) > 0){
-        calcSalary(false);
-      }
+      if(autoCalc.checked && getNumber(salaryInput.value) > 0) calcSalary(false);
     }
 
     function formatNumberInput(value){
@@ -1044,10 +326,10 @@
       const monthlyGross = Math.floor(annualSalary / 12);
       const insuranceBase = Math.max(0, monthlyGross - monthlyTaxFree);
 
-      const pension = round10(insuranceBase * RATES.pension);
-      const health = round10(insuranceBase * RATES.health);
-      const care = round10(health * RATES.careOfHealth);
-      const employment = round10(insuranceBase * RATES.employment);
+      const pension = round10(insuranceBase * RATES.pensionEmployeeRate);
+      const health = round10(insuranceBase * RATES.healthEmployeeRate);
+      const care = round10(health * RATES.careRateOfHealth);
+      const employment = round10(insuranceBase * RATES.employmentEmployeeRate);
 
       const annualTaxableGross = Math.max(0, (monthlyGross - monthlyTaxFree) * 12);
       const annualSocial = (pension + health + care + employment) * 12;
@@ -1070,21 +352,14 @@
       setText('incomeTax', won(incomeTax));
       setText('localTax', won(localTax));
 
-      lastSummary =
-        '연봉 ' + won(annualSalary) + ' 기준 예상 월 실수령액은 ' + won(monthlyNet) +
-        '입니다. 월 세전급여는 ' + won(monthlyGross) + ', 월 공제합계는 ' + won(monthlyDeduct) + '입니다.';
-
+      lastSummary = '연봉 ' + won(annualSalary) + ' 기준 예상 월 실수령액은 ' + won(monthlyNet) + '입니다.';
       document.getElementById('detailText').innerHTML =
-        '<strong>연봉 ' + won(annualSalary) + '</strong> 기준 예상 월 실수령액은 ' +
-        '<strong>' + won(monthlyNet) + '</strong>입니다. 월 세전급여는 <strong>' + won(monthlyGross) +
-        '</strong>, 월 공제합계는 <strong>' + won(monthlyDeduct) + '</strong>이며, 예상 연 실수령액은 <strong>' +
-        won(yearlyNet) + '</strong>입니다.';
+        '<strong>연봉 ' + won(annualSalary) + '</strong> 기준 예상 월 실수령액은 <strong>' + won(monthlyNet) +
+        '</strong>입니다. 월 세전급여는 <strong>' + won(monthlyGross) + '</strong>, 월 공제합계는 <strong>' +
+        won(monthlyDeduct) + '</strong>이며, 예상 연 실수령액은 <strong>' + won(yearlyNet) + '</strong>입니다.';
 
       resultBox.style.display = 'block';
-
-      if(scroll){
-        resultBox.scrollIntoView({behavior:'smooth', block:'nearest'});
-      }
+      if(scroll) resultBox.scrollIntoView({behavior:'smooth', block:'nearest'});
     }
 
     function estimateAnnualIncomeTax(annualTaxableGross, annualSocial, family, children){
@@ -1092,11 +367,9 @@
       const personalDeduction = Math.max(1, family) * 1500000;
       const pensionLikeDeduction = Math.min(annualSocial, annualTaxableGross);
       const childDeduction = children === 1 ? 150000 : children === 2 ? 350000 : children >= 3 ? 650000 : 0;
-
       const taxBase = Math.max(0, annualTaxableGross - earnedDeduction - personalDeduction - pensionLikeDeduction);
       const calculatedTax = progressiveTax(taxBase);
       const earnedTaxCredit = earnedIncomeTaxCredit(calculatedTax);
-
       return Math.max(0, calculatedTax - earnedTaxCredit - childDeduction);
     }
 
@@ -1124,21 +397,17 @@
       return Math.min(credit, 740000);
     }
 
-    function round10(value){
-      return Math.floor(value / 10) * 10;
+    function percent(value){
+      return (Number(value) * 100).toFixed(3).replace(/0+$/,'').replace(/\.$/,'') + '%';
     }
 
-    function won(value){
-      return Math.round(value).toLocaleString() + '원';
-    }
-
-    function setText(id, value){
-      document.getElementById(id).textContent = value;
-    }
+    function round10(value){ return Math.floor(value / 10) * 10; }
+    function won(value){ return Math.round(value).toLocaleString() + '원'; }
+    function setText(id, value){ document.getElementById(id).textContent = value; }
 
     function resetForm(){
       salaryInput.value = '';
-      taxFreeInput.value = '200,000';
+      taxFreeInput.value = Number(RATES.defaultMonthlyTaxFree || 0).toLocaleString();
       familyCount.value = '1';
       childrenCount.value = '0';
       taxRate.value = '1';
@@ -1148,21 +417,11 @@
     }
 
     function shareResult(){
-      if(!lastSummary){
-        alert('먼저 실수령액을 계산해 주세요.');
-        return;
-      }
-
+      if(!lastSummary){ alert('먼저 실수령액을 계산해 주세요.'); return; }
       if(navigator.share){
-        navigator.share({
-          title:'연봉 실수령액 계산 결과',
-          text:lastSummary,
-          url:location.href
-        });
+        navigator.share({title:'연봉 실수령액 계산 결과', text:lastSummary, url:location.href});
       }else if(navigator.clipboard){
-        navigator.clipboard.writeText(lastSummary).then(function(){
-          alert('계산 결과를 복사했습니다.');
-        });
+        navigator.clipboard.writeText(lastSummary).then(function(){ alert('계산 결과를 복사했습니다.'); });
       }else{
         alert(lastSummary);
       }
