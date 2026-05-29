@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://81pm.github.io/life-tools/sitemap.xml
