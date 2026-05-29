@@ -344,36 +344,6 @@
       line-height: 1.5;
     }
 
-    .category-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-bottom: 18px;
-    }
-
-    .category-card {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      border-radius: 20px;
-      padding: 16px;
-      background: rgba(255,255,255,.8);
-      transition: .18s ease;
-    }
-
-    .category-card strong {
-      display: block;
-      font-size: 14px;
-    }
-
-    .category-card span {
-      display: block;
-      margin-top: 3px;
-      color: var(--sub);
-      font-size: 12px;
-      font-weight: 700;
-    }
-
     .tools-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -541,9 +511,7 @@
 
     svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 2.2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
     .brand-mark svg { width: 25px; height: 25px; }
-    .icon-box svg { width: 29px; height: 29px; }
-    .category-card .icon-box { width: 42px; height: 42px; border-radius: 15px; }
-    .category-card .icon-box svg { width: 23px; height: 23px; }
+    .icon-box svg { width: 29px; height: 29px; }    
     .bottom-nav svg { width: 21px; height: 21px; }
 
     @media (max-width: 940px) {
@@ -648,34 +616,7 @@
         </aside>
       </section>
 
-      <section aria-labelledby="category-title">
-        <div class="section-head">
-          <div>
-            <h2 id="category-title">카테고리</h2>
-            <p>기능이 늘어날 때 카테고리별로 확장하기 좋은 구조입니다.</p>
-          </div>
-        </div>
-
-        <div class="category-row">
-          <a class="category-card" href="#tools">
-            <span class="icon-box"><svg viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h16"/></svg></span>
-            <span><strong>전체 도구</strong><span>모든 기능 보기</span></span>
-          </a>
-          <a class="category-card" href="#money">
-            <span class="icon-box"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"/></svg></span>
-            <span><strong>급여·수당</strong><span>연봉, 주휴수당</span></span>
-          </a>
-          <a class="category-card" href="#date">
-            <span class="icon-box"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg></span>
-            <span><strong>날짜·달력</strong><span>만나이, D-Day, 음력</span></span>
-          </a>
-          <a class="category-card" href="#health">
-            <span class="icon-box"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></span>
-            <span><strong>건강</strong><span>BMI 계산</span></span>
-          </a>
-        </div>
-      </section>
-
+      
       <section id="tools" aria-labelledby="tools-title">
         <div class="section-head">
           <div>
