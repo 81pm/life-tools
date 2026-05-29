@@ -1,175 +1,1368 @@
 <!doctype html>
 <html lang="ko">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>이미지 용량 줄이기 - 생활편의 도구</title>
-<meta name="description" content="이미지를 서버에 업로드하지 않고 브라우저 안에서만 압축하고 JPG, PNG, WebP로 변환합니다. 사진은 어디에도 저장되거나 전송되지 않습니다.">
-<meta name="theme-color" content="#2563eb">
-<style>
-:root{--bg:#f4f7fb;--card:#fff;--text:#152033;--sub:#64748b;--line:#e2e8f0;--primary:#2563eb;--cyan:#0891b2;--green:#16a34a;--shadow:0 18px 45px rgba(15,23,42,.10);--shadow-soft:0 10px 24px rgba(15,23,42,.07);--radius-xl:28px;--radius-lg:22px;--safe-bottom:env(safe-area-inset-bottom,0px)}
-*{box-sizing:border-box}html{scroll-behavior:smooth}
-body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;color:var(--text);background:radial-gradient(circle at 18% 0%,rgba(8,145,178,.15),transparent 30%),radial-gradient(circle at 86% 12%,rgba(37,99,235,.12),transparent 28%),linear-gradient(180deg,#ecfeff 0%,var(--bg) 45%,#fff 100%)}
-a{color:inherit;text-decoration:none}button,input,select{font:inherit}
-.app{width:min(1120px,calc(100% - 28px));margin:0 auto;padding:18px 0 calc(92px + var(--safe-bottom))}
-.app-header{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 0;backdrop-filter:blur(18px)}
-.brand{display:flex;align-items:center;gap:11px;font-weight:900}.brand-mark{width:44px;height:44px;border-radius:16px;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,var(--primary),#06b6d4);box-shadow:0 12px 28px rgba(37,99,235,.28)}
-.brand-text strong{display:block;font-size:18px;line-height:1.15}.brand-text span{display:block;margin-top:2px;color:var(--sub);font-size:12px;font-weight:600}
-.pill-btn{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 14px;border:1px solid rgba(226,232,240,.95);border-radius:999px;background:rgba(255,255,255,.78);color:#334155;font-size:13px;font-weight:850;box-shadow:0 6px 18px rgba(15,23,42,.05)}
-.hero{position:relative;overflow:hidden;margin-top:12px;padding:clamp(28px,5vw,52px);border-radius:var(--radius-xl);background:rgba(255,255,255,.9);border:1px solid rgba(226,232,240,.86);box-shadow:var(--shadow)}
-.hero:before{content:"";position:absolute;right:-90px;top:-100px;width:260px;height:260px;border-radius:999px;background:rgba(8,145,178,.12)}
-.hero:after{content:"";position:absolute;right:58px;bottom:-82px;width:190px;height:190px;border-radius:999px;background:rgba(37,99,235,.10)}
-.badge{position:relative;z-index:1;display:inline-flex;align-items:center;gap:8px;padding:9px 13px;border-radius:999px;color:var(--cyan);background:#ecfeff;font-size:13px;font-weight:950;margin-bottom:18px}
-h1{position:relative;z-index:1;margin:0;max-width:820px;font-size:clamp(30px,5.2vw,54px);line-height:1.12;letter-spacing:-1.7px}
-.hero-desc{position:relative;z-index:1;margin:18px 0 0;max-width:790px;color:var(--sub);font-size:17px;line-height:1.75}
-.privacy-banner{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:26px;max-width:900px}
-.privacy-item{display:flex;gap:10px;padding:14px;border-radius:18px;background:#fff;border:1px solid var(--line);box-shadow:0 8px 20px rgba(15,23,42,.05)}
-.privacy-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:12px;color:var(--green);background:#ecfdf5;flex:0 0 auto;font-size:18px}
-.privacy-item strong{display:block;font-size:13px}.privacy-item span{display:block;margin-top:3px;color:var(--sub);font-size:12px;line-height:1.45;font-weight:700}
-.layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;margin-top:22px;align-items:start}
-.panel,.side-card,.result,.ad-card,.info-card{border:1px solid rgba(226,232,240,.86);background:rgba(255,255,255,.92);box-shadow:var(--shadow-soft)}
-.panel{padding:24px;border-radius:var(--radius-xl)}
-.drop-zone{position:relative;display:grid;place-items:center;min-height:260px;border:2px dashed #a5f3fc;border-radius:24px;background:linear-gradient(135deg,#ecfeff,#fff);text-align:center;padding:26px;transition:.18s;overflow:hidden}
-.drop-zone.dragover{transform:translateY(-2px);border-color:var(--cyan);box-shadow:0 18px 34px rgba(8,145,178,.12)}
-.drop-zone input{position:absolute;inset:0;opacity:0;cursor:pointer}
-.drop-visual{width:70px;height:70px;display:grid;place-items:center;border-radius:24px;color:var(--cyan);background:#fff;box-shadow:0 12px 28px rgba(8,145,178,.12);margin:0 auto 16px;font-size:30px}
-.drop-zone h2{margin:0;font-size:24px}.drop-zone p{margin:10px 0 0;color:var(--sub);line-height:1.7;font-size:14px}
-.safe-note{margin-top:16px;padding:14px;border-radius:18px;color:#166534;background:#f0fdf4;border:1px solid #bbf7d0;font-size:13px;line-height:1.6;font-weight:850}
-.preview-wrap{display:none;margin-top:18px;grid-template-columns:1fr 1fr;gap:14px}
-.preview-card{border:1px solid var(--line);border-radius:22px;overflow:hidden;background:#fff}.preview-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line);font-size:13px;font-weight:950}.preview-head span{color:var(--sub);font-weight:850}
-.preview-img{width:100%;aspect-ratio:4/3;display:grid;place-items:center;background:#f8fafc;overflow:hidden}.preview-img img{max-width:100%;max-height:100%;object-fit:contain;display:block}
-.settings{display:none;margin-top:18px;padding:18px;border:1px solid var(--line);border-radius:22px;background:#fff}
-.settings-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}.settings-title strong{font-size:17px}.settings-title span{color:var(--sub);font-size:12px;font-weight:850}
-.form-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.field label{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;color:#0f172a;font-size:14px;font-weight:950}.hint{color:var(--sub);font-size:12px;font-weight:750}
-input,select{width:100%;height:54px;border:1px solid var(--line);border-radius:17px;padding:0 14px;color:var(--text);background:#f8fafc;font-size:16px;outline:none}
-select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,#64748b 50%),linear-gradient(135deg,#64748b 50%,transparent 50%);background-position:calc(100% - 20px) 23px,calc(100% - 14px) 23px;background-size:6px 6px,6px 6px;background-repeat:no-repeat}
-input[type="range"]{padding:0;height:54px;accent-color:var(--cyan);background:transparent;border:0}.quality-value{color:var(--cyan);font-weight:950}
-.actions{display:flex;gap:10px;margin-top:18px}button{min-height:54px;border:0;border-radius:18px;font-weight:950;font-size:15px;cursor:pointer;transition:.16s}.actions button{flex:1 1 0;width:auto}button:hover{transform:translateY(-1px)}
-.primary{color:#fff;background:linear-gradient(135deg,var(--cyan),#0e7490);box-shadow:0 12px 26px rgba(8,145,178,.24)}.ghost{color:#334155;background:#f8fafc;border:1px solid var(--line)}
-.download-btn{display:none;align-items:center;justify-content:center;min-height:54px;border-radius:18px;color:#fff;background:linear-gradient(135deg,var(--green),#15803d);box-shadow:0 12px 26px rgba(22,163,74,.20);font-weight:950;margin-top:10px}
-.result{display:none;margin-top:18px;padding:24px;border-radius:var(--radius-xl);background:radial-gradient(circle at 16% 8%,rgba(8,145,178,.10),transparent 35%),linear-gradient(135deg,#ecfeff,#fff);border-color:#a5f3fc}
-.result-main{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:center;margin-bottom:18px}.result-main span{display:block;color:var(--sub);font-size:14px;font-weight:900}.result-main strong{display:block;margin-top:6px;color:var(--cyan);font-size:clamp(36px,7vw,58px);letter-spacing:-2px;line-height:1}
-.result-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.mini{padding:16px;border-radius:18px;background:#fff;border:1px solid var(--line)}.mini span{display:block;color:var(--sub);font-size:12px;font-weight:850}.mini strong{display:block;margin-top:7px;color:#0f172a;font-size:20px;letter-spacing:-.5px}
-.detail{margin-top:16px;padding:16px;border-radius:18px;color:#475569;background:#fff;border:1px solid var(--line);font-size:14px;line-height:1.75}
-.side{display:grid;gap:14px}.side-card{padding:18px;border-radius:var(--radius-lg)}.side-card h2{margin:0 0 12px;font-size:17px;letter-spacing:-.3px}.side-link{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;border:1px solid var(--line);border-radius:16px;background:#f8fbff;color:#334155;font-size:14px;font-weight:900}.side-link+.side-link{margin-top:8px}
-.privacy-card{color:#166534;background:#f0fdf4;border-color:#bbf7d0}.privacy-card p{margin:0;font-size:14px;line-height:1.75;font-weight:850}
-.ad-card{min-height:110px;margin-top:18px;border-radius:var(--radius-lg);border-style:dashed;display:grid;place-items:center;text-align:center;color:var(--sub);padding:18px;font-size:14px;line-height:1.6}
-.info-card{margin-top:18px;padding:22px;border-radius:var(--radius-lg);color:#475569;font-size:14px;line-height:1.8}.info-card h2{margin:0 0 10px;color:#0f172a;font-size:20px;letter-spacing:-.4px}.faq{display:grid;gap:10px;margin-top:14px}details{padding:16px;border:1px solid var(--line);border-radius:18px;background:#fff}summary{cursor:pointer;color:#0f172a;font-weight:950}details p{margin:10px 0 0;color:#64748b;font-size:14px;line-height:1.7}
-footer{margin-top:28px;padding:22px 0 0;border-top:1px solid rgba(226,232,240,.9);color:var(--sub);font-size:13px;line-height:1.7;text-align:center}
-.bottom-nav{position:fixed;left:50%;bottom:calc(12px + var(--safe-bottom));transform:translateX(-50%);z-index:30;width:min(520px,calc(100% - 24px));display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:8px;border:1px solid rgba(226,232,240,.92);border-radius:24px;background:rgba(255,255,255,.90);backdrop-filter:blur(20px);box-shadow:0 18px 42px rgba(15,23,42,.16)}
-.bottom-nav a{display:grid;place-items:center;gap:3px;min-height:54px;border-radius:17px;color:#64748b;font-size:12px;font-weight:950}.bottom-nav a.active{color:var(--primary);background:var(--primary-soft)}
-@media(max-width:940px){.layout{grid-template-columns:1fr}.side{grid-template-columns:1fr 1fr}.privacy-banner{grid-template-columns:1fr}}
-@media(max-width:680px){.app{width:min(100% - 22px,1120px);padding-top:10px}.brand-text span{display:none}.hero{padding:28px 22px;border-radius:26px}h1{font-size:clamp(30px,9vw,40px);letter-spacing:-1.2px}.hero-desc{font-size:15px}.panel{padding:20px;border-radius:24px}.form-grid,.preview-wrap,.result-cards{grid-template-columns:1fr}.actions{flex-direction:column;gap:10px}.actions button{width:100%;min-height:54px;flex:none}.result-main{grid-template-columns:1fr}.side{grid-template-columns:1fr}input,select{font-size:16px}}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>이미지 용량 줄이기 - 무료 JPG PNG WebP 압축 변환</title>
+  <meta name="description" content="이미지 용량 줄이기 무료 도구입니다. JPG, PNG, WebP 사진을 서버 업로드 없이 브라우저 안에서만 압축하고 변환합니다. 개인정보 걱정 없이 바로 다운로드하세요." />
+  <meta name="keywords" content="이미지 용량 줄이기, 사진 용량 줄이기, JPG 압축, PNG 압축, WebP 변환, 이미지 압축, 사진 압축, JPG WebP 변환" />
+  <meta name="theme-color" content="#2563eb" />
+  <meta property="og:title" content="이미지 용량 줄이기 - 무료 JPG PNG WebP 압축 변환" />
+  <meta property="og:description" content="사진을 서버에 업로드하지 않고 브라우저 안에서만 압축하고 변환합니다." />
+  <meta property="og:type" content="website" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "이미지 용량 줄이기",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Web",
+    "description": "JPG, PNG, WebP 이미지를 서버 업로드 없이 브라우저 안에서 압축하고 변환하는 무료 웹 도구입니다.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "KRW"
+    }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "이미지가 서버에 업로드되나요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "아니요. 이 도구는 선택한 이미지를 서버에 업로드하지 않고 브라우저 안에서만 처리합니다."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "JPG PNG WebP 변환이 가능한가요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "네. JPG, PNG, WebP 포맷으로 압축 및 변환할 수 있습니다."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "모바일에서도 이미지 용량 줄이기가 가능한가요?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "네. 모바일 브라우저에서도 이미지 선택 후 압축과 다운로드가 가능합니다."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root{
+      --bg:#f4f7fb;
+      --card:#fff;
+      --text:#152033;
+      --sub:#64748b;
+      --line:#e2e8f0;
+      --primary:#2563eb;
+      --primary-dark:#1d4ed8;
+      --primary-soft:#eaf2ff;
+      --cyan:#0891b2;
+      --cyan-soft:#ecfeff;
+      --green:#16a34a;
+      --green-soft:#ecfdf5;
+      --orange:#ea580c;
+      --orange-soft:#fff7ed;
+      --red:#dc2626;
+      --red-soft:#fff1f2;
+      --purple:#7c3aed;
+      --purple-soft:#f5f3ff;
+      --shadow:0 18px 45px rgba(15,23,42,.10);
+      --shadow-soft:0 10px 24px rgba(15,23,42,.07);
+      --radius-xl:28px;
+      --radius-lg:22px;
+      --safe-bottom:env(safe-area-inset-bottom,0px);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 18% 0%,rgba(8,145,178,.15),transparent 30%),
+        radial-gradient(circle at 86% 12%,rgba(37,99,235,.12),transparent 28%),
+        linear-gradient(180deg,#ecfeff 0%,var(--bg) 45%,#fff 100%);
+    }
+
+    a{color:inherit;text-decoration:none}
+    button,input,select{font:inherit}
+
+    .app{
+      width:min(1120px,calc(100% - 28px));
+      margin:0 auto;
+      padding:18px 0 calc(92px + var(--safe-bottom));
+    }
+
+    .app-header{
+      position:sticky;
+      top:0;
+      z-index:20;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      padding:12px 0;
+      backdrop-filter:blur(18px);
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:11px;
+      font-weight:900;
+    }
+
+    .brand-mark{
+      width:44px;
+      height:44px;
+      border-radius:16px;
+      display:grid;
+      place-items:center;
+      color:#fff;
+      background:linear-gradient(135deg,var(--primary),#06b6d4);
+      box-shadow:0 12px 28px rgba(37,99,235,.28);
+      flex:0 0 auto;
+    }
+
+    .brand-text strong{
+      display:block;
+      font-size:18px;
+      line-height:1.15;
+    }
+
+    .brand-text span{
+      display:block;
+      margin-top:2px;
+      color:var(--sub);
+      font-size:12px;
+      font-weight:600;
+    }
+
+    .pill-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:40px;
+      padding:0 14px;
+      border:1px solid rgba(226,232,240,.95);
+      border-radius:999px;
+      background:rgba(255,255,255,.78);
+      color:#334155;
+      font-size:13px;
+      font-weight:850;
+      box-shadow:0 6px 18px rgba(15,23,42,.05);
+    }
+
+    .hero{
+      position:relative;
+      overflow:hidden;
+      margin-top:12px;
+      padding:clamp(28px,5vw,52px);
+      border-radius:var(--radius-xl);
+      background:rgba(255,255,255,.92);
+      border:1px solid rgba(226,232,240,.86);
+      box-shadow:var(--shadow);
+    }
+
+    .hero:before{
+      content:"";
+      position:absolute;
+      right:-90px;
+      top:-100px;
+      width:260px;
+      height:260px;
+      border-radius:999px;
+      background:rgba(8,145,178,.12);
+    }
+
+    .hero:after{
+      content:"";
+      position:absolute;
+      right:58px;
+      bottom:-82px;
+      width:190px;
+      height:190px;
+      border-radius:999px;
+      background:rgba(37,99,235,.10);
+    }
+
+    .badge{
+      position:relative;
+      z-index:1;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:9px 13px;
+      border-radius:999px;
+      color:var(--cyan);
+      background:var(--cyan-soft);
+      font-size:13px;
+      font-weight:950;
+      margin-bottom:18px;
+    }
+
+    h1{
+      position:relative;
+      z-index:1;
+      margin:0;
+      max-width:880px;
+      font-size:clamp(31px,5.2vw,56px);
+      line-height:1.11;
+      letter-spacing:-1.8px;
+    }
+
+    .hero-desc{
+      position:relative;
+      z-index:1;
+      margin:18px 0 0;
+      max-width:830px;
+      color:var(--sub);
+      font-size:17px;
+      line-height:1.75;
+    }
+
+    .hero-desc strong{
+      color:#0f766e;
+    }
+
+    .trust-strip{
+      position:relative;
+      z-index:1;
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:10px;
+      margin-top:26px;
+    }
+
+    .trust-item{
+      padding:14px;
+      border-radius:18px;
+      background:#fff;
+      border:1px solid var(--line);
+      box-shadow:0 8px 20px rgba(15,23,42,.05);
+    }
+
+    .trust-item strong{
+      display:block;
+      font-size:13px;
+      color:#0f172a;
+    }
+
+    .trust-item span{
+      display:block;
+      margin-top:4px;
+      color:var(--sub);
+      font-size:12px;
+      line-height:1.45;
+      font-weight:700;
+    }
+
+    .top-ad{
+      margin-top:18px;
+      min-height:96px;
+      border:1px dashed #cbd5e1;
+      border-radius:var(--radius-lg);
+      display:grid;
+      place-items:center;
+      color:var(--sub);
+      background:rgba(255,255,255,.78);
+      text-align:center;
+      font-size:14px;
+      line-height:1.6;
+    }
+
+    .layout{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 340px;
+      gap:18px;
+      margin-top:22px;
+      align-items:start;
+    }
+
+    .panel,
+    .side-card,
+    .result,
+    .ad-card,
+    .info-card{
+      border:1px solid rgba(226,232,240,.86);
+      background:rgba(255,255,255,.94);
+      box-shadow:var(--shadow-soft);
+    }
+
+    .panel{
+      padding:24px;
+      border-radius:var(--radius-xl);
+    }
+
+    .tool-lead{
+      margin:0 0 18px;
+      color:#334155;
+      line-height:1.7;
+      font-size:15px;
+    }
+
+    .tool-lead strong{
+      color:#0f766e;
+    }
+
+    .drop-zone{
+      position:relative;
+      display:grid;
+      place-items:center;
+      min-height:270px;
+      border:2px dashed #a5f3fc;
+      border-radius:24px;
+      background:linear-gradient(135deg,#ecfeff,#fff);
+      text-align:center;
+      padding:26px;
+      transition:.18s;
+      overflow:hidden;
+    }
+
+    .drop-zone.dragover{
+      transform:translateY(-2px);
+      border-color:var(--cyan);
+      box-shadow:0 18px 34px rgba(8,145,178,.12);
+    }
+
+    .drop-zone input[type="file"]{
+      position:absolute !important;
+      inset:0 !important;
+      width:100% !important;
+      height:100% !important;
+      min-height:100% !important;
+      padding:0 !important;
+      margin:0 !important;
+      border:0 !important;
+      border-radius:0 !important;
+      opacity:0 !important;
+      cursor:pointer !important;
+      z-index:5;
+      appearance:none;
+      -webkit-appearance:none;
+    }
+
+    .drop-visual{
+      width:76px;
+      height:76px;
+      display:grid;
+      place-items:center;
+      border-radius:26px;
+      color:var(--cyan);
+      background:#fff;
+      box-shadow:0 12px 28px rgba(8,145,178,.12);
+      margin:0 auto 16px;
+      font-size:34px;
+    }
+
+    .drop-zone h2{
+      margin:0;
+      font-size:25px;
+      letter-spacing:-.6px;
+    }
+
+    .drop-zone p{
+      margin:10px 0 0;
+      color:var(--sub);
+      line-height:1.7;
+      font-size:14px;
+    }
+
+    .safe-note{
+      margin-top:16px;
+      padding:14px;
+      border-radius:18px;
+      color:#166534;
+      background:#f0fdf4;
+      border:1px solid #bbf7d0;
+      font-size:13px;
+      line-height:1.6;
+      font-weight:850;
+    }
+
+    .settings{
+      display:none;
+      margin-top:18px;
+      padding:18px;
+      border:1px solid var(--line);
+      border-radius:22px;
+      background:#fff;
+    }
+
+    .settings-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:14px;
+    }
+
+    .settings-title strong{
+      font-size:17px;
+    }
+
+    .settings-title span{
+      color:var(--sub);
+      font-size:12px;
+      font-weight:850;
+    }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+    }
+
+    .field label{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      margin-bottom:8px;
+      color:#0f172a;
+      font-size:14px;
+      font-weight:950;
+    }
+
+    .hint{
+      color:var(--sub);
+      font-size:12px;
+      font-weight:750;
+    }
+
+    input,select{
+      width:100%;
+      height:54px;
+      border:1px solid var(--line);
+      border-radius:17px;
+      padding:0 14px;
+      color:var(--text);
+      background:#f8fafc;
+      font-size:16px;
+      outline:none;
+    }
+
+    select{
+      appearance:none;
+      background-image:linear-gradient(45deg,transparent 50%,#64748b 50%),linear-gradient(135deg,#64748b 50%,transparent 50%);
+      background-position:calc(100% - 20px) 23px,calc(100% - 14px) 23px;
+      background-size:6px 6px,6px 6px;
+      background-repeat:no-repeat;
+    }
+
+    input[type="range"]{
+      padding:0;
+      height:54px;
+      accent-color:var(--cyan);
+      background:transparent;
+      border:0;
+    }
+
+    .quality-value{
+      color:var(--cyan);
+      font-weight:950;
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      margin-top:18px;
+    }
+
+    button{
+      min-height:54px;
+      border:0;
+      border-radius:18px;
+      font-weight:950;
+      font-size:15px;
+      cursor:pointer;
+      transition:.16s;
+    }
+
+    .actions button{
+      flex:1 1 0;
+      width:auto;
+    }
+
+    button:hover{
+      transform:translateY(-1px);
+    }
+
+    .primary{
+      color:#fff;
+      background:linear-gradient(135deg,var(--cyan),#0e7490);
+      box-shadow:0 12px 26px rgba(8,145,178,.24);
+    }
+
+    .ghost{
+      color:#334155;
+      background:#f8fafc;
+      border:1px solid var(--line);
+    }
+
+    .download-btn{
+      display:none;
+      align-items:center;
+      justify-content:center;
+      min-height:56px;
+      border-radius:18px;
+      color:#fff;
+      background:linear-gradient(135deg,var(--green),#15803d);
+      box-shadow:0 12px 26px rgba(22,163,74,.20);
+      font-weight:950;
+      margin-top:10px;
+    }
+
+    .preview-wrap{
+      display:none;
+      margin-top:18px;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+    }
+
+    .preview-card{
+      border:1px solid var(--line);
+      border-radius:22px;
+      overflow:hidden;
+      background:#fff;
+    }
+
+    .preview-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:12px 14px;
+      border-bottom:1px solid var(--line);
+      font-size:13px;
+      font-weight:950;
+    }
+
+    .preview-head span{
+      color:var(--sub);
+      font-weight:850;
+    }
+
+    .preview-img{
+      width:100%;
+      aspect-ratio:4/3;
+      display:grid;
+      place-items:center;
+      background:#f8fafc;
+      overflow:hidden;
+    }
+
+    .preview-img img{
+      max-width:100%;
+      max-height:100%;
+      object-fit:contain;
+      display:block;
+    }
+
+    .result{
+      display:none;
+      margin-top:18px;
+      padding:24px;
+      border-radius:var(--radius-xl);
+      background:
+        radial-gradient(circle at 16% 8%,rgba(8,145,178,.10),transparent 35%),
+        linear-gradient(135deg,#ecfeff,#fff);
+      border-color:#a5f3fc;
+    }
+
+    .result-main{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto;
+      gap:18px;
+      align-items:center;
+      margin-bottom:18px;
+    }
+
+    .result-main span{
+      display:block;
+      color:var(--sub);
+      font-size:14px;
+      font-weight:900;
+    }
+
+    .result-main strong{
+      display:block;
+      margin-top:6px;
+      color:var(--cyan);
+      font-size:clamp(36px,7vw,58px);
+      letter-spacing:-2px;
+      line-height:1;
+    }
+
+    .result-cards{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
+    }
+
+    .mini{
+      padding:16px;
+      border-radius:18px;
+      background:#fff;
+      border:1px solid var(--line);
+    }
+
+    .mini span{
+      display:block;
+      color:var(--sub);
+      font-size:12px;
+      font-weight:850;
+    }
+
+    .mini strong{
+      display:block;
+      margin-top:7px;
+      color:#0f172a;
+      font-size:20px;
+      letter-spacing:-.5px;
+    }
+
+    .detail{
+      margin-top:16px;
+      padding:16px;
+      border-radius:18px;
+      color:#475569;
+      background:#fff;
+      border:1px solid var(--line);
+      font-size:14px;
+      line-height:1.75;
+    }
+
+    .side{
+      display:grid;
+      gap:14px;
+    }
+
+    .side-card{
+      padding:18px;
+      border-radius:var(--radius-lg);
+    }
+
+    .side-card h2{
+      margin:0 0 12px;
+      font-size:17px;
+      letter-spacing:-.3px;
+    }
+
+    .side-link{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:12px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#f8fbff;
+      color:#334155;
+      font-size:14px;
+      font-weight:900;
+    }
+
+    .side-link + .side-link{
+      margin-top:8px;
+    }
+
+    .privacy-card{
+      color:#166534;
+      background:#f0fdf4;
+      border-color:#bbf7d0;
+    }
+
+    .privacy-card p{
+      margin:0;
+      font-size:14px;
+      line-height:1.75;
+      font-weight:850;
+    }
+
+    .ad-card{
+      min-height:110px;
+      margin-top:18px;
+      border-radius:var(--radius-lg);
+      border-style:dashed;
+      display:grid;
+      place-items:center;
+      text-align:center;
+      color:var(--sub);
+      padding:18px;
+      font-size:14px;
+      line-height:1.6;
+    }
+
+    .info-card{
+      margin-top:18px;
+      padding:22px;
+      border-radius:var(--radius-lg);
+      color:#475569;
+      font-size:14px;
+      line-height:1.8;
+    }
+
+    .info-card h2{
+      margin:0 0 10px;
+      color:#0f172a;
+      font-size:22px;
+      letter-spacing:-.5px;
+    }
+
+    .keyword-links{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:14px;
+    }
+
+    .keyword-links a{
+      padding:8px 10px;
+      border-radius:999px;
+      background:#f8fafc;
+      border:1px solid var(--line);
+      color:#475569;
+      font-size:12px;
+      font-weight:850;
+    }
+
+    .faq{
+      display:grid;
+      gap:10px;
+      margin-top:14px;
+    }
+
+    details{
+      padding:16px;
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:#fff;
+    }
+
+    summary{
+      cursor:pointer;
+      color:#0f172a;
+      font-weight:950;
+    }
+
+    details p{
+      margin:10px 0 0;
+      color:#64748b;
+      font-size:14px;
+      line-height:1.7;
+    }
+
+    footer{
+      margin-top:28px;
+      padding:22px 0 0;
+      border-top:1px solid rgba(226,232,240,.9);
+      color:var(--sub);
+      font-size:13px;
+      line-height:1.7;
+      text-align:center;
+    }
+
+    .bottom-nav{
+      position:fixed;
+      left:50%;
+      bottom:calc(12px + var(--safe-bottom));
+      transform:translateX(-50%);
+      z-index:30;
+      width:min(520px,calc(100% - 24px));
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:4px;
+      padding:8px;
+      border:1px solid rgba(226,232,240,.92);
+      border-radius:24px;
+      background:rgba(255,255,255,.90);
+      backdrop-filter:blur(20px);
+      box-shadow:0 18px 42px rgba(15,23,42,.16);
+    }
+
+    .bottom-nav a{
+      display:grid;
+      place-items:center;
+      gap:3px;
+      min-height:54px;
+      border-radius:17px;
+      color:#64748b;
+      font-size:12px;
+      font-weight:950;
+    }
+
+    .bottom-nav a.active{
+      color:var(--primary);
+      background:var(--primary-soft);
+    }
+
+    @media(max-width:940px){
+      .layout{grid-template-columns:1fr}
+      .side{grid-template-columns:1fr 1fr}
+      .trust-strip{grid-template-columns:1fr 1fr}
+    }
+
+    @media(max-width:680px){
+      .app{
+        width:min(100% - 22px,1120px);
+        padding-top:10px;
+      }
+
+      .brand-text span{display:none}
+
+      .hero{
+        padding:28px 22px;
+        border-radius:26px;
+      }
+
+      h1{
+        font-size:clamp(30px,9vw,40px);
+        letter-spacing:-1.2px;
+      }
+
+      .hero-desc{
+        font-size:15px;
+      }
+
+      .trust-strip{
+        grid-template-columns:1fr;
+      }
+
+      .panel{
+        padding:20px;
+        border-radius:24px;
+      }
+
+      .form-grid,
+      .preview-wrap,
+      .result-cards{
+        grid-template-columns:1fr;
+      }
+
+      .actions{
+        flex-direction:column;
+        gap:10px;
+      }
+
+      .actions button{
+        width:100%;
+        min-height:54px;
+        flex:none;
+      }
+
+      .result-main{
+        grid-template-columns:1fr;
+      }
+
+      .side{
+        grid-template-columns:1fr;
+      }
+    }
+  
+.drop-zone > div{
+  pointer-events:none;
+}
+.drop-zone input[type="file"]{
+  pointer-events:auto;
+}
+
 </style>
 </head>
+
 <body>
-<div class="app">
-<header class="app-header">
-<a href="index.html" class="brand" aria-label="생활편의 도구 홈"><span class="brand-mark">✓</span><span class="brand-text"><strong>생활편의 도구</strong><span>빠른 계산 · 쉬운 변환</span></span></a>
-<a class="pill-btn" href="index.html">전체 기능</a>
-</header>
+  <div class="app">
+    <header class="app-header">
+      <a href="index.html" class="brand" aria-label="생활편의 도구 홈">
+        <span class="brand-mark">✓</span>
+        <span class="brand-text">
+          <strong>생활편의 도구</strong>
+          <span>빠른 계산 · 쉬운 변환</span>
+        </span>
+      </a>
+      <a class="pill-btn" href="index.html">전체 기능</a>
+    </header>
 
-<main>
-<section class="hero">
-<div class="badge">🖼️ 이미지 용량 줄이기</div>
-<h1>사진을 서버에 올리지 않고<br>브라우저 안에서 바로 압축합니다.</h1>
-<p class="hero-desc">JPG, PNG, WebP 이미지를 압축하고 크기를 줄이거나 포맷을 변환할 수 있습니다. <strong>선택한 이미지는 서버에 업로드되지 않고, 어디에도 저장되거나 전송되지 않습니다.</strong></p>
-<div class="privacy-banner">
-<div class="privacy-item"><div class="privacy-icon">🔒</div><div><strong>서버 업로드 없음</strong><span>이미지는 내 브라우저 안에서만 처리됩니다.</span></div></div>
-<div class="privacy-item"><div class="privacy-icon">🚫</div><div><strong>저장·전송 없음</strong><span>사진 파일은 외부 서버로 보내지 않습니다.</span></div></div>
-<div class="privacy-item"><div class="privacy-icon">⚡</div><div><strong>즉시 처리</strong><span>브라우저 메모리에서 압축 후 다운로드합니다.</span></div></div>
-</div>
-</section>
+    <main>
+      <section class="hero">
+        <div class="badge">🖼️ 이미지 용량 줄이기</div>
+        <h1>이미지 용량 줄이기<br>무료 JPG PNG WebP 압축 변환</h1>
+        <p class="hero-desc">
+          사진 용량을 줄이고 JPG, PNG, WebP 포맷으로 변환하세요.
+          <strong>이미지는 서버에 업로드되지 않고, 브라우저 안에서만 압축·변환됩니다.</strong>
+        </p>
 
-<div class="layout">
-<section class="panel">
-<div id="dropZone" class="drop-zone">
-<input id="fileInput" type="file" accept="image/jpeg,image/png,image/webp,image/bmp">
-<div>
-<div class="drop-visual">🖼️</div>
-<h2>이미지를 선택하세요</h2>
-<p>클릭하거나 이미지를 끌어다 놓으세요.<br>JPG, PNG, WebP, BMP 파일을 지원합니다.</p>
-<div class="safe-note">🔒 선택한 이미지는 서버에 업로드되지 않습니다. 모든 작업은 현재 브라우저 안에서만 처리됩니다.</div>
-</div>
-</div>
+        <div class="trust-strip">
+          <div class="trust-item"><strong>🔒 서버 업로드 없음</strong><span>사진은 내 브라우저 안에서만 처리됩니다.</span></div>
+          <div class="trust-item"><strong>🚫 저장·전송 없음</strong><span>이미지 파일은 외부 서버로 보내지 않습니다.</span></div>
+          <div class="trust-item"><strong>⚡ 무료 즉시 변환</strong><span>회원가입 없이 바로 압축 후 다운로드합니다.</span></div>
+          <div class="trust-item"><strong>📱 모바일 지원</strong><span>휴대폰 사진도 바로 용량을 줄일 수 있습니다.</span></div>
+        </div>
+      </section>
 
-<div id="settings" class="settings">
-<div class="settings-title"><strong>압축 설정</strong><span id="fileNameText">파일 선택됨</span></div>
-<div class="form-grid">
-<div class="field"><label for="format">출력 포맷 <span class="hint">권장 WebP</span></label><select id="format"><option value="image/webp">WebP</option><option value="image/jpeg">JPG</option><option value="image/png">PNG</option></select></div>
-<div class="field"><label for="maxWidth">최대 가로폭 <span class="hint">리사이즈</span></label><select id="maxWidth"><option value="0">원본 유지</option><option value="800">800px</option><option value="1200">1200px</option><option value="1600">1600px</option><option value="1920" selected>1920px</option></select></div>
-<div class="field"><label for="quality">품질 <span class="quality-value" id="qualityValue">80%</span></label><input id="quality" type="range" min="0.1" max="1" step="0.05" value="0.8"></div>
-</div>
-<div class="actions"><button type="button" class="primary" onclick="processImage()">압축/변환하기</button><button type="button" class="ghost" onclick="resetTool()">초기화</button></div>
-<a id="downloadBtn" class="download-btn" download>압축된 이미지 다운로드</a>
-</div>
+      <div class="top-ad">
+        광고 영역<br>
+        상단 광고 또는 반응형 디스플레이 광고 위치
+      </div>
 
-<div id="previewWrap" class="preview-wrap">
-<div class="preview-card"><div class="preview-head"><strong>원본 이미지</strong><span id="originalInfo">-</span></div><div class="preview-img"><img id="originalPreview" alt="원본 미리보기"></div></div>
-<div class="preview-card"><div class="preview-head"><strong>처리 결과</strong><span id="outputInfo">-</span></div><div class="preview-img"><img id="outputPreview" alt="처리 결과 미리보기"></div></div>
-</div>
+      <div class="layout">
+        <section class="panel">
+          <p class="tool-lead">
+            아래에서 이미지를 선택하면 <strong>브라우저 메모리에서만</strong> 처리됩니다.
+            파일은 서버에 업로드되지 않으며, 처리 후 직접 다운로드합니다.
+          </p>
 
-<section id="result" class="result">
-<div class="result-main"><div><span>용량 감소율</span><strong id="savingText">0%</strong></div></div>
-<div class="result-cards"><div class="mini"><span>원본 용량</span><strong id="originalSize">0KB</strong></div><div class="mini"><span>결과 용량</span><strong id="outputSize">0KB</strong></div><div class="mini"><span>절약한 용량</span><strong id="savedSize">0KB</strong></div></div>
-<div class="detail" id="detailText"></div>
-</section>
-</section>
+          <div id="dropZone" class="drop-zone">
+            <input id="fileInput" type="file" accept="image/jpeg,image/png,image/webp,image/bmp" />
+            <div>
+              <div class="drop-visual">🖼️</div>
+              <h2>이미지를 선택하세요</h2>
+              <p>
+                클릭하거나 이미지를 끌어다 놓으세요.<br>
+                JPG, PNG, WebP, BMP 파일을 지원합니다.
+              </p>
+              <div class="safe-note">
+                🔒 사진은 서버에 업로드되지 않습니다. 모든 작업은 현재 브라우저 안에서만 처리됩니다.
+              </div>
+            </div>
+          </div>
 
-<aside class="side">
-<section class="side-card privacy-card"><h2>🔒 개인정보 보호</h2><p>이 도구는 이미지를 서버에 업로드하지 않습니다. 파일 선택, 압축, 변환, 다운로드가 모두 사용자의 브라우저 안에서만 처리됩니다.</p></section>
-<section class="side-card"><h2>추천 설정</h2><a class="side-link" href="#" onclick="applyPreset('webp');return false;">블로그용 WebP <span>→</span></a><a class="side-link" href="#" onclick="applyPreset('jpg');return false;">호환성 좋은 JPG <span>→</span></a><a class="side-link" href="#" onclick="applyPreset('small');return false;">최대한 작게 <span>→</span></a></section>
-<section class="side-card"><h2>다른 기능</h2><a class="side-link" href="bmi.html">BMI 계산 <span>→</span></a><a class="side-link" href="dday.html">D-Day 계산 <span>→</span></a><a class="side-link" href="age.html">만나이 계산 <span>→</span></a></section>
-</aside>
-</div>
+          <div id="settings" class="settings">
+            <div class="settings-title">
+              <strong>압축/변환 설정</strong>
+              <span id="fileNameText">파일 선택됨</span>
+            </div>
 
-<div class="ad-card"><strong>광고 영역</strong><br>AdSense 승인 후 이 위치에 광고 코드를 넣으면 됩니다.</div>
-<section class="info-card"><h2>이미지는 어디로 전송되나요?</h2>전송되지 않습니다. 이 페이지는 사용자가 선택한 이미지를 브라우저의 File API와 Canvas 기능으로 읽고, 브라우저 안에서 새 이미지 파일로 다시 만들어 다운로드합니다. <strong>서버 저장, 서버 업로드, 외부 전송 과정이 없습니다.</strong><div class="faq"><details><summary>사진이 서버에 저장되나요?</summary><p>아니요. 사진은 서버에 저장되지 않습니다. 선택한 파일은 현재 브라우저에서만 읽고 처리합니다.</p></details><details><summary>개인 사진을 넣어도 괜찮나요?</summary><p>이 도구 자체는 사진을 서버로 보내지 않습니다. 다만 공용 PC에서는 다운로드한 파일이나 브라우저 캐시를 정리하는 것이 좋습니다.</p></details><details><summary>WebP가 가장 좋은가요?</summary><p>대부분의 웹 사용 목적에서는 WebP가 용량 대비 화질이 좋습니다. 다만 오래된 프로그램 호환성이 필요하면 JPG가 더 편할 수 있습니다.</p></details><details><summary>PNG를 JPG로 바꾸면 배경이 검게 나오나요?</summary><p>투명 배경 PNG를 JPG로 바꾸면 투명 영역이 흰색 배경으로 합성되도록 처리했습니다.</p></details></div></section>
-</main>
+            <div class="form-grid">
+              <div class="field">
+                <label for="format">출력 포맷 <span class="hint">추천 WebP</span></label>
+                <select id="format">
+                  <option value="image/webp">WebP - 용량 절약</option>
+                  <option value="image/jpeg">JPG - 호환성 좋음</option>
+                  <option value="image/png">PNG - 원본 보존</option>
+                </select>
+              </div>
 
-<footer><strong>생활편의 도구</strong><br>빠르고 간편한 생활 계산 서비스<br><br>© 2026 생활편의 도구<br>Designed &amp; Developed by Chulhee</footer>
-</div>
-<nav class="bottom-nav"><a href="index.html">홈</a><a href="age.html">만나이</a><a href="bmi.html">BMI</a><a class="active" href="image-compress.html">이미지</a></nav>
+              <div class="field">
+                <label for="maxWidth">최대 가로폭 <span class="hint">리사이즈</span></label>
+                <select id="maxWidth">
+                  <option value="0">원본 유지</option>
+                  <option value="800">800px - 썸네일</option>
+                  <option value="1200">1200px - 블로그</option>
+                  <option value="1600">1600px</option>
+                  <option value="1920" selected>1920px - 일반 추천</option>
+                </select>
+              </div>
 
-<script>
-const fileInput=document.getElementById('fileInput'),dropZone=document.getElementById('dropZone'),settings=document.getElementById('settings'),previewWrap=document.getElementById('previewWrap'),originalPreview=document.getElementById('originalPreview'),outputPreview=document.getElementById('outputPreview'),quality=document.getElementById('quality'),qualityValue=document.getElementById('qualityValue'),formatSelect=document.getElementById('format'),maxWidthSelect=document.getElementById('maxWidth'),resultBox=document.getElementById('result'),downloadBtn=document.getElementById('downloadBtn');
-let selectedFile=null,originalObjectUrl=null,outputObjectUrl=null,outputBlob=null;
-quality.addEventListener('input',()=>qualityValue.textContent=Math.round(Number(quality.value)*100)+'%');
-fileInput.addEventListener('change',()=>{if(fileInput.files&&fileInput.files[0])loadFile(fileInput.files[0]);});
-['dragenter','dragover'].forEach(n=>dropZone.addEventListener(n,e=>{e.preventDefault();dropZone.classList.add('dragover');}));
-['dragleave','drop'].forEach(n=>dropZone.addEventListener(n,e=>{e.preventDefault();dropZone.classList.remove('dragover');}));
-dropZone.addEventListener('drop',e=>{const f=e.dataTransfer.files&&e.dataTransfer.files[0];if(f)loadFile(f);});
-function loadFile(file){
- if(!file.type.startsWith('image/')){alert('이미지 파일만 선택할 수 있습니다.');return;}
- if(file.size>25*1024*1024)alert('모바일 브라우저 안정성을 위해 25MB 이하 이미지를 권장합니다.');
- selectedFile=file;clearOutput();if(originalObjectUrl)URL.revokeObjectURL(originalObjectUrl);
- originalObjectUrl=URL.createObjectURL(file);originalPreview.src=originalObjectUrl;
- const img=new Image();img.onload=()=>{document.getElementById('fileNameText').textContent=file.name;document.getElementById('originalInfo').textContent=img.naturalWidth+'×'+img.naturalHeight+' · '+formatBytes(file.size);settings.style.display='block';previewWrap.style.display='grid';resultBox.style.display='none';settings.scrollIntoView({behavior:'smooth',block:'nearest'});};img.src=originalObjectUrl;
-}
-async function processImage(){
- if(!selectedFile){alert('먼저 이미지를 선택해 주세요.');return;}
- const image=await fileToImage(selectedFile),targetMime=formatSelect.value,q=Number(quality.value),maxWidth=Number(maxWidthSelect.value);
- let tw=image.naturalWidth,th=image.naturalHeight;
- if(maxWidth>0&&image.naturalWidth>maxWidth){const r=maxWidth/image.naturalWidth;tw=Math.round(image.naturalWidth*r);th=Math.round(image.naturalHeight*r);}
- const canvas=document.createElement('canvas');canvas.width=tw;canvas.height=th;const ctx=canvas.getContext('2d');
- if(targetMime==='image/jpeg'){ctx.fillStyle='#fff';ctx.fillRect(0,0,tw,th);}
- ctx.drawImage(image,0,0,tw,th);
- const blob=await canvasToBlob(canvas,targetMime,targetMime==='image/png'?undefined:q);
- if(!blob){alert('이 브라우저에서는 선택한 포맷으로 변환할 수 없습니다.');return;}
- outputBlob=blob;if(outputObjectUrl)URL.revokeObjectURL(outputObjectUrl);outputObjectUrl=URL.createObjectURL(blob);outputPreview.src=outputObjectUrl;
- const ext=getExtension(targetMime),baseName=selectedFile.name.replace(/\.[^.]+$/,'');downloadBtn.href=outputObjectUrl;downloadBtn.download=baseName+'-compressed.'+ext;downloadBtn.style.display='flex';
- const saving=selectedFile.size>0?Math.round((1-blob.size/selectedFile.size)*100):0,saved=selectedFile.size-blob.size;
- document.getElementById('savingText').textContent=saving+'%';document.getElementById('originalSize').textContent=formatBytes(selectedFile.size);document.getElementById('outputSize').textContent=formatBytes(blob.size);document.getElementById('savedSize').textContent=formatBytes(Math.abs(saved));document.getElementById('outputInfo').textContent=tw+'×'+th+' · '+formatBytes(blob.size);
- document.getElementById('detailText').innerHTML='이미지는 <strong>서버로 업로드되지 않고</strong> 브라우저 안에서만 처리되었습니다. 원본 용량은 <strong>'+formatBytes(selectedFile.size)+'</strong>, 결과 용량은 <strong>'+formatBytes(blob.size)+'</strong>입니다. 출력 포맷은 <strong>'+ext.toUpperCase()+'</strong>이고, 이미지 크기는 <strong>'+tw+'×'+th+'</strong>입니다.';
- resultBox.style.display='block';resultBox.scrollIntoView({behavior:'smooth',block:'nearest'});
-}
-function fileToImage(file){return new Promise((resolve,reject)=>{const url=URL.createObjectURL(file),img=new Image();img.onload=()=>{URL.revokeObjectURL(url);resolve(img);};img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error('이미지를 읽을 수 없습니다.'));};img.src=url;});}
-function canvasToBlob(canvas,type,q){return new Promise(resolve=>canvas.toBlob(blob=>resolve(blob),type,q));}
-function formatBytes(bytes){if(bytes===0)return'0B';const u=['B','KB','MB','GB'],i=Math.floor(Math.log(bytes)/Math.log(1024)),v=bytes/Math.pow(1024,i);return v.toFixed(v>=10||i===0?0:1)+u[i];}
-function getExtension(mime){if(mime==='image/jpeg')return'jpg';if(mime==='image/png')return'png';if(mime==='image/webp')return'webp';return'jpg';}
-function applyPreset(type){if(type==='webp'){formatSelect.value='image/webp';maxWidthSelect.value='1920';quality.value='0.8';}if(type==='jpg'){formatSelect.value='image/jpeg';maxWidthSelect.value='1920';quality.value='0.85';}if(type==='small'){formatSelect.value='image/webp';maxWidthSelect.value='1200';quality.value='0.65';}qualityValue.textContent=Math.round(Number(quality.value)*100)+'%';if(selectedFile)processImage();}
-function clearOutput(){if(outputObjectUrl){URL.revokeObjectURL(outputObjectUrl);outputObjectUrl=null;}outputBlob=null;outputPreview.removeAttribute('src');document.getElementById('outputInfo').textContent='-';downloadBtn.removeAttribute('href');downloadBtn.style.display='none';resultBox.style.display='none';}
-function resetTool(){selectedFile=null;fileInput.value='';if(originalObjectUrl){URL.revokeObjectURL(originalObjectUrl);originalObjectUrl=null;}clearOutput();originalPreview.removeAttribute('src');settings.style.display='none';previewWrap.style.display='none';document.getElementById('originalInfo').textContent='-';document.getElementById('fileNameText').textContent='파일 선택됨';quality.value='0.8';qualityValue.textContent='80%';formatSelect.value='image/webp';maxWidthSelect.value='1920';dropZone.scrollIntoView({behavior:'smooth',block:'nearest'});}
-</script>
+              <div class="field">
+                <label for="quality">품질 <span class="quality-value" id="qualityValue">80%</span></label>
+                <input id="quality" type="range" min="0.1" max="1" step="0.05" value="0.8" />
+              </div>
+            </div>
+
+            <div class="actions">
+              <button type="button" class="primary" onclick="processImage()">이미지 용량 줄이기</button>
+              <button type="button" class="ghost" onclick="resetTool()">초기화</button>
+            </div>
+
+            <a id="downloadBtn" class="download-btn" download>압축된 이미지 다운로드</a>
+          </div>
+
+          <div id="previewWrap" class="preview-wrap">
+            <div class="preview-card">
+              <div class="preview-head"><strong>원본 이미지</strong><span id="originalInfo">-</span></div>
+              <div class="preview-img"><img id="originalPreview" alt="원본 이미지 미리보기" /></div>
+            </div>
+            <div class="preview-card">
+              <div class="preview-head"><strong>압축 결과</strong><span id="outputInfo">-</span></div>
+              <div class="preview-img"><img id="outputPreview" alt="압축 결과 미리보기" /></div>
+            </div>
+          </div>
+
+          <section id="result" class="result">
+            <div class="result-main">
+              <div><span>용량 감소율</span><strong id="savingText">0%</strong></div>
+            </div>
+
+            <div class="result-cards">
+              <div class="mini"><span>원본 용량</span><strong id="originalSize">0KB</strong></div>
+              <div class="mini"><span>결과 용량</span><strong id="outputSize">0KB</strong></div>
+              <div class="mini"><span>절약한 용량</span><strong id="savedSize">0KB</strong></div>
+            </div>
+
+            <div class="detail" id="detailText"></div>
+          </section>
+        </section>
+
+        <aside class="side">
+          <section class="side-card privacy-card">
+            <h2>🔒 안심 처리</h2>
+            <p>사진은 서버에 업로드되지 않습니다. 선택, 압축, 변환, 다운로드가 모두 사용자의 브라우저 안에서만 처리됩니다.</p>
+          </section>
+
+          <section class="side-card">
+            <h2>추천 설정</h2>
+            <a class="side-link" href="#" onclick="applyPreset('webp');return false;">블로그용 WebP <span>→</span></a>
+            <a class="side-link" href="#" onclick="applyPreset('jpg');return false;">호환성 좋은 JPG <span>→</span></a>
+            <a class="side-link" href="#" onclick="applyPreset('small');return false;">최대한 작게 <span>→</span></a>
+          </section>
+
+          <section class="side-card">
+            <h2>관련 도구</h2>
+            <a class="side-link" href="bmi.html">BMI 계산 <span>→</span></a>
+            <a class="side-link" href="dday.html">D-Day 계산 <span>→</span></a>
+            <a class="side-link" href="age.html">만나이 계산 <span>→</span></a>
+          </section>
+        </aside>
+      </div>
+
+      <div class="ad-card">
+        광고 영역<br>
+        결과 아래 광고 또는 반응형 디스플레이 광고 위치
+      </div>
+
+      <section class="info-card">
+        <h2>이미지 용량 줄이기란?</h2>
+        이미지 용량 줄이기는 사진의 가로·세로 크기를 줄이거나 JPG, PNG, WebP 같은 포맷으로 다시 저장해 파일 크기를 낮추는 작업입니다.
+        블로그, 쇼핑몰, 이력서, 첨부파일, 게시판 업로드처럼 파일 용량 제한이 있는 곳에서 유용합니다.
+
+        <div class="keyword-links" aria-label="관련 키워드">
+          <a href="#jpg">JPG 압축</a>
+          <a href="#png">PNG 압축</a>
+          <a href="#webp">WebP 변환</a>
+          <a href="#mobile">모바일 사진 용량 줄이기</a>
+        </div>
+      </section>
+
+      <section id="jpg" class="info-card">
+        <h2>JPG 압축</h2>
+        JPG는 사진 호환성이 좋아 가장 많이 쓰이는 이미지 포맷입니다. 품질을 70~85% 정도로 설정하면 눈에 띄는 화질 저하를 줄이면서 용량을 크게 줄일 수 있습니다.
+      </section>
+
+      <section id="png" class="info-card">
+        <h2>PNG 압축</h2>
+        PNG는 투명 배경이나 선명한 그래픽에 적합합니다. 사진 파일의 경우 PNG보다 JPG 또는 WebP로 변환하면 용량이 더 작아지는 경우가 많습니다.
+      </section>
+
+      <section id="webp" class="info-card">
+        <h2>WebP 변환</h2>
+        WebP는 웹에서 사용하기 좋은 이미지 포맷입니다. 같은 화질 기준으로 JPG나 PNG보다 용량을 줄이기 쉬워 블로그, 홈페이지, 쇼핑몰 이미지에 적합합니다.
+      </section>
+
+      <section id="mobile" class="info-card">
+        <h2>모바일 사진 용량 줄이기</h2>
+        휴대폰 사진은 해상도가 커서 용량이 크게 나오는 경우가 많습니다. 최대 가로폭을 1200px 또는 1920px로 줄이고 WebP나 JPG로 저장하면 업로드하기 좋은 크기로 줄일 수 있습니다.
+      </section>
+
+      <section class="info-card">
+        <h2>사진은 어디로 전송되나요?</h2>
+        전송되지 않습니다. 이 페이지는 사용자가 선택한 이미지를 브라우저의 File API와 Canvas 기능으로 읽고,
+        브라우저 안에서 새 이미지 파일로 다시 만들어 다운로드합니다.
+        <strong>서버 저장, 서버 업로드, 외부 전송 과정이 없습니다.</strong>
+
+        <div class="faq">
+          <details>
+            <summary>이미지가 서버에 업로드되나요?</summary>
+            <p>아니요. 이미지는 서버에 업로드되지 않습니다. 선택한 파일은 현재 브라우저에서만 읽고 압축합니다.</p>
+          </details>
+          <details>
+            <summary>개인 사진을 넣어도 괜찮나요?</summary>
+            <p>이 도구 자체는 사진을 서버로 보내지 않습니다. 공용 PC에서는 작업 후 다운로드 파일과 브라우저 기록을 정리하는 것이 좋습니다.</p>
+          </details>
+          <details>
+            <summary>JPG, PNG, WebP 변환이 가능한가요?</summary>
+            <p>네. 브라우저가 지원하는 범위에서 JPG, PNG, WebP로 변환할 수 있습니다.</p>
+          </details>
+          <details>
+            <summary>왜 압축했는데 용량이 더 커질 수 있나요?</summary>
+            <p>PNG를 PNG로 다시 저장하거나 이미 충분히 압축된 이미지는 용량이 크게 줄지 않거나 더 커질 수 있습니다. 이런 경우 WebP나 JPG 변환을 권장합니다.</p>
+          </details>
+          <details>
+            <summary>HEIC 사진도 변환되나요?</summary>
+            <p>일부 모바일 브라우저는 HEIC를 직접 읽지 못할 수 있습니다. HEIC 변환은 추후 별도 기능으로 확장하는 것이 좋습니다.</p>
+          </details>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <strong>생활편의 도구</strong><br>
+      빠르고 간편한 생활 계산 서비스<br><br>
+      © 2026 생활편의 도구<br>
+      Designed &amp; Developed by Chulhee
+    </footer>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="index.html">홈</a>
+    <a href="age.html">만나이</a>
+    <a href="bmi.html">BMI</a>
+    <a class="active" href="image-compress.html">이미지</a>
+  </nav>
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const dropZone = document.getElementById('dropZone');
+    const settings = document.getElementById('settings');
+    const previewWrap = document.getElementById('previewWrap');
+    const originalPreview = document.getElementById('originalPreview');
+    const outputPreview = document.getElementById('outputPreview');
+    const quality = document.getElementById('quality');
+    const qualityValue = document.getElementById('qualityValue');
+    const formatSelect = document.getElementById('format');
+    const maxWidthSelect = document.getElementById('maxWidth');
+    const resultBox = document.getElementById('result');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    let selectedFile = null;
+    let originalObjectUrl = null;
+    let outputObjectUrl = null;
+
+    quality.addEventListener('input', () => {
+      qualityValue.textContent = Math.round(Number(quality.value) * 100) + '%';
+    });
+
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files && fileInput.files[0]) {
+        loadFile(fileInput.files[0]);
+      }
+    });
+
+    ['dragenter', 'dragover'].forEach(name => {
+      dropZone.addEventListener(name, event => {
+        event.preventDefault();
+        dropZone.classList.add('dragover');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach(name => {
+      dropZone.addEventListener(name, event => {
+        event.preventDefault();
+        dropZone.classList.remove('dragover');
+      });
+    });
+
+    dropZone.addEventListener('drop', event => {
+      const file = event.dataTransfer.files && event.dataTransfer.files[0];
+      if (file) loadFile(file);
+    });
+
+    function loadFile(file) {
+      if (!file.type.startsWith('image/')) {
+        alert('이미지 파일만 선택할 수 있습니다.');
+        return;
+      }
+
+      if (file.size > 25 * 1024 * 1024) {
+        alert('모바일 브라우저 안정성을 위해 25MB 이하 이미지를 권장합니다.');
+      }
+
+      selectedFile = file;
+      clearOutput();
+
+      if (originalObjectUrl) URL.revokeObjectURL(originalObjectUrl);
+      originalObjectUrl = URL.createObjectURL(file);
+      originalPreview.src = originalObjectUrl;
+
+      const img = new Image();
+      img.onload = () => {
+        document.getElementById('fileNameText').textContent = file.name;
+        document.getElementById('originalInfo').textContent =
+          img.naturalWidth + '×' + img.naturalHeight + ' · ' + formatBytes(file.size);
+
+        settings.style.display = 'block';
+        previewWrap.style.display = 'grid';
+        resultBox.style.display = 'none';
+        settings.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      };
+      img.src = originalObjectUrl;
+    }
+
+    async function processImage() {
+      if (!selectedFile) {
+        alert('먼저 이미지를 선택해 주세요.');
+        return;
+      }
+
+      const image = await fileToImage(selectedFile);
+      const targetMime = formatSelect.value;
+      const q = Number(quality.value);
+      const maxWidth = Number(maxWidthSelect.value);
+
+      let targetWidth = image.naturalWidth;
+      let targetHeight = image.naturalHeight;
+
+      if (maxWidth > 0 && image.naturalWidth > maxWidth) {
+        const ratio = maxWidth / image.naturalWidth;
+        targetWidth = Math.round(image.naturalWidth * ratio);
+        targetHeight = Math.round(image.naturalHeight * ratio);
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = targetWidth;
+      canvas.height = targetHeight;
+
+      const ctx = canvas.getContext('2d');
+
+      if (targetMime === 'image/jpeg') {
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, targetWidth, targetHeight);
+      }
+
+      ctx.drawImage(image, 0, 0, targetWidth, targetHeight);
+
+      const blob = await canvasToBlob(canvas, targetMime, targetMime === 'image/png' ? undefined : q);
+
+      if (!blob) {
+        alert('이 브라우저에서는 선택한 포맷으로 변환할 수 없습니다.');
+        return;
+      }
+
+      if (outputObjectUrl) URL.revokeObjectURL(outputObjectUrl);
+      outputObjectUrl = URL.createObjectURL(blob);
+      outputPreview.src = outputObjectUrl;
+
+      const ext = getExtension(targetMime);
+      const baseName = selectedFile.name.replace(/\.[^.]+$/, '');
+      downloadBtn.href = outputObjectUrl;
+      downloadBtn.download = baseName + '-compressed.' + ext;
+      downloadBtn.style.display = 'flex';
+
+      const saving = selectedFile.size > 0 ? Math.round((1 - blob.size / selectedFile.size) * 100) : 0;
+      const saved = selectedFile.size - blob.size;
+
+      document.getElementById('savingText').textContent = saving + '%';
+      document.getElementById('originalSize').textContent = formatBytes(selectedFile.size);
+      document.getElementById('outputSize').textContent = formatBytes(blob.size);
+      document.getElementById('savedSize').textContent = formatBytes(Math.abs(saved));
+      document.getElementById('outputInfo').textContent =
+        targetWidth + '×' + targetHeight + ' · ' + formatBytes(blob.size);
+
+      document.getElementById('detailText').innerHTML =
+        '이미지는 <strong>서버로 업로드되지 않고</strong> 브라우저 안에서만 처리되었습니다. ' +
+        '원본 용량은 <strong>' + formatBytes(selectedFile.size) + '</strong>, 결과 용량은 <strong>' +
+        formatBytes(blob.size) + '</strong>입니다. 출력 포맷은 <strong>' + ext.toUpperCase() +
+        '</strong>이고, 이미지 크기는 <strong>' + targetWidth + '×' + targetHeight + '</strong>입니다.';
+
+      resultBox.style.display = 'block';
+      resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function fileToImage(file) {
+      return new Promise((resolve, reject) => {
+        const url = URL.createObjectURL(file);
+        const img = new Image();
+
+        img.onload = () => {
+          URL.revokeObjectURL(url);
+          resolve(img);
+        };
+
+        img.onerror = () => {
+          URL.revokeObjectURL(url);
+          reject(new Error('이미지를 읽을 수 없습니다.'));
+        };
+
+        img.src = url;
+      });
+    }
+
+    function canvasToBlob(canvas, type, q) {
+      return new Promise(resolve => {
+        canvas.toBlob(blob => resolve(blob), type, q);
+      });
+    }
+
+    function formatBytes(bytes) {
+      if (bytes === 0) return '0B';
+      const units = ['B', 'KB', 'MB', 'GB'];
+      const index = Math.floor(Math.log(bytes) / Math.log(1024));
+      const value = bytes / Math.pow(1024, index);
+      return value.toFixed(value >= 10 || index === 0 ? 0 : 1) + units[index];
+    }
+
+    function getExtension(mime) {
+      if (mime === 'image/jpeg') return 'jpg';
+      if (mime === 'image/png') return 'png';
+      if (mime === 'image/webp') return 'webp';
+      return 'jpg';
+    }
+
+    function applyPreset(type) {
+      if (type === 'webp') {
+        formatSelect.value = 'image/webp';
+        maxWidthSelect.value = '1920';
+        quality.value = '0.8';
+      }
+
+      if (type === 'jpg') {
+        formatSelect.value = 'image/jpeg';
+        maxWidthSelect.value = '1920';
+        quality.value = '0.85';
+      }
+
+      if (type === 'small') {
+        formatSelect.value = 'image/webp';
+        maxWidthSelect.value = '1200';
+        quality.value = '0.65';
+      }
+
+      qualityValue.textContent = Math.round(Number(quality.value) * 100) + '%';
+
+      if (selectedFile) processImage();
+    }
+
+    function clearOutput() {
+      if (outputObjectUrl) {
+        URL.revokeObjectURL(outputObjectUrl);
+        outputObjectUrl = null;
+      }
+
+      outputPreview.removeAttribute('src');
+      document.getElementById('outputInfo').textContent = '-';
+      downloadBtn.removeAttribute('href');
+      downloadBtn.style.display = 'none';
+      resultBox.style.display = 'none';
+    }
+
+    function resetTool() {
+      selectedFile = null;
+      fileInput.value = '';
+
+      if (originalObjectUrl) {
+        URL.revokeObjectURL(originalObjectUrl);
+        originalObjectUrl = null;
+      }
+
+      clearOutput();
+
+      originalPreview.removeAttribute('src');
+      settings.style.display = 'none';
+      previewWrap.style.display = 'none';
+      document.getElementById('originalInfo').textContent = '-';
+      document.getElementById('fileNameText').textContent = '파일 선택됨';
+      quality.value = '0.8';
+      qualityValue.textContent = '80%';
+      formatSelect.value = 'image/webp';
+      maxWidthSelect.value = '1920';
+
+      dropZone.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  </script>
 </body>
 </html>
