@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>만나이 계산기 - 생활편의 도구</title>
+  <meta name="description" content="생년월일을 입력하면 현재 기준 만나이, 한국식 나이, 다음 생일까지 남은 날짜를 빠르게 계산합니다." />
+  <meta name="theme-color" content="#2563eb" />
+
+  <style>
+    :root{
+      --bg:#f4f7fb; --card:#fff; --text:#152033; --sub:#64748b;
+      --line:#e2e8f0; --primary:#2563eb; --soft:#eaf2ff;
+      --shadow:0 18px 45px rgba(15,23,42,.10);
+      --radius:26px; --safe-bottom:env(safe-area-inset-bottom,0px);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 20% 0%,rgba(37,99,235,.16),transparent 30%),
+        linear-gradient(180deg,#eef5ff 0%,var(--bg) 45%,#fff 100%);
+    }
+    a{text-decoration:none;color:inherit}
+    .app{width:min(980px,calc(100% - 28px));margin:0 auto;padding:18px 0 calc(80px + var(--safe-bottom))}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0}
+    .brand{display:flex;align-items:center;gap:11px;font-weight:900}
+    .mark{
+      width:44px;height:44px;border-radius:16px;display:grid;place-items:center;
+      color:#fff;background:linear-gradient(135deg,#2563eb,#06b6d4);
+      box-shadow:0 12px 28px rgba(37,99,235,.28)
+    }
+    .top-btn{
+      padding:10px 14px;border:1px solid var(--line);border-radius:999px;
+      background:rgba(255,255,255,.78);font-size:13px;font-weight:800
+    }
+    .hero{
+      margin-top:14px;padding:34px;border-radius:var(--radius);
+      background:rgba(255,255,255,.9);box-shadow:var(--shadow);border:1px solid var(--line)
+    }
+    .badge{
+      display:inline-flex;gap:7px;align-items:center;padding:8px 12px;border-radius:999px;
+      background:var(--soft);color:var(--primary);font-size:13px;font-weight:900;margin-bottom:16px
+    }
+    h1{margin:0;font-size:clamp(34px,6vw,52px);letter-spacing:-1.5px;line-height:1.1}
+    .desc{margin:14px 0 0;color:var(--sub);font-size:16px;line-height:1.7}
+    .panel{
+      margin-top:22px;padding:24px;border-radius:24px;background:#fff;
+      border:1px solid var(--line);box-shadow:0 10px 24px rgba(15,23,42,.07)
+    }
+    label{display:block;margin-bottom:8px;font-size:14px;font-weight:900}
+    input{
+      width:100%;height:56px;border:1px solid var(--line);border-radius:18px;
+      padding:0 16px;font-size:18px;outline:none;background:#f8fafc
+    }
+    input:focus{border-color:#93c5fd;background:#fff}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .actions{display:flex;gap:10px;margin-top:16px}
+    button{
+      flex:1;height:54px;border:0;border-radius:18px;font-weight:950;font-size:15px;cursor:pointer
+    }
+    .primary{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;box-shadow:0 12px 26px rgba(37,99,235,.24)}
+    .ghost{background:#f8fafc;color:#334155;border:1px solid var(--line)}
+    .result{
+      display:none;margin-top:20px;padding:22px;border-radius:24px;
+      background:linear-gradient(135deg,#eff6ff,#ffffff);border:1px solid #dbeafe
+    }
+    .result-main{text-align:center;margin-bottom:18px}
+    .result-main span{display:block;color:var(--sub);font-size:14px;font-weight:800}
+    .result-main strong{display:block;margin-top:6px;font-size:46px;color:var(--primary);letter-spacing:-1px}
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .mini{padding:16px;border-radius:18px;background:#fff;border:1px solid var(--line)}
+    .mini span{display:block;color:var(--sub);font-size:12px;font-weight:800}
+    .mini strong{display:block;margin-top:6px;font-size:20px}
+    .info{margin-top:20px;color:#475569;font-size:14px;line-height:1.75}
+    .ad{
+      margin-top:22px;min-height:96px;border:1px dashed var(--line);border-radius:22px;
+      display:grid;place-items:center;text-align:center;color:var(--sub);background:rgba(255,255,255,.75)
+    }
+    footer{
+      margin-top:28px;padding-top:22px;border-top:1px solid var(--line);
+      color:var(--sub);font-size:13px;line-height:1.7;text-align:center
+    }
+    .bottom-nav{
+      position:fixed;left:50%;bottom:calc(12px + var(--safe-bottom));transform:translateX(-50%);
+      width:min(520px,calc(100% - 24px));display:grid;grid-template-columns:repeat(4,1fr);
+      gap:4px;padding:8px;border-radius:24px;background:rgba(255,255,255,.9);
+      border:1px solid var(--line);box-shadow:0 18px 42px rgba(15,23,42,.16);backdrop-filter:blur(20px)
+    }
+    .bottom-nav a{
+      display:grid;place-items:center;min-height:52px;border-radius:17px;
+      font-size:12px;font-weight:900;color:#64748b
+    }
+    .bottom-nav a.active{background:var(--soft);color:var(--primary)}
+    @media(max-width:620px){
+      .hero{padding:26px 20px}
+      .grid,.cards{grid-template-columns:1fr}
+      .actions{flex-direction:column}
+    }
+  </style>
+</head>
+
+<body>
+<div class="app">
+  <header>
+    <a href="index.html" class="brand">
+      <span class="mark">✓</span>
+      <span>생활편의 도구</span>
+    </a>
+    <a class="top-btn" href="index.html">전체 기능</a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="badge">🎂 만나이 계산기</div>
+      <h1>생년월일만 입력하면<br>만나이를 바로 계산합니다.</h1>
+      <p class="desc">
+        현재 날짜 기준으로 만나이, 한국식 나이, 다음 생일까지 남은 날짜를 한 번에 확인할 수 있습니다.
+      </p>
+    </section>
+
+    <section class="panel">
+      <div class="grid">
+        <div>
+          <label for="birth">생년월일</label>
+          <input id="birth" type="date" />
+        </div>
+        <div>
+          <label for="base">기준일</label>
+          <input id="base" type="date" />
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="primary" onclick="calcAge()">만나이 계산하기</button>
+        <button class="ghost" onclick="resetForm()">초기화</button>
+      </div>
+
+      <div id="result" class="result">
+        <div class="result-main">
+          <span>현재 기준 만나이</span>
+          <strong id="ageText">만 0세</strong>
+        </div>
+
+        <div class="cards">
+          <div class="mini">
+            <span>한국식 나이</span>
+            <strong id="koreanAge">0세</strong>
+          </div>
+          <div class="mini">
+            <span>다음 생일까지</span>
+            <strong id="nextBirthday">0일</strong>
+          </div>
+          <div class="mini">
+            <span>태어난 지</span>
+            <strong id="daysLived">0일</strong>
+          </div>
+        </div>
+
+        <div class="info" id="detailText"></div>
+      </div>
+    </section>
+
+    <div class="ad">
+      광고 영역<br>
+      AdSense 승인 후 광고 코드를 이 위치에 넣으면 됩니다.
+    </div>
+
+    <section class="panel info">
+      <strong>만나이 계산 방법</strong><br>
+      만나이는 기준일에서 출생연도를 뺀 뒤, 올해 생일이 지나지 않았다면 1살을 빼서 계산합니다.
+      예를 들어 생일이 아직 지나지 않았다면 실제 만 나이는 한 살 적게 계산됩니다.
+    </section>
+  </main>
+
+  <footer>
+    <strong>생활편의 도구</strong><br>
+    빠르고 간편한 생활 계산 서비스<br><br>
+    © 2026 생활편의 도구<br>
+    Designed &amp; Developed by Chulhee
+  </footer>
+</div>
+
+<nav class="bottom-nav">
+  <a href="index.html">홈</a>
+  <a class="active" href="age.html">만나이</a>
+  <a href="salary.html">연봉</a>
+  <a href="dday.html">D-Day</a>
+</nav>
+
+<script>
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const dd = String(today.getDate()).padStart(2, '0');
+  document.getElementById('base').value = `${yyyy}-${mm}-${dd}`;
+
+  function calcAge() {
+    const birthValue = document.getElementById('birth').value;
+    const baseValue = document.getElementById('base').value;
+
+    if (!birthValue) {
+      alert('생년월일을 입력해 주세요.');
+      return;
+    }
+
+    const birth = new Date(birthValue);
+    const base = new Date(baseValue);
+
+    if (birth > base) {
+      alert('생년월일은 기준일보다 이후일 수 없습니다.');
+      return;
+    }
+
+    let age = base.getFullYear() - birth.getFullYear();
+    const birthdayThisYear = new Date(base.getFullYear(), birth.getMonth(), birth.getDate());
+
+    if (base < birthdayThisYear) {
+      age--;
+    }
+
+    const koreanAge = base.getFullYear() - birth.getFullYear() + 1;
+
+    let nextBirthday = new Date(base.getFullYear(), birth.getMonth(), birth.getDate());
+    if (nextBirthday < base) {
+      nextBirthday = new Date(base.getFullYear() + 1, birth.getMonth(), birth.getDate());
+    }
+
+    const msPerDay = 1000 * 60 * 60 * 24;
+    const daysToBirthday = Math.ceil((nextBirthday - base) / msPerDay);
+    const daysLived = Math.floor((base - birth) / msPerDay);
+
+    document.getElementById('ageText').textContent = `만 ${age}세`;
+    document.getElementById('koreanAge').textContent = `${koreanAge}세`;
+    document.getElementById('nextBirthday').textContent =
+      daysToBirthday === 0 ? '오늘' : `${daysToBirthday}일`;
+    document.getElementById('daysLived').textContent = `${daysLived.toLocaleString()}일`;
+
+    document.getElementById('detailText').innerHTML =
+      `입력한 생년월일 기준으로 현재 만나이는 <strong>만 ${age}세</strong>입니다. ` +
+      `한국식 나이는 <strong>${koreanAge}세</strong>이며, ` +
+      `다음 생일까지는 <strong>${daysToBirthday === 0 ? '오늘' : daysToBirthday + '일'}</strong> 남았습니다.`;
+
+    document.getElementById('result').style.display = 'block';
+  }
+
+  function resetForm() {
+    document.getElementById('birth').value = '';
+    document.getElementById('result').style.display = 'none';
+  }
+</script>
+</body>
+</html>
