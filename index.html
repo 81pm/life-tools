@@ -13,33 +13,31 @@
 
   <style>
     :root{
-      --bg:#f4f7fb;
-      --surface:#ffffff;
+      --bg:#f8fbff;
+      --card:#fff;
       --text:#142033;
       --sub:#64748b;
-      --muted:#94a3b8;
       --line:#e2e8f0;
       --primary:#2563eb;
-      --primary-dark:#1d4ed8;
-      --primary-soft:#eaf2ff;
       --blue:#2563eb;
       --red:#ef4444;
       --green:#22c55e;
       --orange:#f59e0b;
       --purple:#8b5cf6;
       --pink:#ec4899;
-      --safe-bottom:env(safe-area-inset-bottom,0px);
+      --blue-soft:#eef5ff;
+      --red-soft:#fff1f2;
+      --green-soft:#ecfdf5;
+      --orange-soft:#fff7ed;
+      --purple-soft:#f5f3ff;
+      --pink-soft:#fdf2f8;
       --shadow:0 18px 45px rgba(15,23,42,.10);
       --shadow-soft:0 8px 24px rgba(15,23,42,.07);
-      --radius-xl:28px;
-      --radius-lg:22px;
-      --radius-md:16px;
+      --safe-bottom:env(safe-area-inset-bottom,0px);
     }
 
     *{box-sizing:border-box}
-
     html{scroll-behavior:smooth}
-
     body{
       margin:0;
       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;
@@ -52,7 +50,18 @@
 
     a{color:inherit;text-decoration:none}
     button,input{font:inherit}
-    svg{width:24px;height:24px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round;display:block}
+
+    svg{
+      display:block;
+      width:100%;
+      height:100%;
+      stroke:currentColor;
+      fill:none;
+      stroke-width:2.15;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+      vector-effect:non-scaling-stroke;
+    }
 
     .app{
       width:min(1180px,calc(100% - 32px));
@@ -63,7 +72,7 @@
     .topbar{
       position:sticky;
       top:0;
-      z-index:30;
+      z-index:50;
       display:flex;
       align-items:center;
       justify-content:space-between;
@@ -83,35 +92,42 @@
       width:46px;
       height:46px;
       border-radius:15px;
-      display:grid;
-      place-items:center;
+      display:flex;
+      align-items:center;
+      justify-content:center;
       color:#fff;
       background:linear-gradient(135deg,#2563eb,#3b82f6);
       box-shadow:0 12px 28px rgba(37,99,235,.28);
       flex:0 0 auto;
     }
 
-    .brand-icon svg{width:25px;height:25px}
+    .brand-icon svg{
+      width:25px;
+      height:25px;
+      flex:0 0 auto;
+    }
 
     .brand strong{
       display:block;
       font-size:19px;
       line-height:1.1;
       letter-spacing:-.4px;
+      white-space:nowrap;
     }
 
-    .brand span{
+    .brand small{
       display:block;
       margin-top:4px;
       color:#64748b;
       font-size:13px;
       font-weight:650;
+      white-space:nowrap;
     }
 
     .nav{
       display:flex;
       align-items:center;
-      gap:26px;
+      gap:30px;
       color:#1e293b;
       font-size:14px;
       font-weight:850;
@@ -188,10 +204,10 @@
       min-width:0;
     }
 
-    .search-inner svg{
+    .search-inner .search-icon{
       width:24px;
       height:24px;
-      flex:0 0 auto;
+      flex:0 0 24px;
     }
 
     .global-search input{
@@ -273,7 +289,7 @@
       display:flex;
       align-items:center;
       justify-content:space-between;
-      padding:14px 14px;
+      padding:14px;
       background:#fff;
       border-bottom:1px solid #eaf0fb;
     }
@@ -301,7 +317,7 @@
       line-height:1.1;
     }
 
-    .phone-brand span{
+    .phone-brand small{
       display:block;
       margin-top:2px;
       color:var(--sub);
@@ -342,9 +358,10 @@
       font-size:11px;
     }
 
-    .phone-search svg{
+    .phone-search .search-icon{
       width:15px;
       height:15px;
+      flex:0 0 15px;
     }
 
     .phone-grid{
@@ -364,14 +381,14 @@
       text-align:center;
     }
 
-    .phone-tool .dash-icon{
+    .phone-tool .ui-icon{
       margin:0 auto 8px;
       width:31px;
       height:31px;
       border-radius:10px;
     }
 
-    .phone-tool .dash-icon svg{
+    .phone-tool .ui-icon svg{
       width:18px;
       height:18px;
     }
@@ -393,7 +410,7 @@
     .section-card{
       margin-top:22px;
       padding:26px;
-      border-radius:var(--radius-xl);
+      border-radius:28px;
       background:#fff;
       border:1px solid rgba(226,232,240,.86);
       box-shadow:var(--shadow-soft);
@@ -416,8 +433,14 @@
       letter-spacing:-.6px;
     }
 
-    .section-title h2 .mini-star{
+    .section-title .section-symbol{
+      width:22px;
+      height:22px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
       color:#2563eb;
+      flex:0 0 22px;
     }
 
     .section-title a{
@@ -462,35 +485,36 @@
     }
 
     .shortcut-card:hover,
-    .category-card:hover,
-    .mini-tool:hover{
+    .category-card:hover{
       transform:translateY(-3px);
       box-shadow:0 14px 30px rgba(15,23,42,.10);
     }
 
-    .dash-icon{
-      width:62px;
-      height:62px;
-      display:grid;
-      place-items:center;
+    .ui-icon{
+      width:64px;
+      height:64px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
       border-radius:18px;
-      background:#eff6ff;
-      color:#2563eb;
+      background:var(--blue-soft);
+      color:var(--primary);
+      flex:0 0 auto;
       position:relative;
       z-index:1;
     }
 
-    .dash-icon svg{
-      width:35px;
-      height:35px;
-      stroke-width:2.1;
+    .ui-icon svg{
+      width:34px;
+      height:34px;
+      flex:0 0 34px;
     }
 
-    .dash-icon.red{background:#fff1f2;color:#ef4444}
-    .dash-icon.green{background:#ecfdf5;color:#22c55e}
-    .dash-icon.orange{background:#fff7ed;color:#f59e0b}
-    .dash-icon.purple{background:#f5f3ff;color:#8b5cf6}
-    .dash-icon.pink{background:#fdf2f8;color:#ec4899}
+    .ui-icon.red{background:var(--red-soft);color:var(--red)}
+    .ui-icon.green{background:var(--green-soft);color:var(--green)}
+    .ui-icon.orange{background:var(--orange-soft);color:var(--orange)}
+    .ui-icon.purple{background:var(--purple-soft);color:var(--purple)}
+    .ui-icon.pink{background:var(--pink-soft);color:var(--pink)}
 
     .shortcut-card strong{
       display:block;
@@ -501,7 +525,7 @@
       letter-spacing:-.45px;
     }
 
-    .shortcut-card span{
+    .shortcut-card span.desc{
       display:block;
       position:relative;
       z-index:1;
@@ -520,54 +544,6 @@
       color:#334155;
       font-size:22px;
       line-height:1;
-    }
-
-    .category-grid{
-      display:grid;
-      grid-template-columns:repeat(5,1fr);
-      gap:14px;
-    }
-
-    .category-card{
-      min-height:148px;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      padding:18px;
-      border-radius:18px;
-      background:#fff;
-      border:1px solid var(--line);
-      box-shadow:0 8px 22px rgba(15,23,42,.05);
-      transition:.18s ease;
-    }
-
-    .category-card .dash-icon{
-      width:58px;
-      height:58px;
-      border-radius:17px;
-    }
-
-    .category-card .dash-icon svg{
-      width:32px;
-      height:32px;
-    }
-
-    .category-card strong{
-      display:block;
-      margin-top:14px;
-      font-size:17px;
-      letter-spacing:-.4px;
-    }
-
-    .category-card span{
-      display:block;
-      margin-top:5px;
-      color:#475569;
-      font-size:13px;
-      line-height:1.4;
-      font-weight:750;
     }
 
     .safe-panel{
@@ -593,15 +569,17 @@
     .safe-icon{
       width:52px;
       height:52px;
-      display:grid;
-      place-items:center;
-      flex:0 0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex:0 0 52px;
       color:#22c55e;
     }
 
     .safe-icon svg{
       width:38px;
       height:38px;
+      flex:0 0 38px;
     }
 
     .safe-panel strong{
@@ -685,6 +663,56 @@
       font-weight:950;
     }
 
+    .category-grid{
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:14px;
+    }
+
+    .category-card{
+      min-height:148px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:18px;
+      border-radius:18px;
+      background:#fff;
+      border:1px solid var(--line);
+      box-shadow:0 8px 22px rgba(15,23,42,.05);
+      transition:.18s ease;
+    }
+
+    .category-card .ui-icon{
+      width:58px;
+      height:58px;
+      border-radius:17px;
+      flex-basis:58px;
+    }
+
+    .category-card .ui-icon svg{
+      width:31px;
+      height:31px;
+      flex-basis:31px;
+    }
+
+    .category-card strong{
+      display:block;
+      margin-top:14px;
+      font-size:17px;
+      letter-spacing:-.4px;
+    }
+
+    .category-card span.desc{
+      display:block;
+      margin-top:5px;
+      color:#475569;
+      font-size:13px;
+      line-height:1.4;
+      font-weight:750;
+    }
+
     .ad-card{
       margin-top:22px;
       min-height:96px;
@@ -740,8 +768,9 @@
     }
 
     .bottom-nav a{
-      display:grid;
-      place-items:center;
+      display:flex;
+      align-items:center;
+      justify-content:center;
       min-height:54px;
       border-radius:17px;
       color:#64748b;
@@ -757,30 +786,12 @@
     .is-hidden{display:none !important}
 
     @media(max-width:1050px){
-      .hero{
-        grid-template-columns:1fr;
-      }
-
-      .phone-preview{
-        display:none;
-      }
-
-      .shortcut-grid{
-        grid-template-columns:repeat(2,1fr);
-      }
-
-      .category-grid{
-        grid-template-columns:repeat(3,1fr);
-      }
-
-      .safe-panel{
-        align-items:flex-start;
-        flex-direction:column;
-      }
-
-      .safe-badges{
-        justify-content:flex-start;
-      }
+      .hero{grid-template-columns:1fr}
+      .phone-preview{display:none}
+      .shortcut-grid{grid-template-columns:repeat(2,1fr)}
+      .category-grid{grid-template-columns:repeat(3,1fr)}
+      .safe-panel{align-items:flex-start;flex-direction:column}
+      .safe-badges{justify-content:flex-start}
     }
 
     @media(max-width:680px){
@@ -790,25 +801,21 @@
       }
 
       .nav{display:none}
-      .brand span{display:none}
+      .brand small{display:none}
 
       .hero{
         min-height:auto;
         padding-top:8px;
       }
 
-      .hero-main{
-        text-align:left;
-      }
+      .hero-main{text-align:left}
 
       .hero h1{
         font-size:clamp(30px,9.5vw,42px);
         letter-spacing:-1.2px;
       }
 
-      .hero p{
-        font-size:15px;
-      }
+      .hero p{font-size:15px}
 
       .global-search{
         grid-template-columns:1fr auto;
@@ -841,13 +848,8 @@
         border-radius:24px;
       }
 
-      .section-title h2{
-        font-size:19px;
-      }
-
-      .section-title a{
-        font-size:13px;
-      }
+      .section-title h2{font-size:19px}
+      .section-title a{font-size:13px}
 
       .shortcut-grid{
         grid-template-columns:repeat(2,1fr);
@@ -855,7 +857,7 @@
       }
 
       .shortcut-card{
-        min-height:132px;
+        min-height:136px;
         padding:14px 10px;
         border-radius:16px;
       }
@@ -867,15 +869,16 @@
         bottom:-26px;
       }
 
-      .dash-icon{
-        width:46px;
-        height:46px;
+      .ui-icon{
+        width:48px;
+        height:48px;
         border-radius:14px;
       }
 
-      .dash-icon svg{
+      .ui-icon svg{
         width:26px;
         height:26px;
+        flex:0 0 26px;
       }
 
       .shortcut-card strong{
@@ -883,46 +886,12 @@
         font-size:14px;
       }
 
-      .shortcut-card span{
+      .shortcut-card span.desc{
         margin-top:4px;
         font-size:11px;
       }
 
-      .shortcut-card .arrow{
-        display:none;
-      }
-
-      .category-grid{
-        grid-template-columns:repeat(3,1fr);
-        gap:9px;
-      }
-
-      .category-card{
-        min-height:100px;
-        padding:12px 8px;
-        border-radius:15px;
-      }
-
-      .category-card .dash-icon{
-        width:40px;
-        height:40px;
-        border-radius:13px;
-      }
-
-      .category-card .dash-icon svg{
-        width:22px;
-        height:22px;
-      }
-
-      .category-card strong{
-        margin-top:8px;
-        font-size:12px;
-      }
-
-      .category-card span{
-        margin-top:3px;
-        font-size:10px;
-      }
+      .shortcut-card .arrow{display:none}
 
       .safe-panel{
         padding:16px;
@@ -932,20 +901,17 @@
       .safe-icon{
         width:42px;
         height:42px;
+        flex-basis:42px;
       }
 
       .safe-icon svg{
         width:30px;
         height:30px;
+        flex-basis:30px;
       }
 
-      .safe-panel strong{
-        font-size:16px;
-      }
-
-      .safe-panel span{
-        font-size:12px;
-      }
+      .safe-panel strong{font-size:16px}
+      .safe-panel span{font-size:12px}
 
       .safe-badges{
         gap:7px;
@@ -962,13 +928,43 @@
         flex-direction:column;
       }
 
-      .favorite-panel a{
-        width:100%;
+      .favorite-panel a{width:100%}
+
+      .category-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:10px;
       }
 
-      .bottom-nav{
-        display:grid;
+      .category-card{
+        min-height:118px;
+        padding:13px 8px;
+        border-radius:16px;
       }
+
+      .category-card .ui-icon{
+        width:46px;
+        height:46px;
+        border-radius:14px;
+        flex-basis:46px;
+      }
+
+      .category-card .ui-icon svg{
+        width:25px;
+        height:25px;
+        flex-basis:25px;
+      }
+
+      .category-card strong{
+        margin-top:9px;
+        font-size:13px;
+      }
+
+      .category-card span.desc{
+        margin-top:3px;
+        font-size:11px;
+      }
+
+      .bottom-nav{display:grid}
     }
   </style>
 </head>
@@ -982,14 +978,13 @@
         </span>
         <span>
           <strong>생활편의 도구</strong>
-          <span>계산과 변환을 한 곳에</span>
+          <small>계산과 변환을 한 곳에</small>
         </span>
       </a>
 
       <nav class="nav" aria-label="상단 메뉴">
         <a class="active" href="index.html">홈</a>
-        <a href="#shortcuts">바로가기</a>
-        <a href="#categories">카테고리</a>
+        <a href="#shortcuts">즐겨찾기</a>
         <a href="#guide">사용 가이드</a>
       </nav>
     </header>
@@ -1002,7 +997,9 @@
 
           <div class="global-search" role="search">
             <div class="search-inner">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+              <span class="search-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+              </span>
               <input id="toolSearch" type="search" placeholder="예) 이미지 압축, 연봉 계산, PDF 합치기..." autocomplete="off" />
             </div>
             <button class="search-btn" type="button" onclick="focusTools()">검색</button>
@@ -1032,40 +1029,21 @@
                 </span>
                 <span>
                   <strong>생활편의 도구</strong>
-                  <span>계산과 변환을 한 곳에</span>
+                  <small>계산과 변환을 한 곳에</small>
                 </span>
               </div>
-              <span>☰</span>
+              <span style="font-weight:900;">☰</span>
             </div>
             <div class="phone-body">
               <h3>필요한 도구를 빠르게 찾아보세요</h3>
               <p>계산, 변환, 파일 처리까지 간편하게</p>
               <div class="phone-search">
-                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                <span class="search-icon">
+                  <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                </span>
                 도구를 검색해보세요
               </div>
-              <div class="phone-grid">
-                <div class="phone-tool">
-                  <span class="dash-icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5-5 5-2-2-4 4"/></svg></span>
-                  <strong>이미지 용량 줄이기</strong>
-                  <span>JPG · PNG · WebP</span>
-                </div>
-                <div class="phone-tool">
-                  <span class="dash-icon red"><svg viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M14 3v5h5"/><path d="M8 15h8M8 18h5"/></svg></span>
-                  <strong>PDF 합치기</strong>
-                  <span>여러 PDF를 하나로</span>
-                </div>
-                <div class="phone-tool">
-                  <span class="dash-icon green"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><path d="M8 7.5 20 16"/><path d="M8 16.5 20 8"/></svg></span>
-                  <strong>PDF 분할</strong>
-                  <span>원하는 페이지만 추출</span>
-                </div>
-                <div class="phone-tool">
-                  <span class="dash-icon orange"><svg viewBox="0 0 24 24"><path d="M6 6h12"/><path d="M8 4l4 16 4-16"/><path d="M5 11h14"/></svg></span>
-                  <strong>연봉 계산</strong>
-                  <span>실수령액 확인</span>
-                </div>
-              </div>
+              <div class="phone-grid" id="phoneGrid"></div>
             </div>
           </div>
         </aside>
@@ -1073,47 +1051,16 @@
 
       <section class="section-card" id="shortcuts" aria-labelledby="shortcut-title">
         <div class="section-title">
-          <h2 id="shortcut-title"><span class="mini-star">✦</span> 바로가기</h2>
+          <h2 id="shortcut-title">
+            <span class="section-symbol">
+              <svg viewBox="0 0 24 24"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z"/></svg>
+            </span>
+            바로가기
+          </h2>
           <a href="#categories">더보기 ›</a>
         </div>
 
-        <div class="shortcut-grid" id="shortcutGrid">
-          <a class="shortcut-card" href="image-compress.html" data-keywords="이미지 사진 용량 줄이기 압축 변환 jpg png webp">
-            <span class="dash-icon">
-              <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5-5 5-2-2-4 4"/></svg>
-            </span>
-            <strong>이미지 용량 줄이기</strong>
-            <span>JPG · PNG · WebP 압축/변환</span>
-            <span class="arrow">→</span>
-          </a>
-
-          <a class="shortcut-card" href="pdf-merge.html" data-keywords="pdf 합치기 병합 merge">
-            <span class="dash-icon red">
-              <svg viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M14 3v5h5"/><path d="M8 15h8M8 18h5"/></svg>
-            </span>
-            <strong>PDF 합치기</strong>
-            <span>여러 PDF를 하나로 합치기</span>
-            <span class="arrow">→</span>
-          </a>
-
-          <a class="shortcut-card" href="pdf-split.html" data-keywords="pdf 분할 추출 페이지 split">
-            <span class="dash-icon green">
-              <svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><path d="M8 7.5 20 16"/><path d="M8 16.5 20 8"/></svg>
-            </span>
-            <strong>PDF 분할</strong>
-            <span>PDF에서 원하는 페이지만 추출</span>
-            <span class="arrow">→</span>
-          </a>
-
-          <a class="shortcut-card" href="salary.html" data-keywords="연봉 실수령액 월급 세금 4대보험">
-            <span class="dash-icon orange">
-              <svg viewBox="0 0 24 24"><path d="M6 6h12"/><path d="M8 4l4 16 4-16"/><path d="M5 11h14"/></svg>
-            </span>
-            <strong>연봉 계산</strong>
-            <span>실수령액을 빠르게 확인</span>
-            <span class="arrow">→</span>
-          </a>
-        </div>
+        <div class="shortcut-grid" id="shortcutGrid"></div>
 
         <div class="safe-panel">
           <div class="safe-main">
@@ -1143,51 +1090,16 @@
 
       <section class="section-card" id="categories" aria-labelledby="category-title">
         <div class="section-title">
-          <h2 id="category-title"><span class="mini-star">▦</span> 카테고리</h2>
+          <h2 id="category-title">
+            <span class="section-symbol">
+              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            </span>
+            카테고리
+          </h2>
           <a href="#shortcuts">위로 ›</a>
         </div>
 
-        <div class="category-grid">
-          <a class="category-card" href="image-compress.html" data-keywords="파일 도구 이미지 pdf">
-            <span class="dash-icon">
-              <svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-            </span>
-            <strong>파일 도구</strong>
-            <span>이미지 · PDF</span>
-          </a>
-
-          <a class="category-card" href="salary.html" data-keywords="급여 계산 연봉 주휴수당">
-            <span class="dash-icon green">
-              <svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h2M12 11h2M16 11h.01M8 15h2M12 15h2M16 15h.01"/></svg>
-            </span>
-            <strong>급여 계산</strong>
-            <span>연봉 · 주휴수당</span>
-          </a>
-
-          <a class="category-card" href="dday.html" data-keywords="날짜 계산 만나이 dday">
-            <span class="dash-icon purple">
-              <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>
-            </span>
-            <strong>날짜 계산</strong>
-            <span>만나이 · D-Day</span>
-          </a>
-
-          <a class="category-card" href="lunar.html" data-keywords="생활 변환 음력 양력">
-            <span class="dash-icon orange">
-              <svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
-            </span>
-            <strong>생활 변환</strong>
-            <span>음력변환</span>
-          </a>
-
-          <a class="category-card" href="bmi.html" data-keywords="건강 계산 bmi 비만도">
-            <span class="dash-icon pink">
-              <svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/><path d="M3.5 12H8l2-3 3 6 2-3h5.5"/></svg>
-            </span>
-            <strong>건강 계산</strong>
-            <span>BMI</span>
-          </a>
-        </div>
+        <div class="category-grid" id="categoryGrid"></div>
       </section>
 
       <div class="ad-card" aria-label="광고 영역">
@@ -1217,12 +1129,152 @@
   </nav>
 
   <script>
+    const ICONS = {
+      image: '<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5-5 5-2-2-4 4"/></svg>',
+      pdf: '<svg viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M14 3v5h5"/><path d="M8 15h8M8 18h5"/></svg>',
+      split: '<svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><path d="M8 7.5 20 16"/><path d="M8 16.5 20 8"/></svg>',
+      money: '<svg viewBox="0 0 24 24"><path d="M6 6h12"/><path d="M8 4l4 16 4-16"/><path d="M5 11h14"/></svg>',
+      folder: '<svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>',
+      calculator: '<svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h2M12 11h2M16 11h.01M8 15h2M12 15h2M16 15h.01"/></svg>',
+      calendar: '<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>',
+      moon: '<svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>',
+      heart: '<svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/><path d="M3.5 12H8l2-3 3 6 2-3h5.5"/></svg>'
+    };
+
+    /*
+      메뉴 추가 방법:
+      1) 아래 tools 배열에 객체를 하나 추가
+      2) category가 새로 필요하면 categories 배열에도 추가
+      3) icon은 ICONS에 있는 이름을 사용하거나 ICONS에 SVG를 추가
+    */
+    const tools = [
+      {
+        title: '이미지 용량 줄이기',
+        desc: 'JPG · PNG · WebP 압축/변환',
+        url: 'image-compress.html',
+        icon: 'image',
+        color: '',
+        keywords: '이미지 사진 용량 줄이기 압축 변환 jpg png webp',
+        shortcut: true
+      },
+      {
+        title: 'PDF 합치기',
+        desc: '여러 PDF를 하나로 합치기',
+        url: 'pdf-merge.html',
+        icon: 'pdf',
+        color: 'red',
+        keywords: 'pdf 합치기 병합 merge',
+        shortcut: true
+      },
+      {
+        title: 'PDF 분할',
+        desc: 'PDF에서 원하는 페이지만 추출',
+        url: 'pdf-split.html',
+        icon: 'split',
+        color: 'green',
+        keywords: 'pdf 분할 추출 페이지 split',
+        shortcut: true
+      },
+      {
+        title: '연봉 계산',
+        desc: '실수령액을 빠르게 확인',
+        url: 'salary.html',
+        icon: 'money',
+        color: 'orange',
+        keywords: '연봉 실수령액 월급 세금 4대보험',
+        shortcut: true
+      }
+    ];
+
+    const categories = [
+      {
+        title: '파일 도구',
+        desc: '이미지 · PDF',
+        url: 'image-compress.html',
+        icon: 'folder',
+        color: '',
+        keywords: '파일 도구 이미지 pdf'
+      },
+      {
+        title: '급여 계산',
+        desc: '연봉 · 주휴수당',
+        url: 'salary.html',
+        icon: 'calculator',
+        color: 'green',
+        keywords: '급여 계산 연봉 주휴수당'
+      },
+      {
+        title: '날짜 계산',
+        desc: '만나이 · D-Day',
+        url: 'dday.html',
+        icon: 'calendar',
+        color: 'purple',
+        keywords: '날짜 계산 만나이 dday'
+      },
+      {
+        title: '생활 변환',
+        desc: '음력변환',
+        url: 'lunar.html',
+        icon: 'moon',
+        color: 'orange',
+        keywords: '생활 변환 음력 양력'
+      },
+      {
+        title: '건강 계산',
+        desc: 'BMI',
+        url: 'bmi.html',
+        icon: 'heart',
+        color: 'pink',
+        keywords: '건강 계산 bmi 비만도'
+      }
+    ];
+
+    function iconMarkup(name, color){
+      return '<span class="ui-icon ' + (color || '') + '">' + ICONS[name] + '</span>';
+    }
+
+    function renderShortcuts(){
+      const shortcutGrid = document.getElementById('shortcutGrid');
+      const phoneGrid = document.getElementById('phoneGrid');
+
+      shortcutGrid.innerHTML = tools.filter(tool => tool.shortcut).map(tool => `
+        <a class="shortcut-card" href="${tool.url}" data-keywords="${tool.keywords}">
+          ${iconMarkup(tool.icon, tool.color)}
+          <strong>${tool.title}</strong>
+          <span class="desc">${tool.desc}</span>
+          <span class="arrow">→</span>
+        </a>
+      `).join('');
+
+      phoneGrid.innerHTML = tools.filter(tool => tool.shortcut).slice(0, 4).map(tool => `
+        <div class="phone-tool">
+          ${iconMarkup(tool.icon, tool.color)}
+          <strong>${tool.title}</strong>
+          <span>${tool.desc}</span>
+        </div>
+      `).join('');
+    }
+
+    function renderCategories(){
+      const categoryGrid = document.getElementById('categoryGrid');
+      categoryGrid.innerHTML = categories.map(category => `
+        <a class="category-card" href="${category.url}" data-keywords="${category.keywords}">
+          ${iconMarkup(category.icon, category.color)}
+          <strong>${category.title}</strong>
+          <span class="desc">${category.desc}</span>
+        </a>
+      `).join('');
+    }
+
+    renderShortcuts();
+    renderCategories();
+
     const searchInput = document.getElementById('toolSearch');
-    const searchableCards = Array.from(document.querySelectorAll('[data-keywords]'));
 
     if(searchInput){
       searchInput.addEventListener('input', function(){
         const keyword = this.value.trim().toLowerCase();
+        const searchableCards = Array.from(document.querySelectorAll('[data-keywords]'));
 
         searchableCards.forEach(function(card){
           const text = (card.innerText + ' ' + (card.dataset.keywords || '')).toLowerCase();
