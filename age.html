@@ -59,8 +59,15 @@
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
     .actions{display:flex;gap:10px;margin-top:16px}
     button{
-      flex:1;height:54px;border:0;border-radius:18px;font-weight:950;font-size:15px;cursor:pointer
-    }
+  width:100%;
+  min-height:54px;
+  border:0;
+  border-radius:18px;
+  font-weight:950;
+  font-size:15px;
+  cursor:pointer;
+  flex:none;
+}
     .primary{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;box-shadow:0 12px 26px rgba(37,99,235,.24)}
     .ghost{background:#f8fafc;color:#334155;border:1px solid var(--line)}
     .result{
@@ -94,11 +101,27 @@
       font-size:12px;font-weight:900;color:#64748b
     }
     .bottom-nav a.active{background:var(--soft);color:var(--primary)}
-    @media(max-width:620px){
-      .hero{padding:26px 20px}
-      .grid,.cards{grid-template-columns:1fr}
-      .actions{flex-direction:column}
-    }
+   @media(max-width:620px){
+  .hero{
+    padding:26px 20px;
+  }
+
+  .grid,
+  .cards{
+    grid-template-columns:1fr;
+  }
+
+  .actions{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+
+  .actions button{
+    width:100%;
+    min-height:54px;
+  }
+}
   </style>
 </head>
 
