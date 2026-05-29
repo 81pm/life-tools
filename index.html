@@ -3,730 +3,1239 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>생활편의 도구 - 계산기와 변환기를 한 곳에</title>
-  <meta name="description" content="만나이, 연봉 실수령액, 주휴수당, D-Day, 음력변환, BMI 등 생활에 필요한 계산기와 변환기를 빠르게 이용하세요." />
+  <title>생활편의 도구 - 이미지 PDF 계산기 변환기 포털</title>
+  <meta name="description" content="이미지 용량 줄이기, PDF 합치기, PDF 분할, 연봉 계산, 주휴수당, 만나이, D-Day, 음력변환, BMI까지 생활에 필요한 무료 도구를 한 곳에서 이용하세요." />
+  <meta name="keywords" content="이미지 용량 줄이기, PDF 합치기, PDF 분할, 연봉 계산기, 주휴수당 계산기, 만나이 계산기, D-Day 계산기, BMI 계산기, 음력변환" />
   <meta name="theme-color" content="#2563eb" />
+  <meta property="og:title" content="생활편의 도구 - 이미지 PDF 계산기 변환기 포털" />
+  <meta property="og:description" content="이미지, PDF, 급여, 날짜, 건강 계산기를 한 곳에서 빠르게 이용하세요." />
+  <meta property="og:type" content="website" />
+
   <style>
-    :root {
-      --bg: #f4f7fb;
-      --surface: rgba(255,255,255,.88);
-      --surface-strong: #ffffff;
-      --text: #152033;
-      --sub: #64748b;
-      --line: #e2e8f0;
-      --primary: #2563eb;
-      --primary-2: #06b6d4;
-      --primary-soft: #eaf2ff;
-      --success: #16a34a;
-      --warning: #f59e0b;
-      --danger: #ef4444;
-      --shadow: 0 18px 45px rgba(15, 23, 42, .10);
-      --shadow-soft: 0 10px 24px rgba(15, 23, 42, .07);
-      --radius-xl: 28px;
-      --radius-lg: 22px;
-      --radius-md: 16px;
-      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    :root{
+      --bg:#f4f7fb;
+      --surface:#ffffff;
+      --text:#142033;
+      --sub:#64748b;
+      --muted:#94a3b8;
+      --line:#e2e8f0;
+      --primary:#2563eb;
+      --primary-dark:#1d4ed8;
+      --primary-soft:#eaf2ff;
+      --blue:#2563eb;
+      --red:#ef4444;
+      --green:#22c55e;
+      --orange:#f59e0b;
+      --purple:#8b5cf6;
+      --pink:#ec4899;
+      --safe-bottom:env(safe-area-inset-bottom,0px);
+      --shadow:0 18px 45px rgba(15,23,42,.10);
+      --shadow-soft:0 8px 24px rgba(15,23,42,.07);
+      --radius-xl:28px;
+      --radius-lg:22px;
+      --radius-md:16px;
     }
 
-    * { box-sizing: border-box; }
+    *{box-sizing:border-box}
 
-    html { scroll-behavior: smooth; }
+    html{scroll-behavior:smooth}
 
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", Arial, sans-serif;
-      color: var(--text);
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;
+      color:var(--text);
       background:
-        radial-gradient(circle at 20% 0%, rgba(37,99,235,.16), transparent 30%),
-        radial-gradient(circle at 82% 12%, rgba(6,182,212,.14), transparent 28%),
-        linear-gradient(180deg, #eef5ff 0%, var(--bg) 42%, #ffffff 100%);
+        radial-gradient(circle at 0% 4%,rgba(37,99,235,.10),transparent 24%),
+        radial-gradient(circle at 78% 3%,rgba(147,197,253,.32),transparent 26%),
+        linear-gradient(180deg,#f8fbff 0%,#edf5ff 42%,#ffffff 100%);
     }
 
-    a { color: inherit; text-decoration: none; }
-    button, input { font: inherit; }
+    a{color:inherit;text-decoration:none}
+    button,input{font:inherit}
+    svg{width:24px;height:24px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round;display:block}
 
-    .app {
-      width: min(1180px, calc(100% - 32px));
-      margin: 0 auto;
-      padding: 18px 0 calc(78px + var(--safe-bottom));
+    .app{
+      width:min(1180px,calc(100% - 32px));
+      margin:0 auto;
+      padding:18px 0 calc(86px + var(--safe-bottom));
     }
 
-    .app-header {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      padding: 12px 0;
-      backdrop-filter: blur(18px);
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:30;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      padding:12px 0;
+      backdrop-filter:blur(18px);
     }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      min-width: 0;
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
     }
 
-    .brand-mark {
-      width: 44px;
-      height: 44px;
-      border-radius: 16px;
-      display: grid;
-      place-items: center;
-      color: #fff;
-      background: linear-gradient(135deg, var(--primary), var(--primary-2));
-      box-shadow: 0 12px 28px rgba(37,99,235,.28);
-      flex: 0 0 auto;
+    .brand-icon{
+      width:46px;
+      height:46px;
+      border-radius:15px;
+      display:grid;
+      place-items:center;
+      color:#fff;
+      background:linear-gradient(135deg,#2563eb,#3b82f6);
+      box-shadow:0 12px 28px rgba(37,99,235,.28);
+      flex:0 0 auto;
     }
 
-    .brand-text strong {
-      display: block;
-      font-size: 18px;
-      line-height: 1.15;
-      letter-spacing: -.3px;
+    .brand-icon svg{width:25px;height:25px}
+
+    .brand strong{
+      display:block;
+      font-size:19px;
+      line-height:1.1;
+      letter-spacing:-.4px;
     }
 
-    .brand-text span {
-      display: block;
-      margin-top: 2px;
-      color: var(--sub);
-      font-size: 12px;
+    .brand span{
+      display:block;
+      margin-top:4px;
+      color:#64748b;
+      font-size:13px;
+      font-weight:650;
     }
 
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    .nav{
+      display:flex;
+      align-items:center;
+      gap:26px;
+      color:#1e293b;
+      font-size:14px;
+      font-weight:850;
     }
 
-    .pill-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
-      min-height: 40px;
-      padding: 0 14px;
-      border: 1px solid rgba(226,232,240,.95);
-      border-radius: 999px;
-      background: rgba(255,255,255,.75);
-      color: #334155;
-      font-size: 13px;
-      font-weight: 800;
-      box-shadow: 0 6px 18px rgba(15,23,42,.05);
+    .nav a{
+      position:relative;
+      padding:10px 0;
     }
 
-    .hero {
-      display: grid;
-      grid-template-columns: minmax(0, 1.16fr) minmax(320px, .84fr);
-      gap: 22px;
-      margin-top: 12px;
+    .nav a.active{
+      color:var(--primary);
     }
 
-    .hero-card,
-    .stat-card,
-    .search-panel,
-    .category-card,
-    .tool-card,
-    .ad-card,
-    .notice-card {
-      border: 1px solid rgba(226,232,240,.82);
-      background: var(--surface);
-      box-shadow: var(--shadow-soft);
-      backdrop-filter: blur(18px);
+    .nav a.active:after{
+      content:"";
+      position:absolute;
+      left:50%;
+      bottom:2px;
+      transform:translateX(-50%);
+      width:28px;
+      height:3px;
+      border-radius:99px;
+      background:var(--primary);
     }
 
-    .hero-card {
-      position: relative;
-      overflow: hidden;
-      border-radius: var(--radius-xl);
-      padding: clamp(28px, 5vw, 52px);
-      min-height: 356px;
-      box-shadow: var(--shadow);
+    .hero{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 270px;
+      gap:26px;
+      align-items:center;
+      min-height:260px;
+      padding:22px 0 12px;
     }
 
-    .hero-card::before,
-    .hero-card::after {
-      content: "";
-      position: absolute;
-      border-radius: 999px;
-      pointer-events: none;
+    .hero-main{
+      text-align:center;
     }
 
-    .hero-card::before {
-      right: -90px;
-      top: -100px;
-      width: 260px;
-      height: 260px;
-      background: rgba(37,99,235,.12);
+    .hero h1{
+      margin:0;
+      font-size:clamp(34px,5vw,48px);
+      line-height:1.16;
+      letter-spacing:-1.5px;
     }
 
-    .hero-card::after {
-      right: 70px;
-      bottom: -88px;
-      width: 190px;
-      height: 190px;
-      background: rgba(6,182,212,.12);
+    .hero p{
+      margin:14px 0 0;
+      color:#334155;
+      font-size:18px;
+      line-height:1.6;
+      font-weight:650;
     }
 
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 9px 13px;
-      border-radius: 999px;
-      color: var(--primary);
-      background: var(--primary-soft);
-      font-size: 13px;
-      font-weight: 900;
-      margin-bottom: 18px;
+    .global-search{
+      width:min(680px,100%);
+      display:grid;
+      grid-template-columns:1fr auto;
+      align-items:center;
+      gap:10px;
+      margin:28px auto 0;
+      padding:10px 10px 10px 20px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:#fff;
+      box-shadow:0 16px 38px rgba(15,23,42,.10);
     }
 
-    h1 {
-      margin: 0;
-      max-width: 690px;
-      font-size: clamp(34px, 5.4vw, 58px);
-      line-height: 1.08;
-      letter-spacing: -1.8px;
+    .search-inner{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      color:#64748b;
+      min-width:0;
     }
 
-    .hero-desc {
-      margin: 18px 0 0;
-      max-width: 650px;
-      color: var(--sub);
-      font-size: 17px;
-      line-height: 1.75;
+    .search-inner svg{
+      width:24px;
+      height:24px;
+      flex:0 0 auto;
     }
 
-    .hero-cta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 30px;
-      position: relative;
-      z-index: 1;
+    .global-search input{
+      width:100%;
+      min-width:0;
+      border:0;
+      outline:0;
+      color:var(--text);
+      font-size:16px;
+      background:transparent;
     }
 
-    .cta {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      min-height: 48px;
-      padding: 0 18px;
-      border-radius: 16px;
-      font-weight: 900;
-      transition: .18s ease;
+    .search-btn{
+      min-width:86px;
+      height:48px;
+      border:0;
+      border-radius:16px;
+      color:#fff;
+      background:linear-gradient(135deg,#2563eb,#3b82f6);
+      font-weight:950;
+      cursor:pointer;
+      box-shadow:0 10px 20px rgba(37,99,235,.24);
     }
 
-    .cta.primary {
-      color: white;
-      background: linear-gradient(135deg, var(--primary), #1d4ed8);
-      box-shadow: 0 12px 26px rgba(37,99,235,.25);
+    .popular-tags{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap:9px;
+      margin-top:18px;
     }
 
-    .cta.secondary {
-      background: #fff;
-      color: #1e293b;
-      border: 1px solid var(--line);
+    .popular-tags strong{
+      margin-right:4px;
+      color:#1e293b;
+      font-size:14px;
+      font-weight:950;
     }
 
-    .cta:hover,
-    .tool-card:hover,
+    .popular-tags a{
+      padding:8px 13px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid var(--line);
+      color:#475569;
+      font-size:13px;
+      font-weight:800;
+      box-shadow:0 4px 14px rgba(15,23,42,.04);
+    }
+
+    .phone-preview{
+      min-height:400px;
+      border-radius:34px;
+      padding:18px 14px;
+      background:#fff;
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+    }
+
+    .phone-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:15px;
+      color:#020617;
+      font-size:12px;
+      font-weight:900;
+    }
+
+    .phone-card{
+      overflow:hidden;
+      border-radius:24px;
+      background:#f6f9ff;
+      border:1px solid #eaf0fb;
+    }
+
+    .phone-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:14px 14px;
+      background:#fff;
+      border-bottom:1px solid #eaf0fb;
+    }
+
+    .phone-brand{
+      display:flex;
+      gap:9px;
+      align-items:center;
+    }
+
+    .phone-brand .brand-icon{
+      width:34px;
+      height:34px;
+      border-radius:11px;
+    }
+
+    .phone-brand .brand-icon svg{
+      width:19px;
+      height:19px;
+    }
+
+    .phone-brand strong{
+      display:block;
+      font-size:13px;
+      line-height:1.1;
+    }
+
+    .phone-brand span{
+      display:block;
+      margin-top:2px;
+      color:var(--sub);
+      font-size:10px;
+      font-weight:700;
+    }
+
+    .phone-body{
+      padding:16px;
+    }
+
+    .phone-body h3{
+      margin:0;
+      text-align:center;
+      font-size:17px;
+      letter-spacing:-.4px;
+      line-height:1.35;
+    }
+
+    .phone-body p{
+      margin:5px 0 14px;
+      text-align:center;
+      color:#475569;
+      font-size:11px;
+      font-weight:700;
+    }
+
+    .phone-search{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      height:38px;
+      padding:0 9px;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid #e2e8f0;
+      color:#64748b;
+      font-size:11px;
+    }
+
+    .phone-search svg{
+      width:15px;
+      height:15px;
+    }
+
+    .phone-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:9px;
+      margin-top:14px;
+    }
+
+    .phone-tool{
+      min-height:88px;
+      padding:12px;
+      border-radius:15px;
+      background:#fff;
+      border:1px solid #e2e8f0;
+      box-shadow:0 4px 14px rgba(15,23,42,.05);
+      text-align:center;
+    }
+
+    .phone-tool .dash-icon{
+      margin:0 auto 8px;
+      width:31px;
+      height:31px;
+      border-radius:10px;
+    }
+
+    .phone-tool .dash-icon svg{
+      width:18px;
+      height:18px;
+    }
+
+    .phone-tool strong{
+      display:block;
+      font-size:11px;
+      line-height:1.2;
+    }
+
+    .phone-tool span{
+      display:block;
+      margin-top:3px;
+      color:#64748b;
+      font-size:9px;
+      font-weight:700;
+    }
+
+    .section-card{
+      margin-top:22px;
+      padding:26px;
+      border-radius:var(--radius-xl);
+      background:#fff;
+      border:1px solid rgba(226,232,240,.86);
+      box-shadow:var(--shadow-soft);
+    }
+
+    .section-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:18px;
+    }
+
+    .section-title h2{
+      display:flex;
+      align-items:center;
+      gap:9px;
+      margin:0;
+      font-size:22px;
+      letter-spacing:-.6px;
+    }
+
+    .section-title h2 .mini-star{
+      color:#2563eb;
+    }
+
+    .section-title a{
+      color:#475569;
+      font-size:14px;
+      font-weight:850;
+    }
+
+    .shortcut-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+    }
+
+    .shortcut-card{
+      min-height:196px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      padding:22px 18px;
+      border-radius:18px;
+      background:#fff;
+      border:1px solid var(--line);
+      box-shadow:0 8px 22px rgba(15,23,42,.06);
+      transition:.18s ease;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .shortcut-card:after{
+      content:"";
+      position:absolute;
+      right:-26px;
+      bottom:-30px;
+      width:112px;
+      height:112px;
+      border-radius:34px;
+      background:rgba(37,99,235,.07);
+      transform:rotate(18deg);
+    }
+
+    .shortcut-card:hover,
     .category-card:hover,
-    .pill-btn:hover {
-      transform: translateY(-2px);
+    .mini-tool:hover{
+      transform:translateY(-3px);
+      box-shadow:0 14px 30px rgba(15,23,42,.10);
     }
 
-    .hero-side {
-      display: grid;
-      gap: 14px;
+    .dash-icon{
+      width:62px;
+      height:62px;
+      display:grid;
+      place-items:center;
+      border-radius:18px;
+      background:#eff6ff;
+      color:#2563eb;
+      position:relative;
+      z-index:1;
     }
 
-    .search-panel {
-      border-radius: var(--radius-xl);
-      padding: 20px;
+    .dash-icon svg{
+      width:35px;
+      height:35px;
+      stroke-width:2.1;
     }
 
-    .search-title {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 14px;
+    .dash-icon.red{background:#fff1f2;color:#ef4444}
+    .dash-icon.green{background:#ecfdf5;color:#22c55e}
+    .dash-icon.orange{background:#fff7ed;color:#f59e0b}
+    .dash-icon.purple{background:#f5f3ff;color:#8b5cf6}
+    .dash-icon.pink{background:#fdf2f8;color:#ec4899}
+
+    .shortcut-card strong{
+      display:block;
+      position:relative;
+      z-index:1;
+      margin-top:16px;
+      font-size:19px;
+      letter-spacing:-.45px;
     }
 
-    .search-title strong { font-size: 17px; }
-    .search-title span { color: var(--sub); font-size: 12px; font-weight: 700; }
-
-    .search-box {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-height: 50px;
-      padding: 0 14px;
-      border: 1px solid var(--line);
-      border-radius: 17px;
-      background: #fff;
+    .shortcut-card span{
+      display:block;
+      position:relative;
+      z-index:1;
+      margin-top:7px;
+      color:#475569;
+      font-size:14px;
+      line-height:1.45;
+      font-weight:700;
     }
 
-    .search-box input {
-      width: 100%;
-      border: 0;
-      outline: 0;
-      color: var(--text);
-      background: transparent;
+    .shortcut-card .arrow{
+      position:absolute;
+      right:20px;
+      bottom:18px;
+      z-index:1;
+      color:#334155;
+      font-size:22px;
+      line-height:1;
     }
 
-    .quick-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 14px;
+    .category-grid{
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:14px;
     }
 
-    .tag {
-      padding: 8px 10px;
-      border-radius: 999px;
-      background: #f8fafc;
-      border: 1px solid var(--line);
-      color: #475569;
-      font-size: 12px;
-      font-weight: 800;
+    .category-card{
+      min-height:148px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:18px;
+      border-radius:18px;
+      background:#fff;
+      border:1px solid var(--line);
+      box-shadow:0 8px 22px rgba(15,23,42,.05);
+      transition:.18s ease;
     }
 
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+    .category-card .dash-icon{
+      width:58px;
+      height:58px;
+      border-radius:17px;
     }
 
-    .stat-card {
-      border-radius: 20px;
-      padding: 16px;
-      background: rgba(255,255,255,.82);
+    .category-card .dash-icon svg{
+      width:32px;
+      height:32px;
     }
 
-    .stat-card strong {
-      display: block;
-      font-size: 22px;
-      letter-spacing: -.5px;
+    .category-card strong{
+      display:block;
+      margin-top:14px;
+      font-size:17px;
+      letter-spacing:-.4px;
     }
 
-    .stat-card span {
-      display: block;
-      margin-top: 4px;
-      color: var(--sub);
-      font-size: 12px;
-      font-weight: 700;
+    .category-card span{
+      display:block;
+      margin-top:5px;
+      color:#475569;
+      font-size:13px;
+      line-height:1.4;
+      font-weight:750;
     }
 
-    .section-head {
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 16px;
-      margin: 34px 0 16px;
+    .safe-panel{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      margin-top:22px;
+      padding:18px 20px;
+      border-radius:20px;
+      background:linear-gradient(135deg,#f0fdf4,#ecfeff);
+      border:1px solid #bbf7d0;
+      color:#166534;
     }
 
-    .section-head h2 {
-      margin: 0;
-      font-size: 26px;
-      letter-spacing: -.7px;
+    .safe-main{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      min-width:0;
     }
 
-    .section-head p {
-      margin: 7px 0 0;
-      color: var(--sub);
-      font-size: 14px;
-      line-height: 1.5;
+    .safe-icon{
+      width:52px;
+      height:52px;
+      display:grid;
+      place-items:center;
+      flex:0 0 auto;
+      color:#22c55e;
     }
 
-    .tools-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
+    .safe-icon svg{
+      width:38px;
+      height:38px;
     }
 
-    .tool-card {
-      position: relative;
-      min-height: 210px;
-      padding: 22px;
-      border-radius: var(--radius-lg);
-      background: rgba(255,255,255,.92);
-      overflow: hidden;
-      transition: .18s ease;
+    .safe-panel strong{
+      display:block;
+      font-size:18px;
+      color:#14532d;
+      letter-spacing:-.4px;
     }
 
-    .tool-card::after {
-      content: "";
-      position: absolute;
-      right: -38px;
-      bottom: -42px;
-      width: 132px;
-      height: 132px;
-      border-radius: 40px;
-      background: linear-gradient(135deg, rgba(37,99,235,.08), rgba(6,182,212,.08));
-      transform: rotate(18deg);
+    .safe-panel span{
+      display:block;
+      margin-top:4px;
+      color:#166534;
+      font-size:14px;
+      font-weight:700;
+      line-height:1.5;
     }
 
-    .card-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 12px;
-      position: relative;
-      z-index: 1;
+    .safe-badges{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      gap:10px;
+      flex:0 0 auto;
     }
 
-    .icon-box {
-      width: 56px;
-      height: 56px;
-      display: grid;
-      place-items: center;
-      border-radius: 20px;
-      background: var(--primary-soft);
-      color: var(--primary);
-      flex: 0 0 auto;
+    .safe-badges em{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      min-height:36px;
+      padding:0 12px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid #bbf7d0;
+      font-style:normal;
+      font-size:13px;
+      font-weight:900;
+      color:#166534;
     }
 
-    .label {
-      padding: 6px 9px;
-      border-radius: 999px;
-      background: #f8fafc;
-      border: 1px solid var(--line);
-      color: #475569;
-      font-size: 11px;
-      font-weight: 900;
+    .favorite-panel{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      margin-top:18px;
+      padding:16px 18px;
+      border-radius:18px;
+      background:#fff;
+      border:1px solid var(--line);
+      box-shadow:0 6px 18px rgba(15,23,42,.04);
     }
 
-    .label.hot { color: #dc2626; background: #fff1f2; border-color: #ffe4e6; }
-    .label.new { color: #0284c7; background: #f0f9ff; border-color: #e0f2fe; }
-
-    .tool-card h3 {
-      margin: 18px 0 8px;
-      font-size: 21px;
-      letter-spacing: -.5px;
-      position: relative;
-      z-index: 1;
+    .favorite-panel strong{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:16px;
     }
 
-    .tool-card p {
-      margin: 0;
-      color: var(--sub);
-      font-size: 14px;
-      line-height: 1.55;
-      min-height: 44px;
-      position: relative;
-      z-index: 1;
+    .favorite-panel p{
+      margin:0;
+      color:#64748b;
+      font-size:14px;
+      font-weight:700;
     }
 
-    .tool-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-top: 20px;
-      color: var(--primary);
-      font-size: 14px;
-      font-weight: 950;
-      position: relative;
-      z-index: 1;
+    .favorite-panel a{
+      flex:0 0 auto;
+      min-height:38px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:0 14px;
+      border-radius:13px;
+      color:#2563eb;
+      background:#fff;
+      border:1px solid #dbeafe;
+      font-size:13px;
+      font-weight:950;
     }
 
-    .tool-footer small {
-      color: #94a3b8;
-      font-weight: 800;
+    .ad-card{
+      margin-top:22px;
+      min-height:96px;
+      display:grid;
+      place-items:center;
+      border:1px dashed #cbd5e1;
+      border-radius:20px;
+      color:#64748b;
+      text-align:center;
+      background:rgba(255,255,255,.74);
+      line-height:1.6;
+      font-size:14px;
     }
 
-    .ad-card {
-      margin-top: 24px;
-      min-height: 108px;
-      border-radius: var(--radius-lg);
-      border-style: dashed;
-      display: grid;
-      place-items: center;
-      text-align: center;
-      color: var(--sub);
-      padding: 18px;
-      background: rgba(255,255,255,.8);
-      font-size: 14px;
-      line-height: 1.6;
+    .notice-card{
+      margin-top:18px;
+      padding:18px;
+      border-radius:20px;
+      color:#475569;
+      font-size:13px;
+      line-height:1.7;
+      background:#fff;
+      border:1px solid var(--line);
+      box-shadow:0 6px 18px rgba(15,23,42,.04);
     }
 
-    .notice-card {
-      margin-top: 18px;
-      border-radius: var(--radius-lg);
-      padding: 18px;
-      color: #475569;
-      font-size: 13px;
-      line-height: 1.7;
-      background: rgba(255,255,255,.78);
+    footer{
+      margin-top:28px;
+      padding:22px 0 0;
+      border-top:1px solid rgba(226,232,240,.9);
+      color:#64748b;
+      font-size:13px;
+      line-height:1.7;
+      text-align:center;
     }
 
-    footer {
-      margin-top: 28px;
-      padding: 22px 0 0;
-      border-top: 1px solid rgba(226,232,240,.9);
-      color: var(--sub);
-      font-size: 13px;
-      line-height: 1.7;
+    .bottom-nav{
+      position:fixed;
+      left:50%;
+      bottom:calc(12px + var(--safe-bottom));
+      transform:translateX(-50%);
+      z-index:40;
+      width:min(520px,calc(100% - 24px));
+      display:none;
+      grid-template-columns:repeat(4,1fr);
+      gap:4px;
+      padding:8px;
+      border:1px solid rgba(226,232,240,.92);
+      border-radius:24px;
+      background:rgba(255,255,255,.92);
+      backdrop-filter:blur(20px);
+      box-shadow:0 18px 42px rgba(15,23,42,.16);
     }
 
-    .bottom-nav {
-      position: fixed;
-      left: 50%;
-      bottom: calc(12px + var(--safe-bottom));
-      transform: translateX(-50%);
-      z-index: 30;
-      width: min(520px, calc(100% - 24px));
-      display: none;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 4px;
-      padding: 8px;
-      border: 1px solid rgba(226,232,240,.92);
-      border-radius: 24px;
-      background: rgba(255,255,255,.88);
-      backdrop-filter: blur(20px);
-      box-shadow: 0 18px 42px rgba(15,23,42,.16);
+    .bottom-nav a{
+      display:grid;
+      place-items:center;
+      min-height:54px;
+      border-radius:17px;
+      color:#64748b;
+      font-size:11px;
+      font-weight:950;
     }
 
-    .bottom-nav a {
-      display: grid;
-      place-items: center;
-      gap: 3px;
-      min-height: 54px;
-      border-radius: 17px;
-      color: #64748b;
-      font-size: 11px;
-      font-weight: 900;
+    .bottom-nav a.active{
+      color:var(--primary);
+      background:var(--primary-soft);
     }
 
-    .bottom-nav a.active {
-      color: var(--primary);
-      background: var(--primary-soft);
+    .is-hidden{display:none !important}
+
+    @media(max-width:1050px){
+      .hero{
+        grid-template-columns:1fr;
+      }
+
+      .phone-preview{
+        display:none;
+      }
+
+      .shortcut-grid{
+        grid-template-columns:repeat(2,1fr);
+      }
+
+      .category-grid{
+        grid-template-columns:repeat(3,1fr);
+      }
+
+      .safe-panel{
+        align-items:flex-start;
+        flex-direction:column;
+      }
+
+      .safe-badges{
+        justify-content:flex-start;
+      }
     }
 
-    svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 2.2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
-    .brand-mark svg { width: 25px; height: 25px; }
-    .icon-box svg { width: 29px; height: 29px; }    
-    .bottom-nav svg { width: 21px; height: 21px; }
+    @media(max-width:680px){
+      .app{
+        width:min(100% - 22px,1180px);
+        padding-top:10px;
+      }
 
-    @media (max-width: 940px) {
-      .hero { grid-template-columns: 1fr; }
-      .tools-grid { grid-template-columns: repeat(2, 1fr); }
-      .category-row { grid-template-columns: repeat(2, 1fr); }
-    }
+      .nav{display:none}
+      .brand span{display:none}
 
-    @media (max-width: 620px) {
-      .app { width: min(100% - 22px, 1180px); padding-top: 10px; }
-      .header-actions .pill-btn:nth-child(2) { display: none; }
-      .brand-text span { display: none; }
-      .hero-card { min-height: auto; padding: 28px 22px; border-radius: 26px; }
-      .hero-desc { font-size: 15px; }
-      .hero-cta .cta { width: 100%; }
-      .stats { grid-template-columns: repeat(3, 1fr); }
-      .stat-card { padding: 13px 10px; }
-      .stat-card strong { font-size: 19px; }
-      .category-row { display: flex; overflow-x: auto; padding-bottom: 4px; scroll-snap-type: x mandatory; }
-      .category-card { min-width: 190px; scroll-snap-align: start; }
-      .tools-grid { grid-template-columns: 1fr; gap: 12px; }
-      .tool-card { min-height: 190px; padding: 20px; }
-      .section-head { display: block; margin-top: 28px; }
-      .bottom-nav { display: grid; }
+      .hero{
+        min-height:auto;
+        padding-top:8px;
+      }
+
+      .hero-main{
+        text-align:left;
+      }
+
+      .hero h1{
+        font-size:clamp(30px,9.5vw,42px);
+        letter-spacing:-1.2px;
+      }
+
+      .hero p{
+        font-size:15px;
+      }
+
+      .global-search{
+        grid-template-columns:1fr auto;
+        margin-top:22px;
+        border-radius:18px;
+        padding:8px 8px 8px 14px;
+      }
+
+      .search-btn{
+        min-width:64px;
+        height:42px;
+        border-radius:14px;
+        font-size:14px;
+      }
+
+      .popular-tags{
+        justify-content:flex-start;
+        overflow-x:auto;
+        flex-wrap:nowrap;
+        padding-bottom:4px;
+      }
+
+      .popular-tags a,
+      .popular-tags strong{
+        flex:0 0 auto;
+      }
+
+      .section-card{
+        padding:18px;
+        border-radius:24px;
+      }
+
+      .section-title h2{
+        font-size:19px;
+      }
+
+      .section-title a{
+        font-size:13px;
+      }
+
+      .shortcut-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:10px;
+      }
+
+      .shortcut-card{
+        min-height:132px;
+        padding:14px 10px;
+        border-radius:16px;
+      }
+
+      .shortcut-card:after{
+        width:76px;
+        height:76px;
+        right:-22px;
+        bottom:-26px;
+      }
+
+      .dash-icon{
+        width:46px;
+        height:46px;
+        border-radius:14px;
+      }
+
+      .dash-icon svg{
+        width:26px;
+        height:26px;
+      }
+
+      .shortcut-card strong{
+        margin-top:11px;
+        font-size:14px;
+      }
+
+      .shortcut-card span{
+        margin-top:4px;
+        font-size:11px;
+      }
+
+      .shortcut-card .arrow{
+        display:none;
+      }
+
+      .category-grid{
+        grid-template-columns:repeat(3,1fr);
+        gap:9px;
+      }
+
+      .category-card{
+        min-height:100px;
+        padding:12px 8px;
+        border-radius:15px;
+      }
+
+      .category-card .dash-icon{
+        width:40px;
+        height:40px;
+        border-radius:13px;
+      }
+
+      .category-card .dash-icon svg{
+        width:22px;
+        height:22px;
+      }
+
+      .category-card strong{
+        margin-top:8px;
+        font-size:12px;
+      }
+
+      .category-card span{
+        margin-top:3px;
+        font-size:10px;
+      }
+
+      .safe-panel{
+        padding:16px;
+        border-radius:18px;
+      }
+
+      .safe-icon{
+        width:42px;
+        height:42px;
+      }
+
+      .safe-icon svg{
+        width:30px;
+        height:30px;
+      }
+
+      .safe-panel strong{
+        font-size:16px;
+      }
+
+      .safe-panel span{
+        font-size:12px;
+      }
+
+      .safe-badges{
+        gap:7px;
+      }
+
+      .safe-badges em{
+        min-height:32px;
+        font-size:11px;
+        padding:0 9px;
+      }
+
+      .favorite-panel{
+        align-items:flex-start;
+        flex-direction:column;
+      }
+
+      .favorite-panel a{
+        width:100%;
+      }
+
+      .bottom-nav{
+        display:grid;
+      }
     }
   </style>
 </head>
+
 <body>
   <div class="app">
-    <header class="app-header">
+    <header class="topbar">
       <a href="index.html" class="brand" aria-label="생활편의 도구 홈">
-        <span class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M4 13.5 9.5 19 20 5"/></svg>
+        <span class="brand-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M10 6h4"/><path d="M9 6V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1"/><rect x="3" y="6" width="18" height="14" rx="3"/><path d="M3 12h18"/></svg>
         </span>
-        <span class="brand-text">
+        <span>
           <strong>생활편의 도구</strong>
-          <span>빠른 계산 · 쉬운 변환 · 모바일 최적화</span>
+          <span>계산과 변환을 한 곳에</span>
         </span>
       </a>
-      <nav class="header-actions" aria-label="상단 메뉴">
-        <a class="pill-btn" href="#tools">전체 기능</a>
+
+      <nav class="nav" aria-label="상단 메뉴">
+        <a class="active" href="index.html">홈</a>
+        <a href="#shortcuts">바로가기</a>
+        <a href="#categories">카테고리</a>
+        <a href="#guide">사용 가이드</a>
       </nav>
     </header>
 
     <main>
       <section class="hero" aria-labelledby="main-title">
-        <div class="hero-card">
-          <div class="eyebrow">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 3 14h8l-1 8 10-12h-8l1-8z"/></svg>
-            매일 쓰는 생활 계산기
+        <div class="hero-main">
+          <h1 id="main-title">필요한 도구를 빠르게 찾아보세요</h1>
+          <p>계산, 변환, 파일 처리까지 간편하게</p>
+
+          <div class="global-search" role="search">
+            <div class="search-inner">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+              <input id="toolSearch" type="search" placeholder="예) 이미지 압축, 연봉 계산, PDF 합치기..." autocomplete="off" />
+            </div>
+            <button class="search-btn" type="button" onclick="focusTools()">검색</button>
           </div>
-          <h1 id="main-title">필요한 계산을<br />가장 빠르게.</h1>
-          <p class="hero-desc">
-            만나이, 연봉 실수령액, 주휴수당, D-Day, 음력변환, BMI까지.
-            복잡한 기능은 줄이고 모바일에서 바로 쓰기 좋은 도구로 구성했습니다.
-          </p>
-          <div class="hero-cta">
-            <a class="cta primary" href="#tools">전체 기능 보기 <span>→</span></a>
-            <a class="cta secondary" href="age.html">만나이 바로 계산</a>
+
+          <div class="popular-tags" aria-label="인기 검색어">
+            <strong>인기 검색어</strong>
+            <a href="image-compress.html">이미지 압축</a>
+            <a href="pdf-merge.html">PDF 합치기</a>
+            <a href="salary.html">연봉 계산</a>
+            <a href="weekly-pay.html">주휴수당</a>
+            <a href="dday.html">D-Day</a>
+            <a href="bmi.html">BMI</a>
           </div>
         </div>
 
-        <aside class="hero-side" aria-label="인기 기능">
-          <div class="search-panel">
-            <div class="search-title">
-              <strong>인기 기능</strong>
-              <span>많이 찾는 계산기</span>
+        <aside class="phone-preview" aria-hidden="true">
+          <div class="phone-top">
+            <span>9:41</span>
+            <span>•••</span>
+          </div>
+          <div class="phone-card">
+            <div class="phone-head">
+              <div class="phone-brand">
+                <span class="brand-icon">
+                  <svg viewBox="0 0 24 24"><path d="M10 6h4"/><path d="M9 6V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1"/><rect x="3" y="6" width="18" height="14" rx="3"/><path d="M3 12h18"/></svg>
+                </span>
+                <span>
+                  <strong>생활편의 도구</strong>
+                  <span>계산과 변환을 한 곳에</span>
+                </span>
+              </div>
+              <span>☰</span>
             </div>
-
-            <div class="quick-list" style="display:grid;gap:10px;">
-              <a class="quick-item" href="salary.html" style="display:flex;align-items:center;gap:12px;padding:14px;border-radius:18px;background:#f8fbff;border:1px solid var(--line);transition:.18s ease;">
-                <span class="icon-box" style="width:44px;height:44px;border-radius:15px;">
-                  <svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="3"/></svg>
-                </span>
-                <span>
-                  <strong style="display:block;font-size:14px;">연봉 계산</strong>
-                  <span style="display:block;margin-top:3px;color:var(--sub);font-size:12px;">실수령액 빠르게 확인</span>
-                </span>
-              </a>
-
-              <a class="quick-item" href="weekly-pay.html" style="display:flex;align-items:center;gap:12px;padding:14px;border-radius:18px;background:#f8fbff;border:1px solid var(--line);transition:.18s ease;">
-                <span class="icon-box" style="width:44px;height:44px;border-radius:15px;">
-                  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-                </span>
-                <span>
-                  <strong style="display:block;font-size:14px;">주휴수당</strong>
-                  <span style="display:block;margin-top:3px;color:var(--sub);font-size:12px;">알바·시급 계산</span>
-                </span>
-              </a>
-
-              <a class="quick-item" href="dday.html" style="display:flex;align-items:center;gap:12px;padding:14px;border-radius:18px;background:#f8fbff;border:1px solid var(--line);transition:.18s ease;">
-                <span class="icon-box" style="width:44px;height:44px;border-radius:15px;">
-                  <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>
-                </span>
-                <span>
-                  <strong style="display:block;font-size:14px;">D-Day 계산</strong>
-                  <span style="display:block;margin-top:3px;color:var(--sub);font-size:12px;">시험·기념일 계산</span>
-                </span>
-              </a>
+            <div class="phone-body">
+              <h3>필요한 도구를 빠르게 찾아보세요</h3>
+              <p>계산, 변환, 파일 처리까지 간편하게</p>
+              <div class="phone-search">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                도구를 검색해보세요
+              </div>
+              <div class="phone-grid">
+                <div class="phone-tool">
+                  <span class="dash-icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5-5 5-2-2-4 4"/></svg></span>
+                  <strong>이미지 용량 줄이기</strong>
+                  <span>JPG · PNG · WebP</span>
+                </div>
+                <div class="phone-tool">
+                  <span class="dash-icon red"><svg viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M14 3v5h5"/><path d="M8 15h8M8 18h5"/></svg></span>
+                  <strong>PDF 합치기</strong>
+                  <span>여러 PDF를 하나로</span>
+                </div>
+                <div class="phone-tool">
+                  <span class="dash-icon green"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><path d="M8 7.5 20 16"/><path d="M8 16.5 20 8"/></svg></span>
+                  <strong>PDF 분할</strong>
+                  <span>원하는 페이지만 추출</span>
+                </div>
+                <div class="phone-tool">
+                  <span class="dash-icon orange"><svg viewBox="0 0 24 24"><path d="M6 6h12"/><path d="M8 4l4 16 4-16"/><path d="M5 11h14"/></svg></span>
+                  <strong>연봉 계산</strong>
+                  <span>실수령액 확인</span>
+                </div>
+              </div>
             </div>
           </div>
         </aside>
       </section>
 
-      
-      <section id="tools" aria-labelledby="tools-title">
-        <div class="section-head">
-          <div>
-            <h2 id="tools-title">생활편의 기능</h2>
-            <p>카드를 누르면 각 상세 계산 페이지로 이동합니다.</p>
+      <section class="section-card" id="shortcuts" aria-labelledby="shortcut-title">
+        <div class="section-title">
+          <h2 id="shortcut-title"><span class="mini-star">✦</span> 바로가기</h2>
+          <a href="#categories">더보기 ›</a>
+        </div>
+
+        <div class="shortcut-grid" id="shortcutGrid">
+          <a class="shortcut-card" href="image-compress.html" data-keywords="이미지 사진 용량 줄이기 압축 변환 jpg png webp">
+            <span class="dash-icon">
+              <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5-5 5-2-2-4 4"/></svg>
+            </span>
+            <strong>이미지 용량 줄이기</strong>
+            <span>JPG · PNG · WebP 압축/변환</span>
+            <span class="arrow">→</span>
+          </a>
+
+          <a class="shortcut-card" href="pdf-merge.html" data-keywords="pdf 합치기 병합 merge">
+            <span class="dash-icon red">
+              <svg viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M14 3v5h5"/><path d="M8 15h8M8 18h5"/></svg>
+            </span>
+            <strong>PDF 합치기</strong>
+            <span>여러 PDF를 하나로 합치기</span>
+            <span class="arrow">→</span>
+          </a>
+
+          <a class="shortcut-card" href="pdf-split.html" data-keywords="pdf 분할 추출 페이지 split">
+            <span class="dash-icon green">
+              <svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><path d="M8 7.5 20 16"/><path d="M8 16.5 20 8"/></svg>
+            </span>
+            <strong>PDF 분할</strong>
+            <span>PDF에서 원하는 페이지만 추출</span>
+            <span class="arrow">→</span>
+          </a>
+
+          <a class="shortcut-card" href="salary.html" data-keywords="연봉 실수령액 월급 세금 4대보험">
+            <span class="dash-icon orange">
+              <svg viewBox="0 0 24 24"><path d="M6 6h12"/><path d="M8 4l4 16 4-16"/><path d="M5 11h14"/></svg>
+            </span>
+            <strong>연봉 계산</strong>
+            <span>실수령액을 빠르게 확인</span>
+            <span class="arrow">→</span>
+          </a>
+        </div>
+
+        <div class="safe-panel">
+          <div class="safe-main">
+            <span class="safe-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-5"/></svg>
+            </span>
+            <span>
+              <strong>안심하고 사용하세요</strong>
+              <span>모든 파일은 브라우저 안에서만 처리되며, 서버에 업로드되지 않습니다.</span>
+            </span>
+          </div>
+          <div class="safe-badges">
+            <em>서버 업로드 없음</em>
+            <em>개인정보 수집 없음</em>
+            <em>빠르고 안전한 처리</em>
           </div>
         </div>
 
-        <div class="tools-grid" id="toolGrid">
-          <a class="tool-card" id="date" href="age.html" data-keywords="만나이 나이 생년월일 생일">
-            <div class="card-top">
-              <span class="icon-box"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
-              <span class="label hot">인기</span>
-            </div>
-            <h3>만나이 계산</h3>
-            <p>생년월일을 기준으로 현재 만나이와 생일 전후 나이를 계산합니다.</p>
-            <div class="tool-footer"><span>계산하러 가기 →</span><small>age.html</small></div>
+        <div class="favorite-panel" id="guide">
+          <span>
+            <strong>즐겨찾기 추가</strong>
+            <p>자주 사용하는 도구를 즐겨찾기에 추가해두면 더 빠르게 이용할 수 있어요.</p>
+          </span>
+          <a href="#shortcuts">즐겨찾기에 추가하기</a>
+        </div>
+      </section>
+
+      <section class="section-card" id="categories" aria-labelledby="category-title">
+        <div class="section-title">
+          <h2 id="category-title"><span class="mini-star">▦</span> 카테고리</h2>
+          <a href="#shortcuts">위로 ›</a>
+        </div>
+
+        <div class="category-grid">
+          <a class="category-card" href="image-compress.html" data-keywords="파일 도구 이미지 pdf">
+            <span class="dash-icon">
+              <svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+            </span>
+            <strong>파일 도구</strong>
+            <span>이미지 · PDF</span>
           </a>
 
-          <a class="tool-card" id="money" href="salary.html" data-keywords="연봉 실수령액 월급 세금 4대보험">
-            <div class="card-top">
-              <span class="icon-box"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M6 9v.01M18 15v.01"/></svg></span>
-              <span class="label hot">추천</span>
-            </div>
-            <h3>연봉 계산</h3>
-            <p>연봉 입력 후 월 예상 실수령액과 공제 항목을 확인합니다.</p>
-            <div class="tool-footer"><span>계산하러 가기 →</span><small>salary.html</small></div>
+          <a class="category-card" href="salary.html" data-keywords="급여 계산 연봉 주휴수당">
+            <span class="dash-icon green">
+              <svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h2M12 11h2M16 11h.01M8 15h2M12 15h2M16 15h.01"/></svg>
+            </span>
+            <strong>급여 계산</strong>
+            <span>연봉 · 주휴수당</span>
           </a>
 
-          <a class="tool-card" href="weekly-pay.html" data-keywords="주휴수당 시급 알바 근무시간 최저임금">
-            <div class="card-top">
-              <span class="icon-box"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
-              <span class="label hot">인기</span>
-            </div>
-            <h3>주휴수당</h3>
-            <p>시급, 근무일, 근무시간을 입력해 예상 주휴수당을 계산합니다.</p>
-            <div class="tool-footer"><span>계산하러 가기 →</span><small>weekly-pay.html</small></div>
+          <a class="category-card" href="dday.html" data-keywords="날짜 계산 만나이 dday">
+            <span class="dash-icon purple">
+              <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>
+            </span>
+            <strong>날짜 계산</strong>
+            <span>만나이 · D-Day</span>
           </a>
 
-          <a class="tool-card" href="dday.html" data-keywords="디데이 dday 기념일 시험 여행 날짜">
-            <div class="card-top">
-              <span class="icon-box"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18M9 15h6"/></svg></span>
-              <span class="label">날짜</span>
-            </div>
-            <h3>D-Day</h3>
-            <p>기념일, 시험, 여행 등 특정 날짜까지 남은 기간을 계산합니다.</p>
-            <div class="tool-footer"><span>계산하러 가기 →</span><small>dday.html</small></div>
+          <a class="category-card" href="lunar.html" data-keywords="생활 변환 음력 양력">
+            <span class="dash-icon orange">
+              <svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+            </span>
+            <strong>생활 변환</strong>
+            <span>음력변환</span>
           </a>
 
-          <a class="tool-card" href="lunar.html" data-keywords="음력 양력 변환 달력 생일 명절">
-            <div class="card-top">
-              <span class="icon-box"><svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span>
-              <span class="label new">확장</span>
-            </div>
-            <h3>음력변환</h3>
-            <p>양력과 음력 날짜를 변환하고 음력 생일 확인에 활용합니다.</p>
-            <div class="tool-footer"><span>변환하러 가기 →</span><small>lunar.html</small></div>
-          </a>
-
-          <a class="tool-card" id="health" href="bmi.html" data-keywords="bmi 비만도 체질량지수 키 몸무게 건강">
-            <div class="card-top">
-              <span class="icon-box"><svg viewBox="0 0 24 24"><path d="M6 3h12a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3z"/><path d="M8 14a4 4 0 0 1 8 0M12 10v4"/></svg></span>
-              <span class="label">건강</span>
-            </div>
-            <h3>BMI 계산</h3>
-            <p>키와 몸무게를 입력해 체질량지수와 비만도 구간을 확인합니다.</p>
-            <div class="tool-footer"><span>계산하러 가기 →</span><small>bmi.html</small></div>
+          <a class="category-card" href="bmi.html" data-keywords="건강 계산 bmi 비만도">
+            <span class="dash-icon pink">
+              <svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/><path d="M3.5 12H8l2-3 3 6 2-3h5.5"/></svg>
+            </span>
+            <strong>건강 계산</strong>
+            <span>BMI</span>
           </a>
         </div>
       </section>
 
-      <div id="ad" class="ad-card" aria-label="광고 영역">
-        <strong>광고 영역</strong><br />
-        AdSense 승인 후 이 영역에 광고 스크립트 또는 배너 코드를 삽입하면 됩니다.
+      <div class="ad-card" aria-label="광고 영역">
+        광고 영역<br>
+        반응형 디스플레이 광고 위치
       </div>
 
       <div class="notice-card">
-        계산 결과는 참고용입니다. 연봉, 세금, 수당 계산은 제도 변경과 개인 조건에 따라 실제 결과가 달라질 수 있습니다.
+        파일 도구는 브라우저 기능을 이용해 처리합니다. 이미지와 PDF 파일은 서버에 업로드되지 않습니다.
+        계산 결과는 참고용이며 실제 제도와 개인 조건에 따라 달라질 수 있습니다.
       </div>
     </main>
 
     <footer>
-      <strong>생활편의 도구</strong><br />
-      빠르고 간편한 생활 계산 서비스<br /><br />
-
-      © 2026 생활편의 도구<br />
+      <strong>생활편의 도구</strong><br>
+      계산과 변환을 한 곳에서 빠르게 이용하세요.<br><br>
+      © 2026 생활편의 도구<br>
       Designed &amp; Developed by Chulhee
     </footer>
   </div>
 
   <nav class="bottom-nav" aria-label="모바일 하단 메뉴">
-    <a class="active" href="index.html"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg><span>홈</span></a>
-    <a href="#tools"><svg viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h16"/></svg><span>도구</span></a>
-    <a href="salary.html"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="3"/></svg><span>연봉</span></a>
-    <a href="dday.html"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg><span>D-Day</span></a>
+    <a class="active" href="index.html">홈</a>
+    <a href="image-compress.html">이미지</a>
+    <a href="pdf-merge.html">PDF</a>
+    <a href="#categories">분류</a>
   </nav>
 
   <script>
     const searchInput = document.getElementById('toolSearch');
-    const toolCards = Array.from(document.querySelectorAll('.tool-card'));
+    const searchableCards = Array.from(document.querySelectorAll('[data-keywords]'));
 
-    if (searchInput) {
-      searchInput.addEventListener('input', function () {
+    if(searchInput){
+      searchInput.addEventListener('input', function(){
         const keyword = this.value.trim().toLowerCase();
 
-        toolCards.forEach(function (card) {
+        searchableCards.forEach(function(card){
           const text = (card.innerText + ' ' + (card.dataset.keywords || '')).toLowerCase();
-          card.style.display = !keyword || text.includes(keyword) ? '' : 'none';
+          card.classList.toggle('is-hidden', Boolean(keyword) && !text.includes(keyword));
         });
       });
+    }
+
+    function focusTools(){
+      const target = document.getElementById('shortcuts');
+      if(target){
+        target.scrollIntoView({behavior:'smooth', block:'start'});
+      }
     }
   </script>
 </body>
