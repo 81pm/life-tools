@@ -4,753 +4,146 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>만나이 계산기 - 생활편의 도구</title>
-  <meta name="description" content="생년월일을 입력하면 현재 기준 만나이, 세는나이, 생후일수, 다음 생일까지 남은 날짜를 빠르게 계산합니다." />
+  <meta name="description" content="생년월일을 입력하면 만나이, 세는나이, 연나이, 띠, 별자리, 출생요일, 생후일수, 다음 생일까지 남은 날짜를 한 번에 계산합니다." />
   <meta name="theme-color" content="#2563eb" />
-
   <style>
-    :root{
-      --bg:#f4f7fb;
-      --card:#ffffff;
-      --text:#152033;
-      --sub:#64748b;
-      --line:#e2e8f0;
-      --primary:#2563eb;
-      --primary-dark:#1d4ed8;
-      --primary-soft:#eaf2ff;
-      --good:#16a34a;
-      --warn:#f59e0b;
-      --shadow:0 18px 45px rgba(15,23,42,.10);
-      --shadow-soft:0 10px 24px rgba(15,23,42,.07);
-      --radius-xl:28px;
-      --radius-lg:22px;
-      --safe-bottom:env(safe-area-inset-bottom,0px);
-    }
-
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{
-      margin:0;
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(circle at 18% 0%,rgba(37,99,235,.16),transparent 30%),
-        radial-gradient(circle at 86% 12%,rgba(6,182,212,.12),transparent 28%),
-        linear-gradient(180deg,#eef5ff 0%,var(--bg) 45%,#fff 100%);
-    }
-
-    a{color:inherit;text-decoration:none}
-    button,input{font:inherit}
-    svg{width:24px;height:24px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
-
-    .app{
-      width:min(1040px,calc(100% - 28px));
-      margin:0 auto;
-      padding:18px 0 calc(90px + var(--safe-bottom));
-    }
-
-    .app-header{
-      position:sticky;
-      top:0;
-      z-index:20;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:14px;
-      padding:12px 0;
-      backdrop-filter:blur(18px);
-    }
-
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:11px;
-      min-width:0;
-      font-weight:900;
-    }
-
-    .brand-mark{
-      width:44px;
-      height:44px;
-      border-radius:16px;
-      display:grid;
-      place-items:center;
-      color:#fff;
-      background:linear-gradient(135deg,var(--primary),#06b6d4);
-      box-shadow:0 12px 28px rgba(37,99,235,.28);
-      flex:0 0 auto;
-    }
-
-    .brand-text strong{
-      display:block;
-      font-size:18px;
-      line-height:1.15;
-      letter-spacing:-.3px;
-    }
-
-    .brand-text span{
-      display:block;
-      margin-top:2px;
-      color:var(--sub);
-      font-size:12px;
-      font-weight:600;
-    }
-
-    .pill-btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      min-height:40px;
-      padding:0 14px;
-      border:1px solid rgba(226,232,240,.95);
-      border-radius:999px;
-      background:rgba(255,255,255,.78);
-      color:#334155;
-      font-size:13px;
-      font-weight:850;
-      box-shadow:0 6px 18px rgba(15,23,42,.05);
-    }
-
-    .hero{
-      position:relative;
-      overflow:hidden;
-      margin-top:12px;
-      padding:clamp(28px,5vw,52px);
-      min-height:320px;
-      border-radius:var(--radius-xl);
-      background:rgba(255,255,255,.9);
-      border:1px solid rgba(226,232,240,.86);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(18px);
-    }
-
-    .hero:before,
-    .hero:after{
-      content:"";
-      position:absolute;
-      border-radius:999px;
-      pointer-events:none;
-    }
-
-    .hero:before{
-      right:-90px;
-      top:-100px;
-      width:260px;
-      height:260px;
-      background:rgba(37,99,235,.12);
-    }
-
-    .hero:after{
-      right:58px;
-      bottom:-82px;
-      width:190px;
-      height:190px;
-      background:rgba(6,182,212,.12);
-    }
-
-    .badge{
-      position:relative;
-      z-index:1;
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:9px 13px;
-      border-radius:999px;
-      color:var(--primary);
-      background:var(--primary-soft);
-      font-size:13px;
-      font-weight:950;
-      margin-bottom:18px;
-    }
-
-    h1{
-      position:relative;
-      z-index:1;
-      margin:0;
-      max-width:720px;
-      font-size:clamp(30px,5.2vw,54px);
-      line-height:1.12;
-      letter-spacing:-1.7px;
-    }
-
-    .hero-desc{
-      position:relative;
-      z-index:1;
-      margin:18px 0 0;
-      max-width:680px;
-      color:var(--sub);
-      font-size:17px;
-      line-height:1.75;
-    }
-
-    .layout{
-      display:grid;
-      grid-template-columns:minmax(0,1fr) 320px;
-      gap:18px;
-      margin-top:22px;
-      align-items:start;
-    }
-
-    .panel,
-    .side-card,
-    .result,
-    .ad-card,
-    .info-card{
-      border:1px solid rgba(226,232,240,.86);
-      background:rgba(255,255,255,.92);
-      box-shadow:var(--shadow-soft);
-      backdrop-filter:blur(18px);
-    }
-
-    .panel{
-      padding:24px;
-      border-radius:var(--radius-xl);
-    }
-
-    .form-grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:14px;
-    }
-
-    .field label{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:8px;
-      margin-bottom:8px;
-      color:#0f172a;
-      font-size:14px;
-      font-weight:950;
-    }
-
-    .hint{
-      color:var(--sub);
-      font-size:12px;
-      font-weight:750;
-    }
-
-    input{
-      width:100%;
-      height:58px;
-      border:1px solid var(--line);
-      border-radius:18px;
-      padding:0 16px;
-      color:var(--text);
-      background:#f8fafc;
-      font-size:18px;
-      outline:none;
-      transition:.16s ease;
-    }
-
-    input:focus{
-      border-color:#93c5fd;
-      background:#fff;
-      box-shadow:0 0 0 4px rgba(37,99,235,.09);
-    }
-
-    .quick-years{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      margin-top:12px;
-    }
-
-    .quick-years button{
-      width:auto;
-      min-height:34px;
-      padding:0 11px;
-      border-radius:999px;
-      color:#475569;
-      background:#f8fafc;
-      border:1px solid var(--line);
-      box-shadow:none;
-      font-size:12px;
-      font-weight:850;
-    }
-
-    .actions{
-      display:flex;
-      gap:10px;
-      margin-top:18px;
-    }
-
-    button{
-      min-height:54px;
-      border:0;
-      border-radius:18px;
-      font-weight:950;
-      font-size:15px;
-      cursor:pointer;
-      transition:.16s ease;
-    }
-
-    .actions button{
-      flex:1 1 0;
-      width:auto;
-    }
-
-    button:hover{transform:translateY(-1px)}
-
-    .primary{
-      color:#fff;
-      background:linear-gradient(135deg,var(--primary),var(--primary-dark));
-      box-shadow:0 12px 26px rgba(37,99,235,.24);
-    }
-
-    .ghost{
-      color:#334155;
-      background:#f8fafc;
-      border:1px solid var(--line);
-    }
-
-    .result{
-      display:none;
-      margin-top:18px;
-      padding:24px;
-      border-radius:var(--radius-xl);
-      background:
-        radial-gradient(circle at 16% 8%,rgba(37,99,235,.11),transparent 35%),
-        linear-gradient(135deg,#eff6ff,#ffffff);
-      border-color:#dbeafe;
-    }
-
-    .result-main{
-      display:grid;
-      grid-template-columns:1fr auto;
-      gap:18px;
-      align-items:center;
-      margin-bottom:18px;
-    }
-
-    .result-main span{
-      display:block;
-      color:var(--sub);
-      font-size:14px;
-      font-weight:900;
-    }
-
-    .result-main strong{
-      display:block;
-      margin-top:6px;
-      color:var(--primary);
-      font-size:clamp(42px,8vw,64px);
-      letter-spacing:-2px;
-      line-height:1;
-    }
-
-    .share-btn{
-      width:auto;
-      min-height:42px;
-      padding:0 14px;
-      border-radius:999px;
-      color:var(--primary);
-      background:#fff;
-      border:1px solid #dbeafe;
-      font-size:13px;
-      box-shadow:none;
-    }
-
-    .result-cards{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:10px;
-    }
-
-    .mini{
-      padding:16px;
-      border-radius:18px;
-      background:#fff;
-      border:1px solid var(--line);
-    }
-
-    .mini span{
-      display:block;
-      color:var(--sub);
-      font-size:12px;
-      font-weight:850;
-    }
-
-    .mini strong{
-      display:block;
-      margin-top:7px;
-      color:#0f172a;
-      font-size:21px;
-      letter-spacing:-.3px;
-    }
-
-    .detail{
-      margin-top:16px;
-      padding:16px;
-      border-radius:18px;
-      color:#475569;
-      background:#fff;
-      border:1px solid var(--line);
-      font-size:14px;
-      line-height:1.75;
-    }
-
-    .side{
-      display:grid;
-      gap:14px;
-    }
-
-    .side-card{
-      padding:18px;
-      border-radius:var(--radius-lg);
-    }
-
-    .side-card h2{
-      margin:0 0 12px;
-      font-size:17px;
-      letter-spacing:-.3px;
-    }
-
-    .side-link{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      padding:12px;
-      border:1px solid var(--line);
-      border-radius:16px;
-      background:#f8fbff;
-      color:#334155;
-      font-size:14px;
-      font-weight:900;
-    }
-
-    .side-link + .side-link{margin-top:8px}
-
-    .ad-card{
-      min-height:110px;
-      margin-top:18px;
-      border-radius:var(--radius-lg);
-      border-style:dashed;
-      display:grid;
-      place-items:center;
-      text-align:center;
-      color:var(--sub);
-      padding:18px;
-      font-size:14px;
-      line-height:1.6;
-    }
-
-    .info-card{
-      margin-top:18px;
-      padding:22px;
-      border-radius:var(--radius-lg);
-      color:#475569;
-      font-size:14px;
-      line-height:1.8;
-    }
-
-    .info-card h2{
-      margin:0 0 10px;
-      color:#0f172a;
-      font-size:20px;
-      letter-spacing:-.4px;
-    }
-
-    .faq{
-      display:grid;
-      gap:10px;
-      margin-top:14px;
-    }
-
-    details{
-      padding:16px;
-      border:1px solid var(--line);
-      border-radius:18px;
-      background:#fff;
-    }
-
-    summary{
-      cursor:pointer;
-      color:#0f172a;
-      font-weight:950;
-    }
-
-    details p{
-      margin:10px 0 0;
-      color:#64748b;
-      font-size:14px;
-      line-height:1.7;
-    }
-
-    footer{
-      margin-top:28px;
-      padding:22px 0 0;
-      border-top:1px solid rgba(226,232,240,.9);
-      color:var(--sub);
-      font-size:13px;
-      line-height:1.7;
-      text-align:center;
-    }
-
-    .bottom-nav{
-      position:fixed;
-      left:50%;
-      bottom:calc(12px + var(--safe-bottom));
-      transform:translateX(-50%);
-      z-index:30;
-      width:min(520px,calc(100% - 24px));
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:4px;
-      padding:8px;
-      border:1px solid rgba(226,232,240,.92);
-      border-radius:24px;
-      background:rgba(255,255,255,.90);
-      backdrop-filter:blur(20px);
-      box-shadow:0 18px 42px rgba(15,23,42,.16);
-    }
-
-    .bottom-nav a{
-      display:grid;
-      place-items:center;
-      gap:3px;
-      min-height:54px;
-      border-radius:17px;
-      color:#64748b;
-      font-size:12px;
-      font-weight:950;
-    }
-
-    .bottom-nav a.active{
-      color:var(--primary);
-      background:var(--primary-soft);
-    }
-
-    @media(max-width:900px){
-      .layout{grid-template-columns:1fr}
-      .side{grid-template-columns:1fr 1fr}
-    }
-
-    @media(max-width:620px){
-      .app{
-        width:min(100% - 22px,1040px);
-        padding-top:10px;
-      }
-
-      .brand-text span{display:none}
-
-      .hero{
-        min-height:auto;
-        padding:28px 22px;
-        border-radius:26px;
-      }
-
-      h1{
-        font-size:clamp(30px,9vw,40px);
-        letter-spacing:-1.2px;
-      }
-
-      .hero-desc{
-        font-size:15px;
-      }
-
-      .panel{
-        padding:20px;
-        border-radius:24px;
-      }
-
-      .form-grid,
-      .result-cards{
-        grid-template-columns:1fr;
-      }
-
-      .actions{
-        flex-direction:column;
-        gap:10px;
-      }
-
-      .actions button{
-        width:100%;
-        min-height:54px;
-        flex:none;
-      }
-
-      .result-main{
-        grid-template-columns:1fr;
-      }
-
-      .share-btn{
-        width:100%;
-      }
-
-      .side{
-        grid-template-columns:1fr;
-      }
-
-      input{
-        font-size:17px;
-      }
-    }
+    :root{--bg:#f4f7fb;--card:#fff;--text:#152033;--sub:#64748b;--line:#e2e8f0;--primary:#2563eb;--primary-dark:#1d4ed8;--primary-soft:#eaf2ff;--green:#16a34a;--green-soft:#ecfdf5;--orange:#ea580c;--orange-soft:#fff7ed;--purple:#7c3aed;--purple-soft:#f5f3ff;--pink:#db2777;--pink-soft:#fdf2f8;--shadow:0 18px 45px rgba(15,23,42,.10);--shadow-soft:0 10px 24px rgba(15,23,42,.07);--radius-xl:28px;--radius-lg:22px;--safe-bottom:env(safe-area-inset-bottom,0px)}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}
+    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;color:var(--text);background:radial-gradient(circle at 18% 0%,rgba(37,99,235,.16),transparent 30%),radial-gradient(circle at 86% 12%,rgba(6,182,212,.12),transparent 28%),linear-gradient(180deg,#eef5ff 0%,var(--bg) 45%,#fff 100%)}
+    a{color:inherit;text-decoration:none}button,input,select{font:inherit}svg{width:24px;height:24px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+    .app{width:min(1120px,calc(100% - 28px));margin:0 auto;padding:18px 0 calc(92px + var(--safe-bottom))}
+    .app-header{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 0;backdrop-filter:blur(18px)}
+    .brand{display:flex;align-items:center;gap:11px;min-width:0;font-weight:900}.brand-mark{width:44px;height:44px;border-radius:16px;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,var(--primary),#06b6d4);box-shadow:0 12px 28px rgba(37,99,235,.28);flex:0 0 auto}
+    .brand-text strong{display:block;font-size:18px;line-height:1.15;letter-spacing:-.3px}.brand-text span{display:block;margin-top:2px;color:var(--sub);font-size:12px;font-weight:600}
+    .pill-btn{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 14px;border:1px solid rgba(226,232,240,.95);border-radius:999px;background:rgba(255,255,255,.78);color:#334155;font-size:13px;font-weight:850;box-shadow:0 6px 18px rgba(15,23,42,.05)}
+    .hero{position:relative;overflow:hidden;margin-top:12px;padding:clamp(28px,5vw,52px);min-height:320px;border-radius:var(--radius-xl);background:rgba(255,255,255,.9);border:1px solid rgba(226,232,240,.86);box-shadow:var(--shadow);backdrop-filter:blur(18px)}
+    .hero:before,.hero:after{content:"";position:absolute;border-radius:999px;pointer-events:none}.hero:before{right:-90px;top:-100px;width:260px;height:260px;background:rgba(37,99,235,.12)}.hero:after{right:58px;bottom:-82px;width:190px;height:190px;background:rgba(6,182,212,.12)}
+    .badge{position:relative;z-index:1;display:inline-flex;align-items:center;gap:8px;padding:9px 13px;border-radius:999px;color:var(--primary);background:var(--primary-soft);font-size:13px;font-weight:950;margin-bottom:18px}
+    h1{position:relative;z-index:1;margin:0;max-width:790px;font-size:clamp(30px,5.2vw,54px);line-height:1.12;letter-spacing:-1.7px}.hero-desc{position:relative;z-index:1;margin:18px 0 0;max-width:760px;color:var(--sub);font-size:17px;line-height:1.75}
+    .layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;margin-top:22px;align-items:start}
+    .panel,.side-card,.result,.ad-card,.info-card{border:1px solid rgba(226,232,240,.86);background:rgba(255,255,255,.92);box-shadow:var(--shadow-soft);backdrop-filter:blur(18px)}
+    .panel{padding:24px;border-radius:var(--radius-xl)}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .field label{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;color:#0f172a;font-size:14px;font-weight:950}.hint{color:var(--sub);font-size:12px;font-weight:750}
+    input{width:100%;height:58px;border:1px solid var(--line);border-radius:18px;padding:0 16px;color:var(--text);background:#f8fafc;font-size:18px;outline:none;transition:.16s ease}
+    input:focus{border-color:#93c5fd;background:#fff;box-shadow:0 0 0 4px rgba(37,99,235,.09)}
+    .quick-presets{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.quick-presets button{width:auto;min-height:34px;padding:0 11px;border-radius:999px;color:#475569;background:#f8fafc;border:1px solid var(--line);box-shadow:none;font-size:12px;font-weight:850}
+    .actions{display:flex;gap:10px;margin-top:18px}button{min-height:54px;border:0;border-radius:18px;font-weight:950;font-size:15px;cursor:pointer;transition:.16s ease}button:hover{transform:translateY(-1px)}.actions button{flex:1 1 0;width:auto}
+    .primary{color:#fff;background:linear-gradient(135deg,var(--primary),var(--primary-dark));box-shadow:0 12px 26px rgba(37,99,235,.24)}.ghost{color:#334155;background:#f8fafc;border:1px solid var(--line)}
+    .result{display:none;margin-top:18px;padding:24px;border-radius:var(--radius-xl);background:radial-gradient(circle at 16% 8%,rgba(37,99,235,.10),transparent 35%),linear-gradient(135deg,#eff6ff,#ffffff);border-color:#dbeafe}
+    .result-main{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:center;margin-bottom:18px}.result-main span{display:block;color:var(--sub);font-size:14px;font-weight:900}.result-main strong{display:block;margin-top:6px;color:var(--primary);font-size:clamp(42px,8vw,64px);letter-spacing:-2px;line-height:1}
+    .share-btn{width:auto;min-height:42px;padding:0 14px;border-radius:999px;color:var(--primary);background:#fff;border:1px solid #dbeafe;font-size:13px;box-shadow:none}
+    .result-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.mini{padding:16px;border-radius:18px;background:#fff;border:1px solid var(--line)}.mini span{display:block;color:var(--sub);font-size:12px;font-weight:850}.mini strong{display:block;margin-top:7px;color:#0f172a;font-size:21px;letter-spacing:-.5px}
+    .mini.blue{background:#eff6ff}.mini.green{background:#ecfdf5}.mini.orange{background:#fff7ed}.mini.purple{background:#f5f3ff}.mini.pink{background:#fdf2f8}
+    .detail{margin-top:16px;padding:16px;border-radius:18px;color:#475569;background:#fff;border:1px solid var(--line);font-size:14px;line-height:1.75}
+    .side{display:grid;gap:14px}.side-card{padding:18px;border-radius:var(--radius-lg)}.side-card h2{margin:0 0 12px;font-size:17px;letter-spacing:-.3px}.side-link{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;border:1px solid var(--line);border-radius:16px;background:#f8fbff;color:#334155;font-size:14px;font-weight:900}.side-link + .side-link{margin-top:8px}
+    .tip{margin:0;color:var(--sub);font-size:14px;line-height:1.7}.ad-card{min-height:110px;margin-top:18px;border-radius:var(--radius-lg);border-style:dashed;display:grid;place-items:center;text-align:center;color:var(--sub);padding:18px;font-size:14px;line-height:1.6}
+    .info-card{margin-top:18px;padding:22px;border-radius:var(--radius-lg);color:#475569;font-size:14px;line-height:1.8}.info-card h2{margin:0 0 10px;color:#0f172a;font-size:20px;letter-spacing:-.4px}.faq{display:grid;gap:10px;margin-top:14px}details{padding:16px;border:1px solid var(--line);border-radius:18px;background:#fff}summary{cursor:pointer;color:#0f172a;font-weight:950}details p{margin:10px 0 0;color:#64748b;font-size:14px;line-height:1.7}
+    footer{margin-top:28px;padding:22px 0 0;border-top:1px solid rgba(226,232,240,.9);color:var(--sub);font-size:13px;line-height:1.7;text-align:center}
+    .bottom-nav{position:fixed;left:50%;bottom:calc(12px + var(--safe-bottom));transform:translateX(-50%);z-index:30;width:min(520px,calc(100% - 24px));display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:8px;border:1px solid rgba(226,232,240,.92);border-radius:24px;background:rgba(255,255,255,.90);backdrop-filter:blur(20px);box-shadow:0 18px 42px rgba(15,23,42,.16)}
+    .bottom-nav a{display:grid;place-items:center;gap:3px;min-height:54px;border-radius:17px;color:#64748b;font-size:12px;font-weight:950}.bottom-nav a.active{color:var(--primary);background:var(--primary-soft)}
+    @media(max-width:940px){.layout{grid-template-columns:1fr}.side{grid-template-columns:1fr 1fr}}
+    @media(max-width:680px){.app{width:min(100% - 22px,1120px);padding-top:10px}.brand-text span{display:none}.hero{min-height:auto;padding:28px 22px;border-radius:26px}h1{font-size:clamp(30px,9vw,40px);letter-spacing:-1.2px}.hero-desc{font-size:15px}.panel{padding:20px;border-radius:24px}.form-grid,.result-cards{grid-template-columns:1fr}.actions{flex-direction:column;gap:10px}.actions button{width:100%;min-height:54px;flex:none}.result-main{grid-template-columns:1fr}.share-btn{width:100%}.side{grid-template-columns:1fr}input{font-size:17px}}
   </style>
 </head>
-
 <body>
   <div class="app">
     <header class="app-header">
       <a href="index.html" class="brand" aria-label="생활편의 도구 홈">
-        <span class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M4 13.5 9.5 19 20 5"/></svg>
-        </span>
-        <span class="brand-text">
-          <strong>생활편의 도구</strong>
-          <span>빠른 계산 · 쉬운 변환</span>
-        </span>
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 13.5 9.5 19 20 5"/></svg></span>
+        <span class="brand-text"><strong>생활편의 도구</strong><span>빠른 계산 · 쉬운 변환</span></span>
       </a>
       <a class="pill-btn" href="index.html">전체 기능</a>
     </header>
 
     <main>
       <section class="hero" aria-labelledby="page-title">
-        <div class="badge">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          만나이 계산기
-        </div>
-        <h1 id="page-title">생년월일만 입력하면<br>만나이를 바로 계산합니다.</h1>
-        <p class="hero-desc">
-          모바일에서 달력을 오래 넘길 필요 없이 생년월일을 숫자로 입력하세요.
-          현재 기준 만나이, 세는나이, 생후일수, 다음 생일까지 남은 날짜를 한 번에 확인할 수 있습니다.
-        </p>
+        <div class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>만나이 계산기</div>
+        <h1 id="page-title">생년월일 하나로<br>나이 정보를 한 번에.</h1>
+        <p class="hero-desc">만나이, 세는나이, 연나이, 띠, 별자리, 출생요일, 생후일수, 다음 생일까지 남은 날짜까지 한 번에 확인하세요.</p>
       </section>
 
       <div class="layout">
-        <section class="panel" aria-labelledby="calc-title">
-          <h2 id="calc-title" style="position:absolute;left:-9999px;">만나이 입력폼</h2>
-
+        <section class="panel">
           <div class="form-grid">
             <div class="field">
-              <label for="birth">
-                생년월일
-                <span class="hint">숫자 8자리</span>
-              </label>
+              <label for="birth">생년월일 <span class="hint">숫자 8자리</span></label>
               <input id="birth" type="text" inputmode="numeric" maxlength="10" placeholder="예: 19810529" autocomplete="bday" />
-              <div class="quick-years" aria-label="빠른 예시 입력">
-                <button type="button" onclick="setBirthExample('19810529')">1981년생 예시</button>
-                <button type="button" onclick="setBirthExample('19900101')">1990년생 예시</button>
-                <button type="button" onclick="setBirthExample('20130105')">2013년생 예시</button>
+              <div class="quick-presets">
+                <button type="button" onclick="setBirthExample('19810529')">1981년생</button>
+                <button type="button" onclick="setBirthExample('19900101')">1990년생</button>
+                <button type="button" onclick="setBirthExample('20130105')">2013년생</button>
               </div>
             </div>
-
             <div class="field">
-              <label for="base">
-                기준일
-                <span class="hint">기본값 오늘</span>
-              </label>
+              <label for="base">기준일 <span class="hint">기본값 오늘</span></label>
               <input id="base" type="date" />
             </div>
           </div>
 
           <div class="actions">
-            <button type="button" class="primary" onclick="calcAge()">만나이 계산하기</button>
+            <button type="button" class="primary" onclick="calcAge()">계산하기</button>
             <button type="button" class="ghost" onclick="resetForm()">초기화</button>
           </div>
 
           <section id="result" class="result" aria-live="polite">
             <div class="result-main">
-              <div>
-                <span>현재 기준 만나이</span>
-                <strong id="ageText">만 0세</strong>
-              </div>
+              <div><span>현재 기준 만나이</span><strong id="ageText">만 0세</strong></div>
               <button type="button" class="share-btn" onclick="shareResult()">결과 공유</button>
             </div>
 
             <div class="result-cards">
-              <div class="mini">
-                <span>세는나이</span>
-                <strong id="koreanAge">0세</strong>
-              </div>
-              <div class="mini">
-                <span>다음 생일까지</span>
-                <strong id="nextBirthday">0일</strong>
-              </div>
-              <div class="mini">
-                <span>태어난 지</span>
-                <strong id="daysLived">0일</strong>
-              </div>
+              <div class="mini blue"><span>세는나이</span><strong id="koreanAge">0세</strong></div>
+              <div class="mini green"><span>연나이</span><strong id="yearAge">0세</strong></div>
+              <div class="mini orange"><span>생일 D-Day</span><strong id="nextBirthday">D-0</strong></div>
             </div>
 
             <div class="result-cards" style="margin-top:10px;">
-              <div class="mini">
-                <span>출생 요일</span>
-                <strong id="birthDayName">-</strong>
-              </div>
-              <div class="mini">
-                <span>올해 생일 여부</span>
-                <strong id="birthdayStatus">-</strong>
-              </div>
-              <div class="mini">
-                <span>만 나이 기준</span>
-                <strong id="baseText">-</strong>
-              </div>
+              <div class="mini purple"><span>띠</span><strong id="zodiac">-</strong></div>
+              <div class="mini pink"><span>별자리</span><strong id="starSign">-</strong></div>
+              <div class="mini"><span>출생 요일</span><strong id="birthDayName">-</strong></div>
+            </div>
+
+            <div class="result-cards" style="margin-top:10px;">
+              <div class="mini"><span>태어난 지</span><strong id="daysLived">0일</strong></div>
+              <div class="mini"><span>생후 주수</span><strong id="weeksLived">0주</strong></div>
+              <div class="mini"><span>올해 생일</span><strong id="birthdayStatus">-</strong></div>
             </div>
 
             <div class="detail" id="detailText"></div>
           </section>
         </section>
 
-        <aside class="side" aria-label="추천 기능">
+        <aside class="side">
           <section class="side-card">
             <h2>인기 기능</h2>
+            <a class="side-link" href="dday.html">D-Day 계산 <span>→</span></a>
             <a class="side-link" href="salary.html">연봉 계산 <span>→</span></a>
             <a class="side-link" href="weekly-pay.html">주휴수당 <span>→</span></a>
-            <a class="side-link" href="dday.html">D-Day 계산 <span>→</span></a>
           </section>
-
           <section class="side-card">
             <h2>사용 팁</h2>
-            <p style="margin:0;color:var(--sub);font-size:14px;line-height:1.7;">
-              생년월일은 <strong style="color:#0f172a;">19810529</strong>처럼 입력하면 자동으로
-              <strong style="color:#0f172a;">1981.05.29</strong> 형식으로 정리됩니다.
-            </p>
+            <p class="tip">생년월일은 <strong style="color:#0f172a;">19810529</strong>처럼 입력하면 자동으로 <strong style="color:#0f172a;">1981.05.29</strong> 형식으로 정리됩니다.</p>
           </section>
         </aside>
       </div>
 
-      <div class="ad-card" aria-label="광고 영역">
-        <strong>광고 영역</strong><br>
-        AdSense 승인 후 이 위치에 광고 코드를 넣으면 됩니다.
-      </div>
+      <div class="ad-card"><strong>광고 영역</strong><br>AdSense 승인 후 이 위치에 광고 코드를 넣으면 됩니다.</div>
 
       <section class="info-card">
-        <h2>만나이 계산 방법</h2>
-        만나이는 기준일에서 출생연도를 뺀 뒤, 기준일 기준으로 올해 생일이 아직 지나지 않았다면 1살을 빼서 계산합니다.
-        예를 들어 1981년 5월 29일생이 2026년 5월 28일에 계산하면 아직 생일 전이므로 만 44세,
-        2026년 5월 29일부터는 만 45세가 됩니다.
-
+        <h2>만나이·세는나이·연나이 차이</h2>
+        만나이는 생일이 지났는지를 기준으로 계산합니다. 세는나이는 태어난 해를 1살로 보고 해가 바뀔 때마다 1살을 더합니다. 연나이는 기준연도에서 출생연도를 뺀 나이입니다.
         <div class="faq">
-          <details>
-            <summary>세는나이와 만나이는 어떻게 다른가요?</summary>
-            <p>세는나이는 태어난 해를 1살로 보고 해가 바뀔 때마다 1살을 더하는 방식입니다. 만나이는 실제 생일이 지났는지를 기준으로 계산합니다.</p>
-          </details>
-          <details>
-            <summary>기준일은 왜 필요한가요?</summary>
-            <p>만나이는 특정 날짜를 기준으로 달라질 수 있습니다. 오늘 기준뿐 아니라 원하는 날짜를 기준으로도 계산할 수 있게 기준일을 제공합니다.</p>
-          </details>
-          <details>
-            <summary>모바일에서 달력 대신 숫자 입력을 쓰는 이유는?</summary>
-            <p>생년월일은 과거 연도로 많이 이동해야 하므로 모바일 달력보다 숫자 직접 입력 방식이 훨씬 빠르고 편합니다.</p>
-          </details>
+          <details><summary>띠는 어떻게 계산하나요?</summary><p>출생연도를 기준으로 12지 순서에 따라 계산합니다. 음력 설 기준과는 다를 수 있어 참고용으로 봐주세요.</p></details>
+          <details><summary>별자리는 어떻게 계산하나요?</summary><p>생일의 월·일 기준으로 서양 별자리 구간에 따라 계산합니다.</p></details>
         </div>
       </section>
     </main>
 
-    <footer>
-      <strong>생활편의 도구</strong><br>
-      빠르고 간편한 생활 계산 서비스<br><br>
-      © 2026 생활편의 도구<br>
-      Designed &amp; Developed by Chulhee
-    </footer>
+    <footer><strong>생활편의 도구</strong><br>빠르고 간편한 생활 계산 서비스<br><br>© 2026 생활편의 도구<br>Designed &amp; Developed by Chulhee</footer>
   </div>
 
   <nav class="bottom-nav" aria-label="모바일 하단 메뉴">
-    <a href="index.html">홈</a>
-    <a class="active" href="age.html">만나이</a>
-    <a href="salary.html">연봉</a>
-    <a href="dday.html">D-Day</a>
+    <a href="index.html">홈</a><a class="active" href="age.html">만나이</a><a href="salary.html">연봉</a><a href="dday.html">D-Day</a>
   </nav>
 
   <script>
@@ -761,21 +154,9 @@
 
     initToday();
 
-    birthInput.addEventListener('input', function(){
-      this.value = formatBirthInput(this.value);
-    });
-
-    birthInput.addEventListener('keydown', function(event){
-      if(event.key === 'Enter'){
-        calcAge();
-      }
-    });
-
-    baseInput.addEventListener('change', function(){
-      if(birthInput.value.replace(/\D/g,'').length === 8){
-        calcAge();
-      }
-    });
+    birthInput.addEventListener('input', function(){ this.value = formatBirthInput(this.value); });
+    birthInput.addEventListener('keydown', function(e){ if(e.key === 'Enter') calcAge(); });
+    baseInput.addEventListener('change', function(){ if(birthInput.value.replace(/\D/g,'').length === 8) calcAge(false); });
 
     function initToday(){
       const today = new Date();
@@ -783,21 +164,13 @@
     }
 
     function toDateInputValue(date){
-      const y = date.getFullYear();
-      const m = String(date.getMonth() + 1).padStart(2, '0');
-      const d = String(date.getDate()).padStart(2, '0');
-      return y + '-' + m + '-' + d;
+      return date.getFullYear() + '-' + String(date.getMonth()+1).padStart(2,'0') + '-' + String(date.getDate()).padStart(2,'0');
     }
 
     function formatBirthInput(value){
       let v = value.replace(/\D/g,'').slice(0,8);
-
-      if(v.length >= 5 && v.length <= 6){
-        v = v.slice(0,4) + '.' + v.slice(4);
-      }else if(v.length >= 7){
-        v = v.slice(0,4) + '.' + v.slice(4,6) + '.' + v.slice(6);
-      }
-
+      if(v.length >= 5 && v.length <= 6) v = v.slice(0,4) + '.' + v.slice(4);
+      else if(v.length >= 7) v = v.slice(0,4) + '.' + v.slice(4,6) + '.' + v.slice(6);
       return v;
     }
 
@@ -808,93 +181,96 @@
 
     function parseBirth(){
       const raw = birthInput.value.replace(/\D/g,'');
-
       if(!/^\d{8}$/.test(raw)){
         alert('생년월일을 8자리로 입력해 주세요. 예: 19810529');
         return null;
       }
-
       const y = Number(raw.slice(0,4));
       const m = Number(raw.slice(4,6));
       const d = Number(raw.slice(6,8));
-      const date = new Date(y, m - 1, d);
-
-      if(
-        date.getFullYear() !== y ||
-        date.getMonth() !== m - 1 ||
-        date.getDate() !== d
-      ){
+      const date = new Date(y, m-1, d);
+      if(date.getFullYear() !== y || date.getMonth() !== m-1 || date.getDate() !== d){
         alert('올바른 생년월일을 입력해 주세요.');
         return null;
       }
-
       return date;
     }
 
-    function calcAge(){
+    function calcAge(scroll){
+      if(scroll === undefined) scroll = true;
       const birth = parseBirth();
       if(!birth) return;
-
-      if(!baseInput.value){
-        alert('기준일을 선택해 주세요.');
-        return;
-      }
+      if(!baseInput.value){ alert('기준일을 선택해 주세요.'); return; }
 
       const base = new Date(baseInput.value + 'T00:00:00');
+      if(birth > base){ alert('생년월일은 기준일보다 이후일 수 없습니다.'); return; }
 
-      if(birth > base){
-        alert('생년월일은 기준일보다 이후일 수 없습니다.');
-        return;
-      }
-
-      const msPerDay = 1000 * 60 * 60 * 24;
-
+      const msPerDay = 1000*60*60*24;
       let age = base.getFullYear() - birth.getFullYear();
       const birthdayThisYear = new Date(base.getFullYear(), birth.getMonth(), birth.getDate());
       const isBeforeBirthday = base < birthdayThisYear;
-
       if(isBeforeBirthday) age--;
 
       const koreanAge = base.getFullYear() - birth.getFullYear() + 1;
+      const yearAge = base.getFullYear() - birth.getFullYear();
 
       let nextBirthday = new Date(base.getFullYear(), birth.getMonth(), birth.getDate());
-      if(nextBirthday < base){
-        nextBirthday = new Date(base.getFullYear() + 1, birth.getMonth(), birth.getDate());
-      }
-
+      if(nextBirthday < base) nextBirthday = new Date(base.getFullYear()+1, birth.getMonth(), birth.getDate());
       const daysToBirthday = Math.ceil((nextBirthday - base) / msPerDay);
       const daysLived = Math.floor((base - birth) / msPerDay);
+      const weeksLived = Math.floor(daysLived / 7);
       const dayNames = ['일','월','화','수','목','금','토'];
+      const status = daysToBirthday === 0 ? '오늘 생일' : (isBeforeBirthday ? '생일 전' : '생일 지남');
 
+      const zodiac = getZodiac(birth.getFullYear());
+      const starSign = getStarSign(birth.getMonth()+1, birth.getDate());
       const birthText = formatKoreanDate(birth);
       const baseText = formatKoreanDate(base);
-      const birthdayStatusText = daysToBirthday === 0 ? '오늘 생일' : (isBeforeBirthday ? '생일 전' : '생일 지남');
 
-      document.getElementById('ageText').textContent = '만 ' + age + '세';
-      document.getElementById('koreanAge').textContent = koreanAge + '세';
-      document.getElementById('nextBirthday').textContent = daysToBirthday === 0 ? '오늘' : daysToBirthday.toLocaleString() + '일';
-      document.getElementById('daysLived').textContent = daysLived.toLocaleString() + '일';
-      document.getElementById('birthDayName').textContent = dayNames[birth.getDay()] + '요일';
-      document.getElementById('birthdayStatus').textContent = birthdayStatusText;
-      document.getElementById('baseText').textContent = baseText;
+      setText('ageText', '만 ' + age + '세');
+      setText('koreanAge', koreanAge + '세');
+      setText('yearAge', yearAge + '세');
+      setText('nextBirthday', daysToBirthday === 0 ? '오늘' : 'D-' + daysToBirthday.toLocaleString());
+      setText('zodiac', zodiac);
+      setText('starSign', starSign);
+      setText('birthDayName', dayNames[birth.getDay()] + '요일');
+      setText('daysLived', daysLived.toLocaleString() + '일');
+      setText('weeksLived', weeksLived.toLocaleString() + '주');
+      setText('birthdayStatus', status);
 
-      lastSummary =
-        birthText + ' 출생자의 ' + baseText + ' 기준 만나이는 만 ' + age + '세입니다. ' +
-        '세는나이는 ' + koreanAge + '세이고, 태어난 지 ' + daysLived.toLocaleString() + '일째입니다.';
-
+      lastSummary = birthText + ' 출생자의 ' + baseText + ' 기준 만나이는 만 ' + age + '세, 세는나이는 ' + koreanAge + '세입니다.';
       document.getElementById('detailText').innerHTML =
-        '<strong>' + birthText + '</strong> 출생자의 <strong>' + baseText + '</strong> 기준 만나이는 ' +
-        '<strong>만 ' + age + '세</strong>입니다. 세는나이는 <strong>' + koreanAge + '세</strong>이고, ' +
-        '태어난 지 <strong>' + daysLived.toLocaleString() + '일</strong>이 지났습니다. ' +
-        '다음 생일까지는 <strong>' + (daysToBirthday === 0 ? '오늘' : daysToBirthday.toLocaleString() + '일') + '</strong> 남았습니다.';
+        '<strong>' + birthText + '</strong> 출생자의 <strong>' + baseText + '</strong> 기준 만나이는 <strong>만 ' + age +
+        '세</strong>입니다. 세는나이는 <strong>' + koreanAge + '세</strong>, 연나이는 <strong>' + yearAge +
+        '세</strong>입니다. <strong>' + zodiac + '</strong>이며 별자리는 <strong>' + starSign + '</strong>입니다.';
 
       resultBox.style.display = 'block';
-      resultBox.scrollIntoView({behavior:'smooth', block:'nearest'});
+      if(scroll) resultBox.scrollIntoView({behavior:'smooth', block:'nearest'});
     }
 
-    function formatKoreanDate(date){
-      return date.getFullYear() + '년 ' + (date.getMonth() + 1) + '월 ' + date.getDate() + '일';
+    function getZodiac(year){
+      const animals = ['원숭이띠','닭띠','개띠','돼지띠','쥐띠','소띠','호랑이띠','토끼띠','용띠','뱀띠','말띠','양띠'];
+      return animals[year % 12];
     }
+
+    function getStarSign(month, day){
+      const md = month * 100 + day;
+      if(md >= 120 && md <= 218) return '물병자리';
+      if(md >= 219 && md <= 320) return '물고기자리';
+      if(md >= 321 && md <= 419) return '양자리';
+      if(md >= 420 && md <= 520) return '황소자리';
+      if(md >= 521 && md <= 621) return '쌍둥이자리';
+      if(md >= 622 && md <= 722) return '게자리';
+      if(md >= 723 && md <= 822) return '사자자리';
+      if(md >= 823 && md <= 922) return '처녀자리';
+      if(md >= 923 && md <= 1022) return '천칭자리';
+      if(md >= 1023 && md <= 1122) return '전갈자리';
+      if(md >= 1123 && md <= 1224) return '사수자리';
+      return '염소자리';
+    }
+
+    function formatKoreanDate(date){ return date.getFullYear() + '년 ' + (date.getMonth()+1) + '월 ' + date.getDate() + '일'; }
+    function setText(id, value){ document.getElementById(id).textContent = value; }
 
     function resetForm(){
       birthInput.value = '';
@@ -905,24 +281,10 @@
     }
 
     function shareResult(){
-      if(!lastSummary){
-        alert('먼저 만나이를 계산해 주세요.');
-        return;
-      }
-
-      if(navigator.share){
-        navigator.share({
-          title:'만나이 계산 결과',
-          text:lastSummary,
-          url:location.href
-        });
-      }else if(navigator.clipboard){
-        navigator.clipboard.writeText(lastSummary).then(function(){
-          alert('계산 결과를 복사했습니다.');
-        });
-      }else{
-        alert(lastSummary);
-      }
+      if(!lastSummary){ alert('먼저 만나이를 계산해 주세요.'); return; }
+      if(navigator.share) navigator.share({title:'만나이 계산 결과', text:lastSummary, url:location.href});
+      else if(navigator.clipboard) navigator.clipboard.writeText(lastSummary).then(function(){ alert('계산 결과를 복사했습니다.'); });
+      else alert(lastSummary);
     }
   </script>
 </body>
