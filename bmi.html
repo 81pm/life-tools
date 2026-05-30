@@ -179,23 +179,48 @@
     [heightInput, weightInput, targetBmiInput, autoCalcInput].forEach(el => {
       el.addEventListener('input', runAuto);
       el.addEventListener('change', runAuto);
-      el.addEventListener('keydown', e => { if(e.key === 'Enter') calcBmi(); });
+      el.addEventListener('keydown', e => {
+        if(e.key === 'Enter'){
+          e.preventDefault();
+          calcBmi(true, true);
+        }
+      });
     });
 
     function runAuto(){
-      if(autoCalcInput.value === '1' && Number(heightInput.value) > 0 && Number(weightInput.value) > 0) calcBmi(false);
+      const heightCm = Number(heightInput.value);
+      const weight = Number(weightInput.value);
+
+      // 입력 중에는 값이 완성되기 전까지 조용히 대기합니다.
+      // 예: 몸무게 70 입력 중 첫 글자 7에서 alert가 뜨지 않도록 방지
+      if(autoCalcInput.value === '1' && heightCm >= 80 && heightCm <= 250 && weight >= 20 && weight <= 300){
+        calcBmi(false, false);
+      }
     }
 
     function setHeight(v){ heightInput.value = v; runAuto(); }
     function setWeight(v){ weightInput.value = v; runAuto(); }
 
-    function calcBmi(scroll=true){
+    function calcBmi(scroll=true, showAlert=true){
       const heightCm = Number(heightInput.value);
       const weight = Number(weightInput.value);
       const targetBmi = Number(targetBmiInput.value);
 
-      if(!heightCm || heightCm < 80 || heightCm > 250){ alert('키를 올바르게 입력해 주세요.'); heightInput.focus(); return; }
-      if(!weight || weight < 20 || weight > 300){ alert('몸무게를 올바르게 입력해 주세요.'); weightInput.focus(); return; }
+      if(!heightCm || heightCm < 80 || heightCm > 250){
+        if(showAlert){
+          alert('키를 올바르게 입력해 주세요.');
+          heightInput.focus();
+        }
+        return;
+      }
+
+      if(!weight || weight < 20 || weight > 300){
+        if(showAlert){
+          alert('몸무게를 올바르게 입력해 주세요.');
+          weightInput.focus();
+        }
+        return;
+      }
 
       const h = heightCm / 100;
       const bmi = weight / (h*h);
