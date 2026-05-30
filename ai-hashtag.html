@@ -1,69 +1,1484 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>AI 인스타 해시태그 생성기 | 검색 노출 해시태그 추천</title>
-<meta name="description" content="Gemini AI가 게시물 주제와 분위기를 분석해 인스타그램, 릴스, 블로그, 쇼츠에 어울리는 검색 노출형 해시태그를 추천합니다.">
-<meta name="keywords" content="AI 해시태그 생성기, 인스타 해시태그, 검색 많은 해시태그, 릴스 해시태그, 블로그 해시태그">
-<meta name="theme-color" content="#7c3aed">
-<meta property="og:type" content="website">
-<meta property="og:title" content="AI 인스타 해시태그 생성기">
-<meta property="og:description" content="AI가 검색 노출에 유리한 인스타그램 해시태그를 추천합니다.">
-<meta property="og:image" content="https://81pm.github.io/life-tools/og-image.png">
-<meta property="og:url" content="https://81pm.github.io/life-tools/ai-hashtag.html">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="AI 인스타 해시태그 생성기">
-<meta name="twitter:description" content="AI가 검색 노출에 유리한 인스타그램 해시태그를 추천합니다.">
-<meta name="twitter:image" content="https://81pm.github.io/life-tools/og-image.png">
-<style>
-:root{--text:#121827;--sub:#64748b;--line:#e2e8f0;--blue:#2563eb;--cyan:#06b6d4;--violet:#7c3aed;--pink:#db2777;--soft:#eef5ff;--vsoft:#f5f3ff;--psoft:#fdf2f8;--gsoft:#ecfdf5;--shadow:0 24px 60px rgba(15,23,42,.12);--shadow2:0 12px 28px rgba(15,23,42,.08);--safe:env(safe-area-inset-bottom,0px)}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;color:var(--text);background:radial-gradient(circle at 12% 0%,rgba(124,58,237,.18),transparent 28%),radial-gradient(circle at 88% 9%,rgba(219,39,119,.14),transparent 30%),linear-gradient(180deg,#fbf7ff 0%,#eef5ff 48%,#fff 100%)}
-a{color:inherit;text-decoration:none}button,input,textarea,select{font:inherit}button{cursor:pointer}svg{display:block;width:100%;height:100%;stroke:currentColor;fill:none;stroke-width:2.15;stroke-linecap:round;stroke-linejoin:round}.app{width:min(1160px,calc(100% - 28px));margin:0 auto;padding:18px 0 calc(96px + var(--safe))}
-.header{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 0;backdrop-filter:blur(20px)}.brand{display:flex;align-items:center;gap:11px;font-weight:900}.mark{width:44px;height:44px;border-radius:16px;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,var(--blue),var(--cyan));box-shadow:0 12px 28px rgba(37,99,235,.28);flex:0 0 auto}.mark svg{width:25px;height:25px}.brand strong{display:block;font-size:18px;line-height:1.1}.brand small{display:block;margin-top:3px;color:var(--sub);font-size:12px}.pill{min-height:40px;display:inline-flex;align-items:center;justify-content:center;padding:0 14px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.84);color:#334155;font-size:13px;font-weight:900;box-shadow:0 6px 18px rgba(15,23,42,.05)}
-.hero{position:relative;overflow:hidden;margin-top:12px;padding:clamp(30px,5vw,60px);border-radius:34px;background:rgba(255,255,255,.94);border:1px solid rgba(226,232,240,.9);box-shadow:var(--shadow)}.hero:before{content:"";position:absolute;right:-105px;top:-120px;width:310px;height:310px;border-radius:50%;background:linear-gradient(135deg,rgba(124,58,237,.18),rgba(219,39,119,.11))}.hero:after{content:"";position:absolute;right:75px;bottom:-105px;width:210px;height:210px;border-radius:50%;background:rgba(37,99,235,.10)}
-.hero-inner{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1.1fr) 360px;gap:28px;align-items:center}.badge{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;color:var(--violet);background:var(--vsoft);font-size:13px;font-weight:950;margin-bottom:18px}.badge svg{width:18px;height:18px}h1{margin:0;max-width:790px;font-size:clamp(34px,5.5vw,60px);line-height:1.08;letter-spacing:-2px}.hero-desc{margin:18px 0 0;max-width:780px;color:#475569;font-size:17px;line-height:1.75;font-weight:750}.hero-desc strong{color:#6d28d9}.hero-tags{display:flex;flex-wrap:wrap;gap:9px;margin-top:24px}.hero-tags span{min-height:36px;display:inline-flex;align-items:center;padding:0 12px;border-radius:999px;background:#fff;border:1px solid var(--line);color:#475569;font-size:12px;font-weight:900}
-.ai-card{border-radius:28px;padding:22px;background:radial-gradient(circle at 20% 0%,rgba(255,255,255,.7),transparent 44%),linear-gradient(135deg,#7c3aed,#db2777);color:#fff;box-shadow:0 20px 44px rgba(124,58,237,.25);min-height:280px;display:flex;flex-direction:column;justify-content:space-between}.ai-orb{width:64px;height:64px;border-radius:22px;display:grid;place-items:center;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.25)}.ai-orb svg{width:35px;height:35px}.ai-card h2{margin:18px 0 0;font-size:24px;letter-spacing:-.7px}.ai-card p{margin:10px 0 0;color:rgba(255,255,255,.82);font-size:14px;line-height:1.65;font-weight:700}.ai-points{display:grid;gap:8px;margin-top:18px}.ai-points span{font-size:13px;font-weight:850;color:rgba(255,255,255,.92)}
-.layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;margin-top:22px;align-items:start}.panel,.side-card,.result,.ad,.info{border:1px solid rgba(226,232,240,.88);background:rgba(255,255,255,.95);box-shadow:var(--shadow2);backdrop-filter:blur(18px)}.panel{padding:24px;border-radius:30px}.form-title{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px}.form-title h2{margin:0;font-size:24px;letter-spacing:-.7px}.form-title p{margin:7px 0 0;color:var(--sub);font-size:14px;line-height:1.6;font-weight:700}.status{min-height:34px;display:inline-flex;align-items:center;gap:7px;padding:0 12px;border-radius:999px;background:var(--gsoft);color:#15803d;border:1px solid #bbf7d0;font-size:12px;font-weight:950;white-space:nowrap}.dot{width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 4px rgba(34,197,94,.12)}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.full{grid-column:1/-1}.field label{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;color:#0f172a;font-size:14px;font-weight:950}.hint{color:var(--sub);font-size:12px;font-weight:750}input,textarea,select{width:100%;border:1px solid var(--line);border-radius:18px;color:var(--text);background:#f8fafc;font-size:16px;outline:none;transition:.16s}input,select{height:56px;padding:0 16px}textarea{min-height:142px;resize:vertical;padding:15px 16px;line-height:1.65}select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,#64748b 50%),linear-gradient(135deg,#64748b 50%,transparent 50%);background-position:calc(100% - 20px) 24px,calc(100% - 14px) 24px;background-size:6px 6px;background-repeat:no-repeat}input:focus,textarea:focus,select:focus{border-color:#c4b5fd;background:#fff;box-shadow:0 0 0 4px rgba(124,58,237,.09)}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.chips button{width:auto;min-height:34px;padding:0 11px;border-radius:999px;color:#475569;background:#f8fafc;border:1px solid var(--line);box-shadow:none;font-size:12px;font-weight:850}.actions{display:flex;gap:10px;margin-top:18px}button{min-height:54px;border:0;border-radius:18px;font-weight:950;font-size:15px;transition:.16s}button:hover{transform:translateY(-1px)}button:disabled{cursor:not-allowed;opacity:.68;transform:none}.actions button{flex:1}.primary{color:#fff;background:linear-gradient(135deg,var(--violet),var(--pink));box-shadow:0 12px 26px rgba(124,58,237,.24)}.ghost{color:#334155;background:#f8fafc;border:1px solid var(--line)}
-.result{display:none;margin-top:18px;padding:24px;border-radius:30px;background:radial-gradient(circle at 16% 8%,rgba(124,58,237,.10),transparent 35%),linear-gradient(135deg,#f5f3ff,#fff);border-color:#ddd6fe}.result.loading{display:block}.result-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:16px}.result-head h2{margin:0;font-size:24px}.count{color:var(--violet);background:#fff;border:1px solid #ddd6fe;padding:8px 12px;border-radius:999px;font-size:12px;font-weight:950;white-space:nowrap}.loading-box{display:none;padding:18px;border-radius:20px;background:#fff;border:1px solid var(--line)}.loading .loading-box{display:block}.loading-line{height:12px;border-radius:999px;background:linear-gradient(90deg,#ede9fe,#fce7f3,#ede9fe);background-size:200% 100%;animation:shine 1.1s infinite linear;margin:10px 0}.loading-line.short{width:70%}.loading-line.mid{width:86%}@keyframes shine{0%{background-position:0 0}100%{background-position:200% 0}}
-.tagbox{display:flex;flex-wrap:wrap;gap:8px;padding:16px;border-radius:20px;background:#fff;border:1px solid var(--line);min-height:120px}.loading .tagbox,.loading .copy,.loading .result-actions,.loading .caption-box{display:none}.tag{display:inline-flex;align-items:center;min-height:36px;padding:0 12px;border-radius:999px;background:#f8fafc;border:1px solid var(--line);color:#334155;font-size:14px;font-weight:850}.tag.hot{color:#be185d;background:#fdf2f8;border-color:#fbcfe8}.tag.mid{color:#6d28d9;background:#f5f3ff;border-color:#ddd6fe}.caption-box,.copy{margin-top:14px;padding:15px;border-radius:18px;background:#fff;border:1px solid var(--line)}.caption-box strong{display:block;font-size:13px;color:#0f172a;margin-bottom:8px}.caption-box p{margin:0;color:#475569;font-size:14px;line-height:1.7;font-weight:700}.copy{color:#334155;font-size:14px;line-height:1.8;word-break:break-all}.result-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.result-actions button{min-height:50px;border-radius:16px}
-.side{display:grid;gap:14px}.side-card{padding:18px;border-radius:22px}.side-card h2{margin:0 0 12px;font-size:17px}.side-card p{margin:0;color:var(--sub);font-size:14px;line-height:1.7;font-weight:700}.tip{display:grid;gap:8px;color:#475569;font-size:13px;line-height:1.55;font-weight:750}.tip span{display:block;padding:10px 12px;border-radius:14px;background:#f8fafc;border:1px solid var(--line)}.side-link{display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid var(--line);border-radius:16px;background:#f8fbff;color:#334155;font-size:14px;font-weight:900}.side-link+.side-link{margin-top:8px}.ad{min-height:110px;margin-top:18px;border-radius:22px;border-style:dashed;display:grid;place-items:center;text-align:center;color:var(--sub);padding:18px;font-size:14px;line-height:1.6}.info{margin-top:18px;padding:22px;border-radius:22px;color:#475569;font-size:14px;line-height:1.8}.info h2{margin:0 0 10px;color:#0f172a;font-size:22px}.guide-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}.guide{padding:16px;border-radius:18px;background:#fff;border:1px solid var(--line)}.guide strong{display:block;color:#0f172a;font-size:15px;margin-bottom:6px}.guide span{display:block;color:var(--sub);font-size:13px;line-height:1.6;font-weight:700}
-footer{margin-top:28px;padding:22px 0 0;border-top:1px solid rgba(226,232,240,.9);color:var(--sub);font-size:13px;line-height:1.7;text-align:center}.bottom{position:fixed;left:50%;bottom:calc(12px + var(--safe));transform:translateX(-50%);z-index:40;width:min(520px,calc(100% - 24px));display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:8px;border:1px solid rgba(226,232,240,.92);border-radius:24px;background:rgba(255,255,255,.92);backdrop-filter:blur(20px);box-shadow:0 18px 42px rgba(15,23,42,.16)}.bottom a{display:grid;place-items:center;min-height:54px;border-radius:17px;color:#64748b;font-size:12px;font-weight:950}.bottom a.active{color:var(--blue);background:var(--soft)}
-@media(max-width:980px){.hero-inner{grid-template-columns:1fr}.layout{grid-template-columns:1fr}.side{grid-template-columns:1fr 1fr}.guide-grid{grid-template-columns:1fr}}@media(max-width:680px){.app{width:min(100% - 22px,1160px);padding-top:10px}.brand small{display:none}.hero{padding:28px 22px;border-radius:28px}h1{font-size:clamp(32px,9.5vw,44px);letter-spacing:-1.4px}.hero-desc{font-size:15px}.ai-card{min-height:auto}.panel{padding:20px;border-radius:24px}.form-title{flex-direction:column;align-items:flex-start}.grid{grid-template-columns:1fr}.actions,.result-actions{grid-template-columns:1fr;flex-direction:column}.actions button{width:100%;flex:none}.result-head{align-items:flex-start;flex-direction:column}.side{grid-template-columns:1fr}input,textarea,select{font-size:16px}}
-</style>
-</head>
-<body>
-<div class="app">
-<header class="header"><a href="index.html" class="brand"><span class="mark"><svg viewBox="0 0 24 24"><path d="M4 13.5 9.5 19 20 5"/></svg></span><span><strong>생활편의 도구</strong><small>빠른 계산 · 쉬운 변환</small></span></a><a class="pill" href="index.html">전체 기능</a></header>
-<main>
-<section class="hero"><div class="hero-inner"><div><div class="badge"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 5.8L20 11l-6.2 2.2L12 19l-1.8-5.8L4 11l6.2-2.2z"/></svg>Gemini AI 연동</div><h1>검색 노출을 노린<br>AI 해시태그 생성기</h1><p class="hero-desc">게시물 주제와 분위기를 입력하면 <strong>Gemini AI가 검색에 많이 쓰이는 해시태그 흐름을 분석</strong>해 인스타그램, 릴스, 블로그, 쇼츠에 어울리는 해시태그 조합을 추천합니다.</p><div class="hero-tags"><span>#인스타그램</span><span>#릴스</span><span>#블로그</span><span>#쇼츠</span><span>#마케팅</span></div></div><div class="ai-card"><div><div class="ai-orb"><svg viewBox="0 0 24 24"><path d="M12 3l1.8 5.8L20 11l-6.2 2.2L12 19l-1.8-5.8L4 11l6.2-2.2z"/><path d="M5 3v4M3 5h4M19 17v4M17 19h4"/></svg></div><h2>AI가 해시태그를 조합합니다</h2><p>단순 랜덤 생성이 아니라 주제, 플랫폼, 분위기, 해시태그 개수를 AI에게 전달해 결과를 생성합니다.</p></div><div class="ai-points"><span>✓ 검색형 + 감성형 + 세부형 태그 조합</span><span>✓ 인스타그램·릴스·블로그 톤 선택</span><span>✓ 복사해서 바로 붙여넣기</span></div></div></div></section>
-<div class="layout"><section class="panel"><div class="form-title"><div><h2>AI 해시태그 만들기</h2><p>구체적으로 입력할수록 더 자연스럽고 검색 의도에 맞는 태그가 생성됩니다.</p></div><span class="status"><span class="dot"></span>AI 연결됨</span></div><div class="grid"><div class="field full"><label for="topic">게시물 주제 <span class="hint">필수</span></label><textarea id="topic" placeholder="예: 제주도 가족여행 성산일출봉 사진, 다산동 분위기 좋은 카페 후기, 집에서 만든 쌀국수 요리 사진"></textarea><div class="chips"><button type="button" onclick="setExample('제주도 가족여행 성산일출봉 사진')">제주 여행</button><button type="button" onclick="setExample('다산동 분위기 좋은 카페 방문 후기')">카페</button><button type="button" onclick="setExample('집에서 만든 쌀국수 요리 사진')">요리</button><button type="button" onclick="setExample('강아지 산책과 반려견 일상')">반려동물</button><button type="button" onclick="setExample('운동 루틴과 다이어트 기록')">운동</button></div></div><div class="field"><label for="platform">플랫폼 <span class="hint">추천 방식</span></label><select id="platform"><option value="instagram">인스타그램 게시물</option><option value="reels">릴스 / 쇼츠</option><option value="blog">블로그 / 검색 유입</option><option value="store">상품 홍보 / 마케팅</option></select></div><div class="field"><label for="mood">분위기 <span class="hint">톤 선택</span></label><select id="mood"><option value="balanced">균형 있게</option><option value="trendy">트렌디하게</option><option value="emotional">감성적으로</option><option value="daily">일상 느낌</option><option value="professional">홍보/전문 느낌</option></select></div><div class="field"><label for="count">해시태그 개수 <span class="hint">권장 20~30개</span></label><select id="count"><option value="15">15개</option><option value="20" selected>20개</option><option value="25">25개</option><option value="30">30개</option></select></div><div class="field"><label for="goal">목표 <span class="hint">노출 전략</span></label><select id="goal"><option value="balanced" selected>검색량+세부태그 균형</option><option value="popular">검색량 많은 태그 중심</option><option value="niche">경쟁 낮은 세부 태그 중심</option><option value="global">영문 태그 일부 포함</option></select></div></div><div class="actions"><button id="generateBtn" class="primary" type="button" onclick="generateTags()">AI 해시태그 생성하기</button><button class="ghost" type="button" onclick="resetForm()">초기화</button></div><section id="result" class="result"><div class="result-head"><h2>AI 추천 결과</h2><span class="count" id="resultCount">0개 생성</span></div><div class="loading-box"><strong>Gemini AI가 해시태그를 생성하는 중입니다...</strong><div class="loading-line"></div><div class="loading-line mid"></div><div class="loading-line short"></div></div><div class="tagbox" id="tagBox"></div><div class="caption-box" id="captionBox"><strong>AI 추천 문구</strong><p id="captionText">-</p></div><div class="copy" id="copyText"></div><div class="result-actions"><button class="primary" type="button" onclick="copyTags()">해시태그 복사하기</button><button class="ghost" type="button" onclick="generateTags(false)">다시 생성</button></div></section></section>
-<aside class="side"><section class="side-card"><h2>잘 쓰는 팁</h2><div class="tip"><span>검색량이 큰 태그만 쓰기보다 세부 태그를 함께 섞으면 노출 기회가 넓어집니다.</span><span>지역, 상황, 감성, 사용 목적을 함께 입력하면 더 정확한 결과가 나옵니다.</span><span>상품 홍보는 제품명보다 사용 장면과 문제 해결 키워드를 같이 넣어보세요.</span></div></section><section class="side-card"><h2>관련 기능</h2><a class="side-link" href="image-compress.html">이미지 용량 줄이기 <span>→</span></a><a class="side-link" href="jpg-to-pdf.html">JPG → PDF <span>→</span></a><a class="side-link" href="dday.html">D-Day 계산 <span>→</span></a></section><section class="side-card"><h2>개인정보 안내</h2><p>입력한 주제는 해시태그 생성을 위해 AI API로 전송됩니다. 민감한 개인정보나 비공개 정보는 입력하지 않는 것이 좋습니다.</p></section></aside></div>
-<div class="ad"><strong>광고 영역</strong><br>AdSense 승인 후 이 위치에 반응형 광고 코드를 넣으면 됩니다.</div><section class="info"><h2>AI 해시태그 생성기 사용법</h2>게시물 주제를 구체적으로 적으면 AI가 더 좋은 해시태그 조합을 만들 수 있습니다. 예를 들어 “카페”보다 “다산동 분위기 좋은 카페 방문 후기”처럼 지역, 상황, 느낌을 함께 입력하는 것이 좋습니다.<div class="guide-grid"><div class="guide"><strong>1. 주제 입력</strong><span>사진이나 게시물 내용을 간단히 설명하세요.</span></div><div class="guide"><strong>2. 목표 선택</strong><span>검색량 중심, 세부 태그 중심, 영문 포함 등을 선택하세요.</span></div><div class="guide"><strong>3. 복사 후 사용</strong><span>생성된 해시태그를 복사해 인스타그램, 릴스, 블로그에 사용하세요.</span></div></div></section></main>
-<footer><div style="margin-bottom:10px;"><a href="about.html">사이트 소개</a> | <a href="privacy.html">개인정보처리방침</a> | <a href="terms.html">이용약관</a></div><div>© 2026 생활편의 도구<br>Designed &amp; Developed by Chulhee</div></footer></div><nav class="bottom"><a href="index.html">홈</a><a href="image-compress.html">이미지</a><a class="active" href="ai-hashtag.html">AI태그</a><a href="pdf-merge.html">PDF</a></nav>
-<script>
-const WORKER_URL='https://ai-hashtag-api.choichichi.workers.dev';
-const topicInput=document.getElementById('topic'),platformInput=document.getElementById('platform'),moodInput=document.getElementById('mood'),countInput=document.getElementById('count'),goalInput=document.getElementById('goal'),resultBox=document.getElementById('result'),tagBox=document.getElementById('tagBox'),copyText=document.getElementById('copyText'),captionText=document.getElementById('captionText'),resultCount=document.getElementById('resultCount'),generateBtn=document.getElementById('generateBtn');
-function setExample(text){topicInput.value=text;generateTags(false)}
-function normalizeTag(tag){return String(tag||'').trim().replace(/^#+/,'').replace(/[^\w가-힣ㄱ-ㅎㅏ-ㅣ一-龥]/g,'')}
-function setLoading(v){if(v){resultBox.classList.add('loading');resultBox.style.display='block';resultCount.textContent='AI 생성 중';generateBtn.disabled=true;generateBtn.textContent='AI 생성 중...'}else{resultBox.classList.remove('loading');generateBtn.disabled=false;generateBtn.textContent='AI 해시태그 생성하기'}}
-async function generateTags(scroll=true){
- const topic=topicInput.value.trim(); if(!topic){alert('게시물 주제를 입력해 주세요.');topicInput.focus();return}
- setLoading(true);tagBox.innerHTML='';copyText.textContent='';captionText.textContent='-';
- try{
-  const response=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({topic,platform:platformInput.value,mood:moodInput.value,goal:goalInput.value,count:Number(countInput.value)})});
-  const data=await response.json(); if(!response.ok)throw new Error(data.error||'AI 해시태그 생성에 실패했습니다.');
-  let hashtags=[]; if(Array.isArray(data.hashtags)){hashtags=data.hashtags.map(normalizeTag).filter(Boolean)}else if(data.text){hashtags=String(data.text).split(/\s+/).map(normalizeTag).filter(Boolean)}
-  hashtags=[...new Set(hashtags)].slice(0,Number(countInput.value)); if(!hashtags.length)throw new Error('AI 결과에서 해시태그를 찾지 못했습니다.');
-  renderTags(hashtags,data.caption||makeCaption(topic,platformInput.value)); if(scroll)resultBox.scrollIntoView({behavior:'smooth',block:'nearest'});
- }catch(e){resultCount.textContent='생성 실패';tagBox.innerHTML='<span class="tag mid">생성 중 오류가 발생했습니다.</span>';copyText.textContent='';captionText.textContent=e.message||'잠시 후 다시 시도해 주세요.';alert(e.message||'AI 해시태그 생성 중 오류가 발생했습니다.')}finally{setLoading(false)}
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
+  <title>
+   AI 인스타 해시태그 생성기 | 검색 노출 해시태그 추천
+  </title>
+  <meta content="Gemini AI가 게시물 주제와 분위기를 분석해 인스타그램, 릴스, 블로그, 쇼츠에 어울리는 검색 노출형 해시태그를 추천합니다." name="description"/>
+  <meta content="AI 해시태그 생성기, 인스타 해시태그, 검색 많은 해시태그, 릴스 해시태그, 블로그 해시태그" name="keywords"/>
+  <meta content="#7c3aed" name="theme-color"/>
+  <meta content="website" property="og:type"/>
+  <meta content="AI 인스타 해시태그 생성기" property="og:title"/>
+  <meta content="AI가 검색 노출에 유리한 인스타그램 해시태그를 추천합니다." property="og:description"/>
+  <meta content="https://81pm.github.io/life-tools/og-image.png" property="og:image"/>
+  <meta content="https://81pm.github.io/life-tools/ai-hashtag.html" property="og:url"/>
+  <meta content="summary_large_image" name="twitter:card"/>
+  <meta content="AI 인스타 해시태그 생성기" name="twitter:title"/>
+  <meta content="AI가 검색 노출에 유리한 인스타그램 해시태그를 추천합니다." name="twitter:description"/>
+  <meta content="https://81pm.github.io/life-tools/og-image.png" name="twitter:image"/>
+  <style>
+   :root {
+  --text:#121827;
+  --sub:#64748b;
+  --line:#e2e8f0;
+  --blue:#2563eb;
+  --cyan:#06b6d4;
+  --violet:#7c3aed;
+  --pink:#db2777;
+  --soft:#eef5ff;
+  --vsoft:#f5f3ff;
+  --psoft:#fdf2f8;
+  --gsoft:#ecfdf5;
+  --shadow:0 24px 60px rgba(15,23,42,.12);
+  --shadow2:0 12px 28px rgba(15,23,42,.08);
+  --safe:env(safe-area-inset-bottom,0px)
 }
-function renderTags(tags,caption){tagBox.innerHTML='';tags.forEach((tag,i)=>{const el=document.createElement('span');el.className='tag '+(i<6?'hot':i<14?'mid':'');el.textContent='#'+tag;tagBox.appendChild(el)});copyText.textContent=tags.map(t=>'#'+t).join(' ');captionText.textContent=caption||'게시물 내용에 맞춰 해시태그를 함께 사용해 보세요.';resultCount.textContent=tags.length+'개 생성';resultBox.style.display='block'}
-function makeCaption(topic,platform){if(platform==='blog')return topic+' 관련 검색 유입을 고려한 해시태그 조합입니다.';if(platform==='store')return topic+' 홍보에 활용하기 좋은 해시태그 조합입니다.';return topic+' 게시물에 어울리는 해시태그 조합입니다.'}
-async function copyTags(){const text=copyText.textContent.trim();if(!text){alert('먼저 해시태그를 생성해 주세요.');return}if(navigator.clipboard){await navigator.clipboard.writeText(text);alert('해시태그를 복사했습니다.')}else{const t=document.createElement('textarea');t.value=text;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();alert('해시태그를 복사했습니다.')}}
-function resetForm(){topicInput.value='';platformInput.value='instagram';moodInput.value='balanced';countInput.value='20';goalInput.value='balanced';resultBox.style.display='none';resultBox.classList.remove('loading');tagBox.innerHTML='';copyText.textContent='';captionText.textContent='-';resultCount.textContent='0개 생성';topicInput.focus()}
-</script>
-</body>
+
+* {
+  box-sizing:border-box
+}
+
+html {
+  scroll-behavior:smooth
+}
+
+body {
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;
+  color:var(--text);
+  background:radial-gradient(circle at 12% 0%,rgba(124,58,237,.18),transparent 28%),radial-gradient(circle at 88% 9%,rgba(219,39,119,.14),transparent 30%),linear-gradient(180deg,#fbf7ff 0%,#eef5ff 48%,#fff 100%)
+}
+
+a {
+  color:inherit;
+  text-decoration:none
+}
+
+button,input,textarea,select {
+  font:inherit
+}
+
+button {
+  cursor:pointer
+}
+
+svg {
+  display:block;
+  width:100%;
+  height:100%;
+  stroke:currentColor;
+  fill:none;
+  stroke-width:2.15;
+  stroke-linecap:round;
+  stroke-linejoin:round
+}
+
+.app {
+  width:min(1160px,calc(100% - 28px));
+  margin:0 auto;
+  padding:18px 0 calc(96px + var(--safe))
+}
+
+.header {
+  position:sticky;
+  top:0;
+  z-index:50;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  padding:12px 0;
+  backdrop-filter:blur(20px)
+}
+
+.brand {
+  display:flex;
+  align-items:center;
+  gap:11px;
+  font-weight:900
+}
+
+.mark {
+  width:44px;
+  height:44px;
+  border-radius:16px;
+  display:grid;
+  place-items:center;
+  color:#fff;
+  background:linear-gradient(135deg,var(--blue),var(--cyan));
+  box-shadow:0 12px 28px rgba(37,99,235,.28);
+  flex:0 0 auto
+}
+
+.mark svg {
+  width:25px;
+  height:25px
+}
+
+.brand strong {
+  display:block;
+  font-size:18px;
+  line-height:1.1
+}
+
+.brand small {
+  display:block;
+  margin-top:3px;
+  color:var(--sub);
+  font-size:12px
+}
+
+.pill {
+  min-height:40px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 14px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:rgba(255,255,255,.84);
+  color:#334155;
+  font-size:13px;
+  font-weight:900;
+  box-shadow:0 6px 18px rgba(15,23,42,.05)
+}
+
+.hero {
+  position:relative;
+  overflow:hidden;
+  margin-top:12px;
+  padding:clamp(30px,5vw,60px);
+  border-radius:34px;
+  background:rgba(255,255,255,.94);
+  border:1px solid rgba(226,232,240,.9);
+  box-shadow:var(--shadow)
+}
+
+.hero:before {
+  content:"";
+  position:absolute;
+  right:-105px;
+  top:-120px;
+  width:310px;
+  height:310px;
+  border-radius:50%;
+  background:linear-gradient(135deg,rgba(124,58,237,.18),rgba(219,39,119,.11))
+}
+
+.hero:after {
+  content:"";
+  position:absolute;
+  right:75px;
+  bottom:-105px;
+  width:210px;
+  height:210px;
+  border-radius:50%;
+  background:rgba(37,99,235,.10)
+}
+
+.hero-inner {
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:minmax(0,1.1fr) 360px;
+  gap:28px;
+  align-items:center
+}
+
+.badge {
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 14px;
+  border-radius:999px;
+  color:var(--violet);
+  background:var(--vsoft);
+  font-size:13px;
+  font-weight:950;
+  margin-bottom:18px
+}
+
+.badge svg {
+  width:18px;
+  height:18px
+}
+
+h1 {
+  margin:0;
+  max-width:790px;
+  font-size:clamp(34px,5.5vw,60px);
+  line-height:1.08;
+  letter-spacing:-2px
+}
+
+.hero-desc {
+  margin:18px 0 0;
+  max-width:780px;
+  color:#475569;
+  font-size:17px;
+  line-height:1.75;
+  font-weight:750
+}
+
+.hero-desc strong {
+  color:#6d28d9
+}
+
+.hero-tags {
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+  margin-top:24px
+}
+
+.hero-tags span {
+  min-height:36px;
+  display:inline-flex;
+  align-items:center;
+  padding:0 12px;
+  border-radius:999px;
+  background:#fff;
+  border:1px solid var(--line);
+  color:#475569;
+  font-size:12px;
+  font-weight:900
+}
+
+.ai-card {
+  border-radius:28px;
+  padding:22px;
+  background:radial-gradient(circle at 20% 0%,rgba(255,255,255,.7),transparent 44%),linear-gradient(135deg,#7c3aed,#db2777);
+  color:#fff;
+  box-shadow:0 20px 44px rgba(124,58,237,.25);
+  min-height:280px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between
+}
+
+.ai-orb {
+  width:64px;
+  height:64px;
+  border-radius:22px;
+  display:grid;
+  place-items:center;
+  background:rgba(255,255,255,.18);
+  border:1px solid rgba(255,255,255,.25)
+}
+
+.ai-orb svg {
+  width:35px;
+  height:35px
+}
+
+.ai-card h2 {
+  margin:18px 0 0;
+  font-size:24px;
+  letter-spacing:-.7px
+}
+
+.ai-card p {
+  margin:10px 0 0;
+  color:rgba(255,255,255,.82);
+  font-size:14px;
+  line-height:1.65;
+  font-weight:700
+}
+
+.ai-points {
+  display:grid;
+  gap:8px;
+  margin-top:18px
+}
+
+.ai-points span {
+  font-size:13px;
+  font-weight:850;
+  color:rgba(255,255,255,.92)
+}
+
+.layout {
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 340px;
+  gap:18px;
+  margin-top:22px;
+  align-items:start
+}
+
+.panel,.side-card,.result,.ad,.info {
+  border:1px solid rgba(226,232,240,.88);
+  background:rgba(255,255,255,.95);
+  box-shadow:var(--shadow2);
+  backdrop-filter:blur(18px)
+}
+
+.panel {
+  padding:24px;
+  border-radius:30px
+}
+
+.form-title {
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:18px
+}
+
+.form-title h2 {
+  margin:0;
+  font-size:24px;
+  letter-spacing:-.7px
+}
+
+.form-title p {
+  margin:7px 0 0;
+  color:var(--sub);
+  font-size:14px;
+  line-height:1.6;
+  font-weight:700
+}
+
+.status {
+  min-height:34px;
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:0 12px;
+  border-radius:999px;
+  background:var(--gsoft);
+  color:#15803d;
+  border:1px solid #bbf7d0;
+  font-size:12px;
+  font-weight:950;
+  white-space:nowrap
+}
+
+.dot {
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#22c55e;
+  box-shadow:0 0 0 4px rgba(34,197,94,.12)
+}
+
+.grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px
+}
+
+.full {
+  grid-column:1/-1
+}
+
+.field label {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:8px;
+  color:#0f172a;
+  font-size:14px;
+  font-weight:950
+}
+
+.hint {
+  color:var(--sub);
+  font-size:12px;
+  font-weight:750
+}
+
+input,textarea,select {
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:18px;
+  color:var(--text);
+  background:#f8fafc;
+  font-size:16px;
+  outline:none;
+  transition:.16s
+}
+
+input,select {
+  height:56px;
+  padding:0 16px
+}
+
+textarea {
+  min-height:142px;
+  resize:vertical;
+  padding:15px 16px;
+  line-height:1.65
+}
+
+select {
+  appearance:none;
+  background-image:linear-gradient(45deg,transparent 50%,#64748b 50%),linear-gradient(135deg,#64748b 50%,transparent 50%);
+  background-position:calc(100% - 20px) 24px,calc(100% - 14px) 24px;
+  background-size:6px 6px;
+  background-repeat:no-repeat
+}
+
+input:focus,textarea:focus,select:focus {
+  border-color:#c4b5fd;
+  background:#fff;
+  box-shadow:0 0 0 4px rgba(124,58,237,.09)
+}
+
+.chips {
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:10px
+}
+
+.chips button {
+  width:auto;
+  min-height:34px;
+  padding:0 11px;
+  border-radius:999px;
+  color:#475569;
+  background:#f8fafc;
+  border:1px solid var(--line);
+  box-shadow:none;
+  font-size:12px;
+  font-weight:850
+}
+
+.actions {
+  display:flex;
+  gap:10px;
+  margin-top:18px
+}
+
+button {
+  min-height:54px;
+  border:0;
+  border-radius:18px;
+  font-weight:950;
+  font-size:15px;
+  transition:.16s
+}
+
+button:hover {
+  transform:translateY(-1px)
+}
+
+button:disabled {
+  cursor:not-allowed;
+  opacity:.68;
+  transform:none
+}
+
+.actions button {
+  flex:1
+}
+
+.primary {
+  color:#fff;
+  background:linear-gradient(135deg,var(--violet),var(--pink));
+  box-shadow:0 12px 26px rgba(124,58,237,.24)
+}
+
+.ghost {
+  color:#334155;
+  background:#f8fafc;
+  border:1px solid var(--line)
+}
+
+.result {
+  display:none;
+  margin-top:18px;
+  padding:24px;
+  border-radius:30px;
+  background:radial-gradient(circle at 16% 8%,rgba(124,58,237,.10),transparent 35%),linear-gradient(135deg,#f5f3ff,#fff);
+  border-color:#ddd6fe
+}
+
+.result.loading {
+  display:block
+}
+
+.result-head {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  margin-bottom:16px
+}
+
+.result-head h2 {
+  margin:0;
+  font-size:24px
+}
+
+.count {
+  color:var(--violet);
+  background:#fff;
+  border:1px solid #ddd6fe;
+  padding:8px 12px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:950;
+  white-space:nowrap
+}
+
+.loading-box {
+  display:none;
+  padding:18px;
+  border-radius:20px;
+  background:#fff;
+  border:1px solid var(--line)
+}
+
+.loading .loading-box {
+  display:block
+}
+
+.loading-line {
+  height:12px;
+  border-radius:999px;
+  background:linear-gradient(90deg,#ede9fe,#fce7f3,#ede9fe);
+  background-size:200% 100%;
+  animation:shine 1.1s infinite linear;
+  margin:10px 0
+}
+
+.loading-line.short {
+  width:70%
+}
+
+.loading-line.mid {
+  width:86%
+}
+
+@keyframes shine {
+  0% {
+  background-position:0 0
+}
+
+100% {
+  background-position:200% 0
+}
+
+}
+
+.tagbox {
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  padding:16px;
+  border-radius:20px;
+  background:#fff;
+  border:1px solid var(--line);
+  min-height:120px
+}
+
+.loading .tagbox,.loading .copy,.loading .result-actions,.loading .caption-box {
+  display:none
+}
+
+.tag {
+  display:inline-flex;
+  align-items:center;
+  min-height:36px;
+  padding:0 12px;
+  border-radius:999px;
+  background:#f8fafc;
+  border:1px solid var(--line);
+  color:#334155;
+  font-size:14px;
+  font-weight:850
+}
+
+.tag.hot {
+  color:#be185d;
+  background:#fdf2f8;
+  border-color:#fbcfe8
+}
+
+.tag.mid {
+  color:#6d28d9;
+  background:#f5f3ff;
+  border-color:#ddd6fe
+}
+
+.caption-box,.copy {
+  margin-top:14px;
+  padding:15px;
+  border-radius:18px;
+  background:#fff;
+  border:1px solid var(--line)
+}
+
+.caption-box strong {
+  display:block;
+  font-size:13px;
+  color:#0f172a;
+  margin-bottom:8px
+}
+
+.caption-box p {
+  margin:0;
+  color:#475569;
+  font-size:14px;
+  line-height:1.7;
+  font-weight:700
+}
+
+.copy {
+  color:#334155;
+  font-size:14px;
+  line-height:1.8;
+  word-break:break-all
+}
+
+.result-actions {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:14px
+}
+
+.result-actions button {
+  min-height:50px;
+  border-radius:16px
+}
+
+.side {
+  display:grid;
+  gap:14px
+}
+
+.side-card {
+  padding:18px;
+  border-radius:22px
+}
+
+.side-card h2 {
+  margin:0 0 12px;
+  font-size:17px
+}
+
+.side-card p {
+  margin:0;
+  color:var(--sub);
+  font-size:14px;
+  line-height:1.7;
+  font-weight:700
+}
+
+.tip {
+  display:grid;
+  gap:8px;
+  color:#475569;
+  font-size:13px;
+  line-height:1.55;
+  font-weight:750
+}
+
+.tip span {
+  display:block;
+  padding:10px 12px;
+  border-radius:14px;
+  background:#f8fafc;
+  border:1px solid var(--line)
+}
+
+.side-link {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:#f8fbff;
+  color:#334155;
+  font-size:14px;
+  font-weight:900
+}
+
+.side-link+.side-link {
+  margin-top:8px
+}
+
+.ad {
+  min-height:110px;
+  margin-top:18px;
+  border-radius:22px;
+  border-style:dashed;
+  display:grid;
+  place-items:center;
+  text-align:center;
+  color:var(--sub);
+  padding:18px;
+  font-size:14px;
+  line-height:1.6
+}
+
+.info {
+  margin-top:18px;
+  padding:22px;
+  border-radius:22px;
+  color:#475569;
+  font-size:14px;
+  line-height:1.8
+}
+
+.info h2 {
+  margin:0 0 10px;
+  color:#0f172a;
+  font-size:22px
+}
+
+.guide-grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-top:14px
+}
+
+.guide {
+  padding:16px;
+  border-radius:18px;
+  background:#fff;
+  border:1px solid var(--line)
+}
+
+.guide strong {
+  display:block;
+  color:#0f172a;
+  font-size:15px;
+  margin-bottom:6px
+}
+
+.guide span {
+  display:block;
+  color:var(--sub);
+  font-size:13px;
+  line-height:1.6;
+  font-weight:700
+}
+
+footer {
+  margin-top:28px;
+  padding:22px 0 0;
+  border-top:1px solid rgba(226,232,240,.9);
+  color:var(--sub);
+  font-size:13px;
+  line-height:1.7;
+  text-align:center
+}
+
+.bottom {
+  position:fixed;
+  left:50%;
+  bottom:calc(12px + var(--safe));
+  transform:translateX(-50%);
+  z-index:40;
+  width:min(520px,calc(100% - 24px));
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:4px;
+  padding:8px;
+  border:1px solid rgba(226,232,240,.92);
+  border-radius:24px;
+  background:rgba(255,255,255,.92);
+  backdrop-filter:blur(20px);
+  box-shadow:0 18px 42px rgba(15,23,42,.16)
+}
+
+.bottom a {
+  display:grid;
+  place-items:center;
+  min-height:54px;
+  border-radius:17px;
+  color:#64748b;
+  font-size:12px;
+  font-weight:950
+}
+
+.bottom a.active {
+  color:var(--blue);
+  background:var(--soft)
+}
+
+@media(max-width:980px) {
+  .hero-inner {
+  grid-template-columns:1fr
+}
+
+.layout {
+  grid-template-columns:1fr
+}
+
+.side {
+  grid-template-columns:1fr 1fr
+}
+
+.guide-grid {
+  grid-template-columns:1fr
+}
+
+}
+
+@media(max-width:680px) {
+  .app {
+  width:min(100% - 22px,1160px);
+  padding-top:10px
+}
+
+.brand small {
+  display:none
+}
+
+.hero {
+  padding:28px 22px;
+  border-radius:28px
+}
+
+h1 {
+  font-size:clamp(32px,9.5vw,44px);
+  letter-spacing:-1.4px
+}
+
+.hero-desc {
+  font-size:15px
+}
+
+.ai-card {
+  min-height:auto
+}
+
+.panel {
+  padding:20px;
+  border-radius:24px
+}
+
+.form-title {
+  flex-direction:column;
+  align-items:flex-start
+}
+
+.grid {
+  grid-template-columns:1fr
+}
+
+.actions,.result-actions {
+  grid-template-columns:1fr;
+  flex-direction:column
+}
+
+.actions button {
+  width:100%;
+  flex:none
+}
+
+.result-head {
+  align-items:flex-start;
+  flex-direction:column
+}
+
+.side {
+  grid-template-columns:1fr
+}
+
+input,textarea,select {
+  font-size:16px
+}
+
+}
+  </style>
+ </head>
+ <body>
+  <div class="app">
+   <header class="header">
+    <a class="brand" href="index.html">
+     <span class="mark">
+      <svg viewbox="0 0 24 24">
+       <path d="M4 13.5 9.5 19 20 5">
+       </path>
+      </svg>
+     </span>
+     <span>
+      <strong>
+       생활편의 도구
+      </strong>
+      <small>
+       빠른 계산 &middot; 쉬운 변환
+      </small>
+     </span>
+    </a>
+    <a class="pill" href="index.html">
+     전체 기능
+    </a>
+   </header>
+   <main>
+    <section class="hero">
+     <div class="hero-inner">
+      <div>
+       <div class="badge">
+        <svg viewbox="0 0 24 24">
+         <path d="M12 3l1.8 5.8L20 11l-6.2 2.2L12 19l-1.8-5.8L4 11l6.2-2.2z">
+         </path>
+        </svg>
+        OpenAI 연동
+       </div>
+       <h1>
+        검색 노출을 노린
+        <br/>
+        AI 해시태그 생성기
+       </h1>
+       <p class="hero-desc">
+        게시물 주제와 분위기를 입력하면
+        <strong>
+         AI가 검색에 자주 쓰이는 해시태그 흐름을 분석
+        </strong>
+        해 인스타그램, 릴스, 블로그, 쇼츠에 어울리는 해시태그 조합을 추천합니다.
+       </p>
+       <div class="hero-tags">
+        <span>
+         #인스타그램
+        </span>
+        <span>
+         #릴스
+        </span>
+        <span>
+         #블로그
+        </span>
+        <span>
+         #쇼츠
+        </span>
+        <span>
+         #마케팅
+        </span>
+       </div>
+      </div>
+      <div class="ai-card">
+       <div>
+        <div class="ai-orb">
+         <svg viewbox="0 0 24 24">
+          <path d="M12 3l1.8 5.8L20 11l-6.2 2.2L12 19l-1.8-5.8L4 11l6.2-2.2z">
+          </path>
+          <path d="M5 3v4M3 5h4M19 17v4M17 19h4">
+          </path>
+         </svg>
+        </div>
+        <h2>
+         AI가 해시태그를 조합합니다
+        </h2>
+        <p>
+         단순 랜덤 생성이 아니라 주제, 플랫폼, 분위기, 해시태그 개수를 AI에게 전달해 결과를 생성합니다.
+        </p>
+       </div>
+       <div class="ai-points">
+        <span>
+         &checkmark; 검색형 + 감성형 + 세부형 태그 조합
+        </span>
+        <span>
+         &checkmark; 인스타그램&middot;릴스&middot;블로그 톤 선택
+        </span>
+        <span>
+         &checkmark; 복사해서 바로 붙여넣기
+        </span>
+       </div>
+      </div>
+     </div>
+    </section>
+    <div class="layout">
+     <section class="panel">
+      <div class="form-title">
+       <div>
+        <h2>
+         AI 해시태그 만들기
+        </h2>
+        <p>
+         구체적으로 입력할수록 더 자연스럽고 검색 의도에 맞는 태그가 생성됩니다.
+        </p>
+       </div>
+       <span class="status">
+        <span class="dot">
+        </span>
+        AI 연결됨
+       </span>
+      </div>
+      <div class="grid">
+       <div class="field full">
+        <label for="topic">
+         게시물 주제
+         <span class="hint">
+          필수
+         </span>
+        </label>
+        <textarea id="topic" placeholder="예: 제주도 가족여행 성산일출봉 사진, 다산동 분위기 좋은 카페 후기, 집에서 만든 쌀국수 요리 사진"></textarea>
+        <div class="chips">
+         <button onclick="setExample('제주도 가족여행 성산일출봉 사진')" type="button">
+          제주 여행
+         </button>
+         <button onclick="setExample('다산동 분위기 좋은 카페 방문 후기')" type="button">
+          카페
+         </button>
+         <button onclick="setExample('집에서 만든 쌀국수 요리 사진')" type="button">
+          요리
+         </button>
+         <button onclick="setExample('강아지 산책과 반려견 일상')" type="button">
+          반려동물
+         </button>
+         <button onclick="setExample('운동 루틴과 다이어트 기록')" type="button">
+          운동
+         </button>
+        </div>
+       </div>
+       <div class="field">
+        <label for="platform">
+         플랫폼
+         <span class="hint">
+          추천 방식
+         </span>
+        </label>
+        <select id="platform">
+         <option value="instagram">
+          인스타그램 게시물
+         </option>
+         <option value="reels">
+          릴스 / 쇼츠
+         </option>
+         <option value="blog">
+          블로그 / 검색 유입
+         </option>
+         <option value="store">
+          상품 홍보 / 마케팅
+         </option>
+        </select>
+       </div>
+       <div class="field">
+        <label for="mood">
+         분위기
+         <span class="hint">
+          톤 선택
+         </span>
+        </label>
+        <select id="mood">
+         <option value="balanced">
+          균형 있게
+         </option>
+         <option value="trendy">
+          트렌디하게
+         </option>
+         <option value="emotional">
+          감성적으로
+         </option>
+         <option value="daily">
+          일상 느낌
+         </option>
+         <option value="professional">
+          홍보/전문 느낌
+         </option>
+        </select>
+       </div>
+       <div class="field">
+        <label for="count">
+         해시태그 개수
+         <span class="hint">
+          권장 20~30개
+         </span>
+        </label>
+        <select id="count">
+         <option value="15">
+          15개
+         </option>
+         <option selected="" value="20">
+          20개
+         </option>
+         <option value="25">
+          25개
+         </option>
+         <option value="30">
+          30개
+         </option>
+        </select>
+       </div>
+       <div class="field">
+        <label for="goal">
+         목표
+         <span class="hint">
+          노출 전략
+         </span>
+        </label>
+        <select id="goal">
+         <option selected="" value="balanced">
+          검색량+세부태그 균형
+         </option>
+         <option value="popular">
+          검색량 많은 태그 중심
+         </option>
+         <option value="niche">
+          경쟁 낮은 세부 태그 중심
+         </option>
+         <option value="global">
+          영문 태그 일부 포함
+         </option>
+        </select>
+       </div>
+      </div>
+      <div class="actions">
+       <button class="primary" id="generateBtn" onclick="generateTags()" type="button">
+        AI 해시태그 생성하기
+       </button>
+       <button class="ghost" onclick="resetForm()" type="button">
+        초기화
+       </button>
+      </div>
+      <section class="result" id="result">
+       <div class="result-head">
+        <h2>
+         AI 추천 결과
+        </h2>
+        <span class="count" id="resultCount">
+         0개 생성
+        </span>
+       </div>
+       <div class="loading-box">
+        <strong>
+         AI가 해시태그를 생성하는 중입니다...
+        </strong>
+        <div class="loading-line">
+        </div>
+        <div class="loading-line mid">
+        </div>
+        <div class="loading-line short">
+        </div>
+       </div>
+       <div class="tagbox" id="tagBox">
+       </div>
+       <div class="caption-box" id="captionBox">
+        <strong>
+         AI 추천 문구
+        </strong>
+        <p id="captionText">
+         -
+        </p>
+       </div>
+       <div class="copy" id="copyText">
+       </div>
+       <div class="result-actions">
+        <button class="primary" onclick="copyTags()" type="button">
+         해시태그 복사하기
+        </button>
+        <button class="ghost" onclick="generateTags(false)" type="button">
+         다시 생성
+        </button>
+       </div>
+      </section>
+     </section>
+     <aside class="side">
+      <section class="side-card">
+       <h2>
+        잘 쓰는 팁
+       </h2>
+       <div class="tip">
+        <span>
+         검색량이 큰 태그만 쓰기보다 세부 태그를 함께 섞으면 노출 기회가 넓어집니다.
+        </span>
+        <span>
+         지역, 상황, 감성, 사용 목적을 함께 입력하면 더 정확한 결과가 나옵니다.
+        </span>
+        <span>
+         상품 홍보는 제품명보다 사용 장면과 문제 해결 키워드를 같이 넣어보세요.
+        </span>
+       </div>
+      </section>
+      <section class="side-card">
+       <h2>
+        관련 기능
+       </h2>
+       <a class="side-link" href="image-compress.html">
+        이미지 용량 줄이기
+        <span>
+         &rarr;
+        </span>
+       </a>
+       <a class="side-link" href="jpg-to-pdf.html">
+        JPG &rarr; PDF
+        <span>
+         &rarr;
+        </span>
+       </a>
+       <a class="side-link" href="dday.html">
+        D-Day 계산
+        <span>
+         &rarr;
+        </span>
+       </a>
+      </section>
+      <section class="side-card">
+       <h2>
+        개인정보 안내
+       </h2>
+       <p>
+        입력한 주제는 해시태그 생성을 위해 AI API로 전송됩니다. 민감한 개인정보나 비공개 정보는 입력하지 않는 것이 좋습니다.
+       </p>
+      </section>
+     </aside>
+    </div>
+    <div class="ad">
+     <strong>
+      광고 영역
+     </strong>
+     <br/>
+     AdSense 승인 후 이 위치에 반응형 광고 코드를 넣으면 됩니다.
+    </div>
+    <section class="info">
+     <h2>
+      AI 해시태그 생성기 사용법
+     </h2>
+     게시물 주제를 구체적으로 적으면 AI가 더 좋은 해시태그 조합을 만들 수 있습니다. 예를 들어 &ldquo;카페&rdquo;보다 &ldquo;다산동 분위기 좋은 카페 방문 후기&rdquo;처럼 지역, 상황, 느낌을 함께 입력하는 것이 좋습니다.
+     <div class="guide-grid">
+      <div class="guide">
+       <strong>
+        1. 주제 입력
+       </strong>
+       <span>
+        사진이나 게시물 내용을 간단히 설명하세요.
+       </span>
+      </div>
+      <div class="guide">
+       <strong>
+        2. 목표 선택
+       </strong>
+       <span>
+        검색량 중심, 세부 태그 중심, 영문 포함 등을 선택하세요.
+       </span>
+      </div>
+      <div class="guide">
+       <strong>
+        3. 복사 후 사용
+       </strong>
+       <span>
+        생성된 해시태그를 복사해 인스타그램, 릴스, 블로그에 사용하세요.
+       </span>
+      </div>
+     </div>
+    </section>
+   </main>
+   <footer>
+    <div style="margin-bottom:10px;">
+     <a href="about.html">
+      사이트 소개
+     </a>
+     |
+     <a href="privacy.html">
+      개인정보처리방침
+     </a>
+     |
+     <a href="terms.html">
+      이용약관
+     </a>
+    </div>
+    <div>
+     &copy; 2026 생활편의 도구
+     <br/>
+     Designed &amp; Developed by Chulhee
+    </div>
+   </footer>
+  </div>
+  <nav class="bottom">
+   <a href="index.html">
+    홈
+   </a>
+   <a href="image-compress.html">
+    이미지
+   </a>
+   <a class="active" href="ai-hashtag.html">
+    AI태그
+   </a>
+   <a href="pdf-merge.html">
+    PDF
+   </a>
+  </nav>
+  <script>
+   const WORKER_URL = "https://choichichi-ai.choichichi.workers.dev";
+
+    const topicInput = document.getElementById("topic");
+    const platformInput = document.getElementById("platform");
+    const moodInput = document.getElementById("mood");
+    const countInput = document.getElementById("count");
+    const goalInput = document.getElementById("goal");
+    const resultBox = document.getElementById("result");
+    const tagBox = document.getElementById("tagBox");
+    const copyText = document.getElementById("copyText");
+    const captionText = document.getElementById("captionText");
+    const resultCount = document.getElementById("resultCount");
+    const generateBtn = document.getElementById("generateBtn");
+
+    function setExample(text) {
+      topicInput.value = text;
+      generateTags(false);
+    }
+
+    function normalizeTag(tag) {
+      return String(tag || "")
+        .trim()
+        .replace(/^#+/, "")
+        .replace(/[^\w가-힣ㄱ-ㅎㅏ-ㅣ一-龥]/g, "");
+    }
+
+    function setLoading(isLoading) {
+      if (isLoading) {
+        resultBox.classList.add("loading");
+        resultBox.style.display = "block";
+        resultCount.textContent = "AI 생성 중";
+        generateBtn.disabled = true;
+        generateBtn.textContent = "AI 생성 중...";
+        return;
+      }
+
+      resultBox.classList.remove("loading");
+      generateBtn.disabled = false;
+      generateBtn.textContent = "AI 해시태그 생성하기";
+    }
+
+    async function generateTags(scroll = true) {
+      const topic = topicInput.value.trim();
+
+      if (!topic) {
+        alert("게시물 주제를 입력해 주세요.");
+        topicInput.focus();
+        return;
+      }
+
+      setLoading(true);
+      tagBox.innerHTML = "";
+      copyText.textContent = "";
+      captionText.textContent = "-";
+
+      try {
+        const response = await fetch(WORKER_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            type: "hashtag",
+            topic: topic,
+            platform: platformInput.value,
+            mood: moodInput.value,
+            goal: goalInput.value,
+            count: Number(countInput.value)
+          })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "AI 해시태그 생성에 실패했습니다.");
+        }
+
+        let hashtags = [];
+
+        if (Array.isArray(data.hashtags)) {
+          hashtags = data.hashtags.map(normalizeTag).filter(Boolean);
+        } else if (data.text) {
+          hashtags = String(data.text)
+            .split(/\s+/)
+            .map(normalizeTag)
+            .filter(Boolean);
+        }
+
+        hashtags = [...new Set(hashtags)].slice(0, Number(countInput.value));
+
+        if (!hashtags.length) {
+          throw new Error("AI 결과에서 해시태그를 찾지 못했습니다.");
+        }
+
+        renderTags(hashtags, data.caption || makeCaption(topic, platformInput.value));
+
+        if (scroll) {
+          resultBox.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest"
+          });
+        }
+      } catch (error) {
+        resultCount.textContent = "생성 실패";
+        tagBox.innerHTML = '<span class="tag mid">생성 중 오류가 발생했습니다.</span>';
+        copyText.textContent = "";
+        captionText.textContent = error.message || "잠시 후 다시 시도해 주세요.";
+        alert(error.message || "AI 해시태그 생성 중 오류가 발생했습니다.");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    function renderTags(tags, caption) {
+      tagBox.innerHTML = "";
+
+      tags.forEach((tag, index) => {
+        const el = document.createElement("span");
+        el.className = "tag " + (index < 6 ? "hot" : index < 14 ? "mid" : "");
+        el.textContent = "#" + tag;
+        tagBox.appendChild(el);
+      });
+
+      copyText.textContent = tags.map((tag) => "#" + tag).join(" ");
+      captionText.textContent = caption || "게시물 내용에 맞춰 해시태그를 함께 사용해 보세요.";
+      resultCount.textContent = tags.length + "개 생성";
+      resultBox.style.display = "block";
+    }
+
+    function makeCaption(topic, platform) {
+      if (platform === "blog") {
+        return topic + " 관련 검색 유입을 고려한 해시태그 조합입니다.";
+      }
+
+      if (platform === "store") {
+        return topic + " 홍보에 활용하기 좋은 해시태그 조합입니다.";
+      }
+
+      return topic + " 게시물에 어울리는 해시태그 조합입니다.";
+    }
+
+    async function copyTags() {
+      const text = copyText.textContent.trim();
+
+      if (!text) {
+        alert("먼저 해시태그를 생성해 주세요.");
+        return;
+      }
+
+      if (navigator.clipboard) {
+        await navigator.clipboard.writeText(text);
+        alert("해시태그를 복사했습니다.");
+        return;
+      }
+
+      const temp = document.createElement("textarea");
+      temp.value = text;
+      document.body.appendChild(temp);
+      temp.select();
+      document.execCommand("copy");
+      temp.remove();
+      alert("해시태그를 복사했습니다.");
+    }
+
+    function resetForm() {
+      topicInput.value = "";
+      platformInput.value = "instagram";
+      moodInput.value = "balanced";
+      countInput.value = "20";
+      goalInput.value = "balanced";
+
+      resultBox.style.display = "none";
+      resultBox.classList.remove("loading");
+      tagBox.innerHTML = "";
+      copyText.textContent = "";
+      captionText.textContent = "-";
+      resultCount.textContent = "0개 생성";
+
+      topicInput.focus();
+    }
+  </script>
+ </body>
 </html>
