@@ -3,37 +3,45 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>생활편의 도구 - 이미지 PDF 계산기 변환기 포털</title>
-  <meta name="description" content="이미지 용량 줄이기, PDF 합치기, PDF 분할, 연봉 계산, 주휴수당, 만나이, D-Day, 음력변환, BMI까지 생활에 필요한 무료 도구를 한 곳에서 이용하세요." />
-  <meta name="keywords" content="이미지 용량 줄이기, PDF 합치기, PDF 분할, 연봉 계산기, 주휴수당 계산기, 만나이 계산기, D-Day 계산기, BMI 계산기, 음력변환" />
-  <meta name="theme-color" content="#2563eb" />
-  <meta property="og:title" content="생활편의 도구 - 이미지 PDF 계산기 변환기 포털" />
-  <meta property="og:description" content="이미지, PDF, 급여, 날짜, 건강 계산기를 한 곳에서 빠르게 이용하세요." />
-  <meta property="og:type" content="website" />
+
+  <title>생활편의 도구 | 이미지·PDF·계산기·변환기</title>
+  <meta name="description" content="이미지 압축, JPG PDF 변환, PDF JPG 변환, PDF 합치기, PDF 분할, 연봉 계산기, 주휴수당 계산기, 만나이 계산기, D-Day 계산기 등을 무료로 이용하세요.">
+  <meta name="keywords" content="생활편의 도구, 이미지 압축, JPG PDF 변환, PDF JPG 변환, PDF 합치기, PDF 분할, 연봉 계산기, 주휴수당 계산기, 만나이 계산기, D-Day 계산기, BMI 계산기, 음력 변환">
+  <meta name="theme-color" content="#2563eb">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="생활편의 도구">
+  <meta property="og:description" content="이미지·PDF·계산기·날짜도구를 설치 없이 바로 사용하세요.">
   <meta property="og:image" content="https://81pm.github.io/life-tools/og-image.png">
   <meta property="og:url" content="https://81pm.github.io/life-tools/">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="생활편의 도구">
+  <meta name="twitter:description" content="이미지·PDF·계산기·날짜도구를 설치 없이 바로 사용하세요.">
+  <meta name="twitter:image" content="https://81pm.github.io/life-tools/og-image.png">
+
   <style>
     :root{
-      --bg:#f8fbff;
+      --bg:#f4f8ff;
       --card:#fff;
       --text:#142033;
       --sub:#64748b;
       --line:#e2e8f0;
       --primary:#2563eb;
-      --blue:#2563eb;
-      --red:#ef4444;
-      --green:#22c55e;
-      --orange:#f59e0b;
-      --purple:#8b5cf6;
-      --pink:#ec4899;
-      --blue-soft:#eef5ff;
-      --red-soft:#fff1f2;
+      --primary2:#06b6d4;
+      --primary-soft:#eef5ff;
+      --green:#16a34a;
       --green-soft:#ecfdf5;
+      --red:#ef4444;
+      --red-soft:#fff1f2;
+      --orange:#f59e0b;
       --orange-soft:#fff7ed;
+      --purple:#8b5cf6;
       --purple-soft:#f5f3ff;
+      --pink:#ec4899;
       --pink-soft:#fdf2f8;
       --shadow:0 18px 45px rgba(15,23,42,.10);
-      --shadow-soft:0 8px 24px rgba(15,23,42,.07);
+      --shadow-soft:0 10px 24px rgba(15,23,42,.07);
       --safe-bottom:env(safe-area-inset-bottom,0px);
     }
 
@@ -44,14 +52,12 @@
       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",Arial,sans-serif;
       color:var(--text);
       background:
-        radial-gradient(circle at 0% 4%,rgba(37,99,235,.10),transparent 24%),
-        radial-gradient(circle at 78% 3%,rgba(147,197,253,.32),transparent 26%),
-        linear-gradient(180deg,#f8fbff 0%,#edf5ff 42%,#ffffff 100%);
+        radial-gradient(circle at 12% 0%,rgba(37,99,235,.14),transparent 30%),
+        radial-gradient(circle at 86% 10%,rgba(6,182,212,.13),transparent 28%),
+        linear-gradient(180deg,#f8fbff 0%,#edf5ff 44%,#fff 100%);
     }
 
     a{color:inherit;text-decoration:none}
-    button,input{font:inherit}
-
     svg{
       display:block;
       width:100%;
@@ -67,7 +73,7 @@
     .app{
       width:min(1180px,calc(100% - 32px));
       margin:0 auto;
-      padding:18px 0 calc(86px + var(--safe-bottom));
+      padding:18px 0 calc(88px + var(--safe-bottom));
     }
 
     .topbar{
@@ -93,19 +99,18 @@
       width:46px;
       height:46px;
       border-radius:15px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
+      display:grid;
+      place-items:center;
       color:#fff;
-      background:linear-gradient(135deg,#2563eb,#3b82f6);
+      background:linear-gradient(135deg,var(--primary),var(--primary2));
       box-shadow:0 12px 28px rgba(37,99,235,.28);
       flex:0 0 auto;
+      overflow:hidden;
     }
 
     .brand-icon svg{
       width:25px;
       height:25px;
-      flex:0 0 auto;
     }
 
     .brand strong{
@@ -119,7 +124,7 @@
     .brand small{
       display:block;
       margin-top:4px;
-      color:#64748b;
+      color:var(--sub);
       font-size:13px;
       font-weight:650;
       white-space:nowrap;
@@ -128,387 +133,275 @@
     .nav{
       display:flex;
       align-items:center;
-      gap:30px;
-      color:#1e293b;
-      font-size:14px;
-      font-weight:850;
+      gap:10px;
     }
 
     .nav a{
-      position:relative;
-      padding:10px 0;
-    }
-
-    .nav a.active{
-      color:var(--primary);
-    }
-
-    .nav a.active:after{
-      content:"";
-      position:absolute;
-      left:50%;
-      bottom:2px;
-      transform:translateX(-50%);
-      width:28px;
-      height:3px;
-      border-radius:99px;
-      background:var(--primary);
+      min-height:40px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:0 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.82);
+      border:1px solid rgba(226,232,240,.92);
+      color:#334155;
+      font-size:13px;
+      font-weight:900;
+      box-shadow:0 6px 18px rgba(15,23,42,.04);
     }
 
     .hero{
-      display:grid;
-      grid-template-columns:minmax(0,1fr) 270px;
-      gap:26px;
-      align-items:center;
-      min-height:260px;
-      padding:22px 0 12px;
-    }
-
-    .hero-main{
+      position:relative;
+      overflow:hidden;
+      margin-top:12px;
+      padding:clamp(32px,6vw,68px);
+      border-radius:32px;
+      background:rgba(255,255,255,.94);
+      border:1px solid rgba(226,232,240,.86);
+      box-shadow:var(--shadow);
       text-align:center;
     }
 
-    .hero h1{
+    .hero:before,.hero:after{
+      content:"";
+      position:absolute;
+      border-radius:999px;
+      pointer-events:none;
+    }
+
+    .hero:before{
+      width:280px;
+      height:280px;
+      right:-90px;
+      top:-110px;
+      background:rgba(37,99,235,.12);
+    }
+
+    .hero:after{
+      width:190px;
+      height:190px;
+      left:-70px;
+      bottom:-72px;
+      background:rgba(6,182,212,.12);
+    }
+
+    .hero-badge{
+      position:relative;
+      z-index:1;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px 15px;
+      border-radius:999px;
+      color:var(--primary);
+      background:var(--primary-soft);
+      font-size:13px;
+      font-weight:950;
+      margin-bottom:18px;
+    }
+
+    h1{
+      position:relative;
+      z-index:1;
       margin:0;
-      font-size:clamp(34px,5vw,48px);
-      line-height:1.16;
-      letter-spacing:-1.5px;
+      font-size:clamp(38px,6.2vw,68px);
+      line-height:1.05;
+      letter-spacing:-2.2px;
     }
 
     .hero p{
-      margin:14px 0 0;
-      color:#334155;
+      position:relative;
+      z-index:1;
+      margin:18px auto 0;
+      max-width:720px;
+      color:#475569;
       font-size:18px;
-      line-height:1.6;
-      font-weight:650;
+      line-height:1.7;
+      font-weight:700;
     }
 
-    .global-search{
-      width:min(680px,100%);
-      display:grid;
-      grid-template-columns:1fr auto;
-      align-items:center;
-      gap:10px;
-      margin:28px auto 0;
-      padding:10px 10px 10px 20px;
-      border:1px solid var(--line);
-      border-radius:999px;
-      background:#fff;
-      box-shadow:0 16px 38px rgba(15,23,42,.10);
-    }
-
-    .search-inner{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      color:#64748b;
-      min-width:0;
-    }
-
-    .search-inner .search-icon{
-      width:24px;
-      height:24px;
-      flex:0 0 24px;
-    }
-
-    .global-search input{
-      width:100%;
-      min-width:0;
-      border:0;
-      outline:0;
-      color:var(--text);
-      font-size:16px;
-      background:transparent;
-    }
-
-    .search-btn{
-      min-width:86px;
-      height:48px;
-      border:0;
-      border-radius:16px;
-      color:#fff;
-      background:linear-gradient(135deg,#2563eb,#3b82f6);
-      font-weight:950;
-      cursor:pointer;
-      box-shadow:0 10px 20px rgba(37,99,235,.24);
-    }
-
-    .popular-tags{
+    .hero-shortcuts{
+      position:relative;
+      z-index:1;
       display:flex;
       align-items:center;
       justify-content:center;
       flex-wrap:wrap;
-      gap:9px;
-      margin-top:18px;
+      gap:10px;
+      margin-top:28px;
     }
 
-    .popular-tags strong{
-      margin-right:4px;
-      color:#1e293b;
+    .hero-shortcuts a{
+      min-height:46px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:0 17px;
+      border-radius:16px;
+      background:#fff;
+      border:1px solid var(--line);
+      color:#334155;
       font-size:14px;
       font-weight:950;
+      box-shadow:0 8px 22px rgba(15,23,42,.06);
+      transition:.16s ease;
     }
 
-    .popular-tags a{
-      padding:8px 13px;
-      border-radius:999px;
-      background:#fff;
-      border:1px solid var(--line);
-      color:#475569;
-      font-size:13px;
-      font-weight:800;
-      box-shadow:0 4px 14px rgba(15,23,42,.04);
-    }
+    .hero-shortcuts a:hover{transform:translateY(-2px)}
 
-    .phone-preview{
-      min-height:400px;
-      border-radius:34px;
-      padding:18px 14px;
-      background:#fff;
-      border:1px solid var(--line);
-      box-shadow:var(--shadow);
-    }
-
-    .phone-top{
+    .security-banner{
+      margin:22px 0;
+      padding:16px 18px;
       display:flex;
       align-items:center;
       justify-content:space-between;
-      margin-bottom:15px;
-      color:#020617;
-      font-size:12px;
-      font-weight:900;
-    }
-
-    .phone-card{
-      overflow:hidden;
-      border-radius:24px;
-      background:#f6f9ff;
-      border:1px solid #eaf0fb;
-    }
-
-    .phone-head{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:14px;
-      background:#fff;
-      border-bottom:1px solid #eaf0fb;
-    }
-
-    .phone-brand{
-      display:flex;
-      gap:9px;
-      align-items:center;
-    }
-
-    .phone-brand .brand-icon{
-      width:34px;
-      height:34px;
-      border-radius:11px;
-    }
-
-    .phone-brand .brand-icon svg{
-      width:19px;
-      height:19px;
-    }
-
-    .phone-brand strong{
-      display:block;
-      font-size:13px;
-      line-height:1.1;
-    }
-
-    .phone-brand small{
-      display:block;
-      margin-top:2px;
-      color:var(--sub);
-      font-size:10px;
-      font-weight:700;
-    }
-
-    .phone-body{
-      padding:16px;
-    }
-
-    .phone-body h3{
-      margin:0;
-      text-align:center;
-      font-size:17px;
-      letter-spacing:-.4px;
-      line-height:1.35;
-    }
-
-    .phone-body p{
-      margin:5px 0 14px;
-      text-align:center;
-      color:#475569;
-      font-size:11px;
-      font-weight:700;
-    }
-
-    .phone-search{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      height:38px;
-      padding:0 9px;
-      border-radius:14px;
-      background:#fff;
-      border:1px solid #e2e8f0;
-      color:#64748b;
-      font-size:11px;
-    }
-
-    .phone-search .search-icon{
-      width:15px;
-      height:15px;
-      flex:0 0 15px;
-    }
-
-    .phone-grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:9px;
-      margin-top:14px;
-    }
-
-    .phone-tool{
-      min-height:88px;
-      padding:12px;
-      border-radius:15px;
-      background:#fff;
-      border:1px solid #e2e8f0;
-      box-shadow:0 4px 14px rgba(15,23,42,.05);
-      text-align:center;
-    }
-
-    .phone-tool .ui-icon{
-      margin:0 auto 8px;
-      width:31px;
-      height:31px;
-      border-radius:10px;
-    }
-
-    .phone-tool .ui-icon svg{
-      width:18px;
-      height:18px;
-    }
-
-    .phone-tool strong{
-      display:block;
-      font-size:11px;
-      line-height:1.2;
-    }
-
-    .phone-tool span{
-      display:block;
-      margin-top:3px;
-      color:#64748b;
-      font-size:9px;
-      font-weight:700;
-    }
-
-    .section-card{
-      margin-top:22px;
-      padding:26px;
-      border-radius:28px;
-      background:#fff;
-      border:1px solid rgba(226,232,240,.86);
+      gap:12px;
+      flex-wrap:wrap;
+      border-radius:22px;
+      background:linear-gradient(135deg,#f0fdf4,#ecfeff);
+      border:1px solid #bbf7d0;
+      color:#166534;
       box-shadow:var(--shadow-soft);
     }
 
-    .section-title{
+    .security-main{
       display:flex;
       align-items:center;
+      gap:12px;
+      font-size:15px;
+      font-weight:950;
+      line-height:1.5;
+    }
+
+    .security-icon{
+      width:42px;
+      height:42px;
+      flex:0 0 42px;
+      border-radius:15px;
+      display:grid;
+      place-items:center;
+      background:#fff;
+      color:var(--green);
+      border:1px solid #bbf7d0;
+      overflow:hidden;
+    }
+
+    .security-icon svg{
+      width:24px;
+      height:24px;
+    }
+
+    .security-tags{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+
+    .security-tags span{
+      display:inline-flex;
+      align-items:center;
+      min-height:34px;
+      padding:0 12px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid #bbf7d0;
+      color:#166534;
+      font-size:12px;
+      font-weight:950;
+    }
+
+    .section{margin-top:28px}
+
+    .section-head{
+      display:flex;
+      align-items:flex-end;
       justify-content:space-between;
       gap:16px;
-      margin-bottom:18px;
+      margin-bottom:16px;
     }
 
-    .section-title h2{
-      display:flex;
-      align-items:center;
-      gap:9px;
+    .section-head h2{
       margin:0;
-      font-size:22px;
-      letter-spacing:-.6px;
+      font-size:27px;
+      line-height:1.2;
+      letter-spacing:-.8px;
     }
 
-    .section-title .section-symbol{
-      width:22px;
-      height:22px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:#2563eb;
-      flex:0 0 22px;
+    .section-head p{
+      margin:7px 0 0;
+      color:var(--sub);
+      font-size:15px;
+      line-height:1.55;
+      font-weight:700;
     }
 
-    .section-title a{
-      color:#475569;
-      font-size:14px;
-      font-weight:850;
-    }
-
-    .shortcut-grid{
+    .popular-grid{
       display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:14px;
+      grid-template-columns:repeat(6,1fr);
+      gap:12px;
     }
 
-    .shortcut-card{
-      min-height:196px;
+    .popular-card{
+      min-height:156px;
+      padding:18px 14px;
+      border-radius:22px;
+      background:#fff;
+      border:1px solid rgba(226,232,240,.92);
+      box-shadow:var(--shadow-soft);
       display:flex;
       flex-direction:column;
-      justify-content:center;
       align-items:center;
+      justify-content:center;
       text-align:center;
-      padding:22px 18px;
-      border-radius:18px;
-      background:#fff;
-      border:1px solid var(--line);
-      box-shadow:0 8px 22px rgba(15,23,42,.06);
-      transition:.18s ease;
+      transition:.16s ease;
       position:relative;
       overflow:hidden;
     }
 
-    .shortcut-card:after{
+    .popular-card:after{
       content:"";
       position:absolute;
-      right:-26px;
-      bottom:-30px;
-      width:112px;
-      height:112px;
-      border-radius:34px;
-      background:rgba(37,99,235,.07);
+      right:-28px;
+      bottom:-32px;
+      width:94px;
+      height:94px;
+      border-radius:30px;
+      background:rgba(37,99,235,.06);
       transform:rotate(18deg);
     }
 
-    .shortcut-card:hover,
-    .category-card:hover{
+    .popular-card:hover,.tool-link:hover,.category-card:hover{
       transform:translateY(-3px);
-      box-shadow:0 14px 30px rgba(15,23,42,.10);
+      box-shadow:0 14px 32px rgba(15,23,42,.11);
     }
 
+    /* 아이콘 정렬 최종 보정 */
     .ui-icon{
-      width:64px;
-      height:64px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
+      width:54px;
+      height:54px;
+      min-width:54px;
+      min-height:54px;
       border-radius:18px;
-      background:var(--blue-soft);
+      display:grid !important;
+      place-items:center !important;
+      background:var(--primary-soft);
       color:var(--primary);
-      flex:0 0 auto;
+      flex:0 0 54px;
       position:relative;
       z-index:1;
+      overflow:hidden;
     }
 
+    .ui-icon > svg,
     .ui-icon svg{
-      width:34px;
-      height:34px;
-      flex:0 0 34px;
+      width:28px !important;
+      height:28px !important;
+      display:block !important;
+      margin:0 !important;
+      position:static !important;
+      transform:none !important;
+      flex:none !important;
     }
 
     .ui-icon.red{background:var(--red-soft);color:var(--red)}
@@ -516,236 +409,243 @@
     .ui-icon.orange{background:var(--orange-soft);color:var(--orange)}
     .ui-icon.purple{background:var(--purple-soft);color:var(--purple)}
     .ui-icon.pink{background:var(--pink-soft);color:var(--pink)}
-    .ui-icon.blue{background:#eef5ff;color:#2563eb;}
 
-    .shortcut-card strong{
-      display:block;
+    .popular-card strong{
       position:relative;
       z-index:1;
-      margin-top:16px;
-      font-size:19px;
-      letter-spacing:-.45px;
+      display:block;
+      margin-top:13px;
+      font-size:15px;
+      letter-spacing:-.35px;
     }
 
-    .shortcut-card span.desc{
-      display:block;
+    .popular-card span.desc{
       position:relative;
       z-index:1;
-      margin-top:7px;
-      color:#475569;
-      font-size:14px;
-      line-height:1.45;
-      font-weight:700;
-    }
-
-    .shortcut-card .arrow{
-      position:absolute;
-      right:20px;
-      bottom:18px;
-      z-index:1;
-      color:#334155;
-      font-size:22px;
-      line-height:1;
-    }
-
-    .safe-panel{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:16px;
-      margin-top:22px;
-      padding:18px 20px;
-      border-radius:20px;
-      background:linear-gradient(135deg,#f0fdf4,#ecfeff);
-      border:1px solid #bbf7d0;
-      color:#166534;
-    }
-
-    .safe-main{
-      display:flex;
-      align-items:center;
-      gap:14px;
-      min-width:0;
-    }
-
-    .safe-icon{
-      width:52px;
-      height:52px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      flex:0 0 52px;
-      color:#22c55e;
-    }
-
-    .safe-icon svg{
-      width:38px;
-      height:38px;
-      flex:0 0 38px;
-    }
-
-    .safe-panel strong{
-      display:block;
-      font-size:18px;
-      color:#14532d;
-      letter-spacing:-.4px;
-    }
-
-    .safe-panel span{
-      display:block;
-      margin-top:4px;
-      color:#166534;
-      font-size:14px;
-      font-weight:700;
-      line-height:1.5;
-    }
-
-    .safe-badges{
-      display:flex;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-      gap:10px;
-      flex:0 0 auto;
-    }
-
-    .safe-badges em{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      min-height:36px;
-      padding:0 12px;
-      border-radius:999px;
-      background:#fff;
-      border:1px solid #bbf7d0;
-      font-style:normal;
-      font-size:13px;
-      font-weight:900;
-      color:#166534;
-    }
-
-    .favorite-panel{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:16px;
-      margin-top:18px;
-      padding:16px 18px;
-      border-radius:18px;
-      background:#fff;
-      border:1px solid var(--line);
-      box-shadow:0 6px 18px rgba(15,23,42,.04);
-    }
-
-    .favorite-panel strong{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      font-size:16px;
-    }
-
-    .favorite-panel p{
-      margin:0;
-      color:#64748b;
-      font-size:14px;
-      font-weight:700;
-    }
-
-    .favorite-panel a{
-      flex:0 0 auto;
-      min-height:38px;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding:0 14px;
-      border-radius:13px;
-      color:#2563eb;
-      background:#fff;
-      border:1px solid #dbeafe;
-      font-size:13px;
-      font-weight:950;
-    }
-
-    .category-grid{
-      display:grid;
-      grid-template-columns:repeat(5,1fr);
-      gap:14px;
-    }
-
-    .category-card{
-      min-height:148px;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      padding:18px;
-      border-radius:18px;
-      background:#fff;
-      border:1px solid var(--line);
-      box-shadow:0 8px 22px rgba(15,23,42,.05);
-      transition:.18s ease;
-    }
-
-    .category-card .ui-icon{
-      width:58px;
-      height:58px;
-      border-radius:17px;
-      flex-basis:58px;
-    }
-
-    .category-card .ui-icon svg{
-      width:31px;
-      height:31px;
-      flex-basis:31px;
-    }
-
-    .category-card strong{
-      display:block;
-      margin-top:14px;
-      font-size:17px;
-      letter-spacing:-.4px;
-    }
-
-    .category-card span.desc{
       display:block;
       margin-top:5px;
-      color:#475569;
-      font-size:13px;
+      color:var(--sub);
+      font-size:12px;
       line-height:1.4;
       font-weight:750;
     }
 
+    .menu-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:16px;
+      align-items:stretch;
+    }
+
+    .category-card{
+      min-height:430px;
+      padding:22px;
+      border-radius:26px;
+      background:#fff;
+      border:1px solid rgba(226,232,240,.92);
+      box-shadow:var(--shadow-soft);
+      transition:.16s ease;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .category-title{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-bottom:18px;
+      min-height:52px;
+    }
+
+    .category-title .ui-icon{
+      width:44px;
+      height:44px;
+      min-width:44px;
+      min-height:44px;
+      flex-basis:44px;
+      border-radius:15px;
+    }
+
+    .category-title .ui-icon svg{
+      width:23px !important;
+      height:23px !important;
+    }
+
+    .category-title strong{
+      display:block;
+      font-size:22px;
+      letter-spacing:-.6px;
+    }
+
+    .category-title small{
+      display:block;
+      margin-top:3px;
+      color:var(--sub);
+      font-size:12px;
+      font-weight:800;
+    }
+
+    .tool-list{
+      display:grid;
+      gap:10px;
+      align-content:start;
+    }
+
+    .tool-link{
+      min-height:80px;
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      align-items:center;
+      gap:12px;
+      padding:12px;
+      border-radius:18px;
+      background:#f8fbff;
+      border:1px solid var(--line);
+      transition:.16s ease;
+    }
+
+    .tool-link .ui-icon{
+      width:44px;
+      height:44px;
+      min-width:44px;
+      min-height:44px;
+      flex-basis:44px;
+      border-radius:15px;
+    }
+
+    .tool-link .ui-icon svg{
+      width:22px !important;
+      height:22px !important;
+    }
+
+    .tool-link strong{
+      display:block;
+      font-size:14px;
+      letter-spacing:-.25px;
+    }
+
+    .tool-link small{
+      display:block;
+      margin-top:3px;
+      color:var(--sub);
+      font-size:11px;
+      line-height:1.35;
+      font-weight:750;
+    }
+
+    .arrow{
+      color:#94a3b8;
+      font-size:20px;
+      font-weight:900;
+    }
+
+    .about-panel{
+      margin-top:28px;
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:16px;
+      align-items:stretch;
+    }
+
+    .about-card,.feature-card,.ad-card{
+      border-radius:26px;
+      background:#fff;
+      border:1px solid rgba(226,232,240,.92);
+      box-shadow:var(--shadow-soft);
+    }
+
+    .about-card{padding:28px}
+
+    .about-card h2{
+      margin:0;
+      font-size:28px;
+      letter-spacing:-.8px;
+    }
+
+    .about-card p{
+      margin:14px 0 0;
+      color:#475569;
+      font-size:15px;
+      line-height:1.85;
+      font-weight:700;
+    }
+
+    .feature-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .feature-card{
+      padding:18px;
+      min-height:132px;
+    }
+
+    .feature-card strong{
+      display:block;
+      font-size:15px;
+      margin-top:10px;
+    }
+
+    .feature-card span.desc{
+      display:block;
+      margin-top:5px;
+      color:var(--sub);
+      font-size:12px;
+      line-height:1.45;
+      font-weight:750;
+    }
+
+    .feature-card .ui-icon{
+      width:42px;
+      height:42px;
+      min-width:42px;
+      min-height:42px;
+      flex-basis:42px;
+      border-radius:15px;
+    }
+
+    .feature-card .ui-icon svg{
+      width:22px !important;
+      height:22px !important;
+    }
+
     .ad-card{
-      margin-top:22px;
+      margin-top:28px;
       min-height:96px;
       display:grid;
       place-items:center;
-      border:1px dashed #cbd5e1;
-      border-radius:20px;
-      color:#64748b;
       text-align:center;
-      background:rgba(255,255,255,.74);
-      line-height:1.6;
+      border-style:dashed;
+      color:var(--sub);
       font-size:14px;
+      line-height:1.6;
+      background:rgba(255,255,255,.72);
     }
 
-    .notice-card{
-      margin-top:18px;
-      padding:18px;
-      border-radius:20px;
-      color:#475569;
-      font-size:13px;
-      line-height:1.7;
+    .footer-links{
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:24px;
+    }
+
+    .footer-links a{
+      padding:8px 11px;
+      border-radius:999px;
       background:#fff;
       border:1px solid var(--line);
-      box-shadow:0 6px 18px rgba(15,23,42,.04);
+      color:#475569;
+      font-size:13px;
+      font-weight:850;
     }
 
     footer{
-      margin-top:28px;
+      margin-top:20px;
       padding:22px 0 0;
       border-top:1px solid rgba(226,232,240,.9);
-      color:#64748b;
+      color:var(--sub);
       font-size:13px;
       line-height:1.7;
       text-align:center;
@@ -785,15 +685,11 @@
       background:var(--primary-soft);
     }
 
-    .is-hidden{display:none !important}
-
-    @media(max-width:1050px){
-      .hero{grid-template-columns:1fr}
-      .phone-preview{display:none}
-      .shortcut-grid{grid-template-columns:repeat(2,1fr)}
-      .category-grid{grid-template-columns:repeat(3,1fr)}
-      .safe-panel{align-items:flex-start;flex-direction:column}
-      .safe-badges{justify-content:flex-start}
+    @media(max-width:1100px){
+      .popular-grid{grid-template-columns:repeat(3,1fr)}
+      .menu-grid{grid-template-columns:repeat(2,1fr)}
+      .category-card{min-height:380px}
+      .about-panel{grid-template-columns:1fr}
     }
 
     @media(max-width:680px){
@@ -802,168 +698,99 @@
         padding-top:10px;
       }
 
-      .nav{display:none}
       .brand small{display:none}
+      .nav{display:none}
 
       .hero{
-        min-height:auto;
-        padding-top:8px;
+        padding:30px 20px;
+        border-radius:26px;
+        text-align:left;
       }
 
-      .hero-main{text-align:left}
-
-      .hero h1{
-        font-size:clamp(30px,9.5vw,42px);
-        letter-spacing:-1.2px;
+      h1{
+        font-size:clamp(36px,12vw,48px);
+        letter-spacing:-1.5px;
       }
 
-      .hero p{font-size:15px}
-
-      .global-search{
-        grid-template-columns:1fr auto;
-        margin-top:22px;
-        border-radius:18px;
-        padding:8px 8px 8px 14px;
+      .hero p{
+        font-size:15px;
+        margin-left:0;
       }
 
-      .search-btn{
-        min-width:64px;
-        height:42px;
-        border-radius:14px;
-        font-size:14px;
-      }
-
-      .popular-tags{
+      .hero-shortcuts{
         justify-content:flex-start;
         overflow-x:auto;
         flex-wrap:nowrap;
         padding-bottom:4px;
       }
 
-      .popular-tags a,
-      .popular-tags strong{
-        flex:0 0 auto;
+      .hero-shortcuts a{flex:0 0 auto}
+
+      .security-banner{
+        align-items:flex-start;
+        flex-direction:column;
+        border-radius:20px;
       }
 
-      .section-card{
-        padding:18px;
-        border-radius:24px;
-      }
+      .section-head{display:block}
+      .section-head h2{font-size:24px}
+      .section-head p{font-size:14px}
 
-      .section-title h2{font-size:19px}
-      .section-title a{font-size:13px}
-
-      .shortcut-grid{
+      .popular-grid{
         grid-template-columns:repeat(2,1fr);
         gap:10px;
       }
 
-      .shortcut-card{
+      .popular-card{
         min-height:136px;
         padding:14px 10px;
-        border-radius:16px;
-      }
-
-      .shortcut-card:after{
-        width:76px;
-        height:76px;
-        right:-22px;
-        bottom:-26px;
-      }
-
-      .ui-icon{
-        width:48px;
-        height:48px;
-        border-radius:14px;
-      }
-
-      .ui-icon svg{
-        width:26px;
-        height:26px;
-        flex:0 0 26px;
-      }
-
-      .shortcut-card strong{
-        margin-top:11px;
-        font-size:14px;
-      }
-
-      .shortcut-card span.desc{
-        margin-top:4px;
-        font-size:11px;
-      }
-
-      .shortcut-card .arrow{display:none}
-
-      .safe-panel{
-        padding:16px;
         border-radius:18px;
       }
 
-      .safe-icon{
-        width:42px;
-        height:42px;
-        flex-basis:42px;
+      .ui-icon{
+        width:46px;
+        height:46px;
+        min-width:46px;
+        min-height:46px;
+        flex-basis:46px;
+        border-radius:15px;
       }
 
-      .safe-icon svg{
-        width:30px;
-        height:30px;
-        flex-basis:30px;
+      .ui-icon svg{
+        width:24px !important;
+        height:24px !important;
       }
 
-      .safe-panel strong{font-size:16px}
-      .safe-panel span{font-size:12px}
+      .popular-card strong{font-size:13px}
+      .popular-card span.desc{font-size:11px}
 
-      .safe-badges{
-        gap:7px;
+      .menu-grid{grid-template-columns:1fr}
+
+      .category-card{
+        min-height:auto;
+        padding:18px;
+        border-radius:22px;
       }
 
-      .safe-badges em{
-        min-height:32px;
-        font-size:11px;
-        padding:0 9px;
+      .category-title strong{font-size:20px}
+
+      .tool-link{
+        min-height:78px;
       }
 
-      .favorite-panel{
-        align-items:flex-start;
-        flex-direction:column;
+      .about-card{
+        padding:22px;
+        border-radius:22px;
       }
 
-      .favorite-panel a{width:100%}
-
-      .category-grid{
-        grid-template-columns:repeat(2,1fr);
+      .feature-grid{
+        grid-template-columns:1fr 1fr;
         gap:10px;
       }
 
-      .category-card{
-        min-height:118px;
-        padding:13px 8px;
-        border-radius:16px;
-      }
-
-      .category-card .ui-icon{
-        width:46px;
-        height:46px;
-        border-radius:14px;
-        flex-basis:46px;
-      }
-
-      .category-card .ui-icon svg{
-        width:25px;
-        height:25px;
-        flex-basis:25px;
-      }
-
-      .category-card strong{
-        margin-top:9px;
-        font-size:13px;
-      }
-
-      .category-card span.desc{
-        margin-top:3px;
-        font-size:11px;
+      .feature-card{
+        padding:15px;
+        border-radius:20px;
       }
 
       .bottom-nav{display:grid}
@@ -985,339 +812,164 @@
       </a>
 
       <nav class="nav" aria-label="상단 메뉴">
-        <a class="active" href="index.html">홈</a>
-        <a href="#shortcuts">즐겨찾기</a>
-        <a href="#guide">사용 가이드</a>
+        <a href="#popular">인기 기능</a>
+        <a href="#all-menu">전체 메뉴</a>
+        <a href="#about">소개</a>
       </nav>
     </header>
 
     <main>
-      <section class="hero" aria-labelledby="main-title">
-        <div class="hero-main">
-          <h1 id="main-title">필요한 도구를 빠르게 찾아보세요</h1>
-          <p>계산, 변환, 파일 처리까지 간편하게</p>
-
-          <div class="global-search" role="search">
-            <div class="search-inner">
-              <span class="search-icon">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-              </span>
-              <input id="toolSearch" type="search" placeholder="예) 이미지 압축, 연봉 계산, PDF 합치기..." autocomplete="off" />
-            </div>
-            <button class="search-btn" type="button" onclick="focusTools()">검색</button>
-          </div>
-
-          <div class="popular-tags" aria-label="인기 검색어">
-            <strong>인기 검색어</strong>
-            <a href="image-compress.html">이미지 압축</a>
-            <a href="pdf-merge.html">PDF 합치기</a>
-            <a href="salary.html">연봉 계산</a>
-            <a href="weekly-pay.html">주휴수당</a>
-            <a href="dday.html">D-Day</a>
-            <a href="bmi.html">BMI</a>
-          </div>
-        </div>
-
-        <aside class="phone-preview" aria-hidden="true">
-          <div class="phone-top">
-            <span>9:41</span>
-            <span>•••</span>
-          </div>
-          <div class="phone-card">
-            <div class="phone-head">
-              <div class="phone-brand">
-                <span class="brand-icon">
-                  <svg viewBox="0 0 24 24"><path d="M10 6h4"/><path d="M9 6V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1"/><rect x="3" y="6" width="18" height="14" rx="3"/><path d="M3 12h18"/></svg>
-                </span>
-                <span>
-                  <strong>생활편의 도구</strong>
-                  <small>계산과 변환을 한 곳에</small>
-                </span>
-              </div>
-              <span style="font-weight:900;">☰</span>
-            </div>
-            <div class="phone-body">
-              <h3>필요한 도구를 빠르게 찾아보세요</h3>
-              <p>계산, 변환, 파일 처리까지 간편하게</p>
-              <div class="phone-search">
-                <span class="search-icon">
-                  <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-                </span>
-                도구를 검색해보세요
-              </div>
-              <div class="phone-grid" id="phoneGrid"></div>
-            </div>
-          </div>
-        </aside>
-      </section>
-
-      <section class="section-card" id="shortcuts" aria-labelledby="shortcut-title">
-        <div class="section-title">
-          <h2 id="shortcut-title">
-            <span class="section-symbol">
-              <svg viewBox="0 0 24 24"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z"/></svg>
-            </span>
-            바로가기
-          </h2>
-          <a href="#categories">더보기 ›</a>
-        </div>
-
-        <div class="shortcut-grid" id="shortcutGrid"></div>
-
-        <div class="safe-panel">
-          <div class="safe-main">
-            <span class="safe-icon">
-              <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-5"/></svg>
-            </span>
-            <span>
-              <strong>안심하고 사용하세요</strong>
-              <span>모든 파일은 브라우저 안에서만 처리되며, 서버에 업로드되지 않습니다.</span>
-            </span>
-          </div>
-          <div class="safe-badges">
-            <em>서버 업로드 없음</em>
-            <em>개인정보 수집 없음</em>
-            <em>빠르고 안전한 처리</em>
-          </div>
-        </div>
-
-        <div class="favorite-panel" id="guide">
-          <span>
-            <strong>즐겨찾기 추가</strong>
-            <p>자주 사용하는 도구를 즐겨찾기에 추가해두면 더 빠르게 이용할 수 있어요.</p>
-          </span>
-          <a href="#shortcuts">즐겨찾기에 추가하기</a>
+      <section class="hero">
+        <div class="hero-badge">무료 생활 도구 모음</div>
+        <h1>생활편의 도구</h1>
+        <p>이미지 · PDF · 계산기 · 날짜도구를 설치 없이 바로 사용하세요. 필요한 기능을 빠르게 찾고, 모바일에서도 편하게 이용할 수 있습니다.</p>
+        <div class="hero-shortcuts">
+          <a href="#pdf-tools">PDF 도구</a>
+          <a href="#image-tools">이미지 도구</a>
+          <a href="#calc-tools">계산기</a>
+          <a href="#date-tools">날짜·변환</a>
         </div>
       </section>
 
-      <section class="section-card" id="categories" aria-labelledby="category-title">
-        <div class="section-title">
-          <h2 id="category-title">
-            <span class="section-symbol">
-              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-            </span>
-            메뉴
-          </h2>
-          <a href="#shortcuts">위로 ›</a>
+      <section class="security-banner" aria-label="안전성 안내">
+        <div class="security-main">
+          <span class="security-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-5"/></svg></span>
+          <span>모든 파일 도구는 브라우저 안에서 처리되도록 구성했습니다.</span>
         </div>
-
-        <div class="category-grid" id="categoryGrid"></div>
+        <div class="security-tags">
+          <span>서버 업로드 없음</span>
+          <span>개인정보 수집 없음</span>
+          <span>설치 없이 사용</span>
+        </div>
       </section>
 
-      <div class="ad-card" aria-label="광고 영역">
-        광고 영역<br>
-        반응형 디스플레이 광고 위치
-      </div>
+      <section class="section" id="popular">
+        <div class="section-head"><div><h2>많이 찾는 기능</h2><p>자주 쓰는 기능을 먼저 배치했습니다.</p></div></div>
 
-      <div class="notice-card">
-        파일 도구는 브라우저 기능을 이용해 처리합니다. 이미지와 PDF 파일은 서버에 업로드되지 않습니다.
-        계산 결과는 참고용이며 실제 제도와 개인 조건에 따라 달라질 수 있습니다.
-      </div>
+        <div class="popular-grid">
+          <a class="popular-card" href="image-compress.html">
+            <span class="ui-icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5-5 5-2-2-4 4"/></svg></span>
+            <strong>이미지 용량 줄이기</strong><span class="desc">JPG · PNG · WebP 압축</span>
+          </a>
+
+          <a class="popular-card" href="jpg-to-pdf.html">
+            <span class="ui-icon red"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M16 3v4h4"/><path d="M14 3h2l4 4v12"/><path d="M7 15h6"/></svg></span>
+            <strong>JPG → PDF</strong><span class="desc">이미지 여러 장을 PDF 하나로</span>
+          </a>
+
+          <a class="popular-card" href="pdf-to-jpg.html">
+            <span class="ui-icon orange"><svg viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M14 3v5h5"/><path d="M8 15h8"/></svg></span>
+            <strong>PDF → JPG</strong><span class="desc">PDF 페이지를 이미지로 저장</span>
+          </a>
+
+          <a class="popular-card" href="age.html">
+            <span class="ui-icon purple"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg></span>
+            <strong>만나이 계산</strong><span class="desc">생일 · 한국나이 · 다음 생일</span>
+          </a>
+
+          <a class="popular-card" href="dday.html">
+            <span class="ui-icon green"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></span>
+            <strong>D-Day 계산</strong><span class="desc">기념일 · 시험 · 행사까지</span>
+          </a>
+
+          <a class="popular-card" href="salary.html">
+            <span class="ui-icon orange"><svg viewBox="0 0 24 24"><path d="M6 6h12"/><path d="M8 4l4 16 4-16"/><path d="M5 11h14"/></svg></span>
+            <strong>연봉 계산</strong><span class="desc">월 실수령액 · 4대보험</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="section" id="all-menu">
+        <div class="section-head"><div><h2>전체 메뉴</h2><p>기능을 PDF, 이미지, 계산기, 날짜·변환으로 보기 쉽게 분류했습니다.</p></div></div>
+
+        <div class="menu-grid">
+          <section class="category-card" id="pdf-tools">
+            <div class="category-title">
+              <span class="ui-icon red"><svg viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M14 3v5h5"/><path d="M8 15h8M8 18h5"/></svg></span>
+              <span><strong>PDF 도구</strong><small>변환 · 합치기 · 분할</small></span>
+            </div>
+            <div class="tool-list">
+              <a class="tool-link" href="jpg-to-pdf.html"><span class="ui-icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5-5 5-2-2-4 4"/></svg></span><span><strong>JPG → PDF</strong><small>이미지를 PDF 하나로 변환</small></span><span class="arrow">→</span></a>
+              <a class="tool-link" href="pdf-to-jpg.html"><span class="ui-icon orange"><svg viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M14 3v5h5"/><path d="M8 15h8"/></svg></span><span><strong>PDF → JPG</strong><small>PDF 페이지를 이미지로 저장</small></span><span class="arrow">→</span></a>
+              <a class="tool-link" href="pdf-merge.html"><span class="ui-icon red"><svg viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M14 3v5h5"/><path d="M8 15h8M8 18h5"/></svg></span><span><strong>PDF 합치기</strong><small>여러 PDF 파일을 하나로</small></span><span class="arrow">→</span></a>
+              <a class="tool-link" href="pdf-split.html"><span class="ui-icon green"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><path d="M8 7.5 20 16"/><path d="M8 16.5 20 8"/></svg></span><span><strong>PDF 분할</strong><small>원하는 페이지만 추출</small></span><span class="arrow">→</span></a>
+            </div>
+          </section>
+
+          <section class="category-card" id="image-tools">
+            <div class="category-title">
+              <span class="ui-icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5-5 5-2-2-4 4"/></svg></span>
+              <span><strong>이미지 도구</strong><small>압축 · 변환</small></span>
+            </div>
+            <div class="tool-list">
+              <a class="tool-link" href="image-compress.html"><span class="ui-icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5-5 5-2-2-4 4"/></svg></span><span><strong>이미지 용량 줄이기</strong><small>JPG, PNG, WebP 압축 및 변환</small></span><span class="arrow">→</span></a>
+            </div>
+          </section>
+
+          <section class="category-card" id="calc-tools">
+            <div class="category-title">
+              <span class="ui-icon green"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h2M12 11h2M16 11h.01M8 15h2M12 15h2M16 15h.01"/></svg></span>
+              <span><strong>계산기</strong><small>급여 · 건강</small></span>
+            </div>
+            <div class="tool-list">
+              <a class="tool-link" href="salary.html"><span class="ui-icon orange"><svg viewBox="0 0 24 24"><path d="M6 6h12"/><path d="M8 4l4 16 4-16"/><path d="M5 11h14"/></svg></span><span><strong>연봉 계산기</strong><small>연봉 기준 월 실수령액 계산</small></span><span class="arrow">→</span></a>
+              <a class="tool-link" href="weekly-pay.html"><span class="ui-icon purple"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span><strong>주휴수당 계산기</strong><small>근무시간과 시급으로 계산</small></span><span class="arrow">→</span></a>
+              <a class="tool-link" href="bmi.html"><span class="ui-icon pink"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/><path d="M3.5 12H8l2-3 3 6 2-3h5.5"/></svg></span><span><strong>BMI 계산기</strong><small>키와 몸무게로 BMI 확인</small></span><span class="arrow">→</span></a>
+            </div>
+          </section>
+
+          <section class="category-card" id="date-tools">
+            <div class="category-title">
+              <span class="ui-icon purple"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg></span>
+              <span><strong>날짜·변환</strong><small>나이 · 디데이 · 음력</small></span>
+            </div>
+            <div class="tool-list">
+              <a class="tool-link" href="age.html"><span class="ui-icon purple"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg></span><span><strong>만나이 계산기</strong><small>생년월일 기준 만나이 계산</small></span><span class="arrow">→</span></a>
+              <a class="tool-link" href="dday.html"><span class="ui-icon green"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></span><span><strong>D-Day 계산기</strong><small>중요한 날짜까지 남은 일수</small></span><span class="arrow">→</span></a>
+              <a class="tool-link" href="lunar.html"><span class="ui-icon orange"><svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span><span><strong>음력 변환기</strong><small>양력과 음력 날짜 변환</small></span><span class="arrow">→</span></a>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="about-panel" id="about">
+        <div class="about-card">
+          <h2>생활편의 도구 소개</h2>
+          <p>생활편의 도구는 이미지, PDF, 계산기, 날짜 계산 기능을 무료로 제공하는 웹사이트입니다. 회원가입 없이 필요한 도구를 바로 사용할 수 있고, 모바일에서도 편하게 이용할 수 있도록 구성했습니다.</p>
+          <p>특히 이미지와 PDF 관련 기능은 사용자의 파일을 서버에 저장하지 않고 브라우저 안에서 처리하는 방향으로 설계했습니다.</p>
+        </div>
+
+        <div class="feature-grid">
+          <div class="feature-card"><span class="ui-icon green"><svg viewBox="0 0 24 24"><path d="M4 13.5 9.5 19 20 5"/></svg></span><strong>무료 사용</strong><span class="desc">별도 비용 없이 바로 사용할 수 있습니다.</span></div>
+          <div class="feature-card"><span class="ui-icon"><svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></span><strong>모바일 지원</strong><span class="desc">PC와 모바일 모두 편하게 이용할 수 있습니다.</span></div>
+          <div class="feature-card"><span class="ui-icon orange"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7 6 13 6 13s6-6 6-13z"/><circle cx="12" cy="8" r="2"/></svg></span><strong>설치 없음</strong><span class="desc">앱 설치 없이 브라우저에서 바로 실행됩니다.</span></div>
+          <div class="feature-card"><span class="ui-icon green"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span><strong>브라우저 내부 처리</strong><span class="desc">파일 도구는 로컬 브라우저에서 처리합니다.</span></div>
+        </div>
+      </section>
+
+      <div class="ad-card">광고 영역<br>반응형 디스플레이 광고 위치</div>
     </main>
 
-    <footer>
-        <div style="margin-bottom:10px;">
-            <a href="about.html">사이트 소개</a> |
-            <a href="privacy.html">개인정보처리방침</a> |
-            <a href="terms.html">이용약관</a>
-        </div>
+    <div class="footer-links">
+      <a href="about.html">사이트 소개</a>
+      <a href="privacy.html">개인정보처리방침</a>
+      <a href="terms.html">이용약관</a>
+      <a href="sitemap.xml">사이트맵</a>
+    </div>
 
-        <div>            
-            © 2026 생활편의 도구<br>
-            Designed &amp; Developed by Chulhee
-        </div>
+    <footer>
+      <strong>생활편의 도구</strong><br>
+      이미지 · PDF · 계산기 · 날짜도구를 한 곳에서 빠르게 이용하세요.<br><br>
+      © 2026 생활편의 도구<br>
+      Designed &amp; Developed by Chulhee
     </footer>
   </div>
 
   <nav class="bottom-nav" aria-label="모바일 하단 메뉴">
     <a class="active" href="index.html">홈</a>
-    <a href="image-compress.html">이미지</a>
-    <a href="pdf-merge.html">PDF</a>
-    <a href="#categories">분류</a>
+    <a href="#pdf-tools">PDF</a>
+    <a href="#image-tools">이미지</a>
+    <a href="#all-menu">메뉴</a>
   </nav>
-
-  <script>
-    const ICONS = {
-      image: '<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5-5 5-2-2-4 4"/></svg>',
-      pdf: '<svg viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M14 3v5h5"/><path d="M8 15h8M8 18h5"/></svg>',
-      split: '<svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><path d="M8 7.5 20 16"/><path d="M8 16.5 20 8"/></svg>',
-      money: '<svg viewBox="0 0 24 24"><path d="M6 6h12"/><path d="M8 4l4 16 4-16"/><path d="M5 11h14"/></svg>',
-      folder: '<svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>',
-      calculator: '<svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h2M12 11h2M16 11h.01M8 15h2M12 15h2M16 15h.01"/></svg>',
-      target: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="M12 2v3"/><path d="M12 19v3"/><path d="M2 12h3"/><path d="M19 12h3"/></svg>`,
-      calendar: '<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>',
-      moon: '<svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>',
-      heart: '<svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/><path d="M3.5 12H8l2-3 3 6 2-3h5.5"/></svg>'
-    };
-
-    /*
-      메뉴 추가 방법:
-      1) 아래 tools 배열에 객체를 하나 추가
-      2) category가 새로 필요하면 categories 배열에도 추가
-      3) icon은 ICONS에 있는 이름을 사용하거나 ICONS에 SVG를 추가
-    */
-    const tools = [
-      {
-        title: '이미지 용량 줄이기',
-        desc: 'JPG · PNG · WebP 압축/변환',
-        url: 'image-compress.html',
-        icon: 'image',
-        color: '',
-        keywords: '이미지 사진 용량 줄이기 압축 변환 jpg png webp',
-        shortcut: true
-      },
-      {
-        title: 'PDF 합치기',
-        desc: '여러 PDF를 하나로 합치기',
-        url: 'pdf-merge.html',
-        icon: 'pdf',
-        color: 'red',
-        keywords: 'pdf 합치기 병합 merge',
-        shortcut: true
-      },
-      {
-        title: 'PDF 분할',
-        desc: 'PDF에서 원하는 페이지만 추출',
-        url: 'pdf-split.html',
-        icon: 'split',
-        color: 'green',
-        keywords: 'pdf 분할 추출 페이지 split',
-        shortcut: true
-      },
-      {
-        title: '연봉 계산',
-        desc: '실수령액을 빠르게 확인',
-        url: 'salary.html',
-        icon: 'money',
-        color: 'orange',
-        keywords: '연봉 실수령액 월급 세금 4대보험',
-        shortcut: true
-      }
-    ];
-
-    const categories = [
-      {
-        title: '이미지 용량 줄이기',
-        desc: 'JPG · PNG · WebP 압축',
-        url: 'image-compress.html',
-        icon: 'image',
-        color: ''
-      },
-      {
-        title: 'PDF 합치기',
-        desc: '여러 PDF를 하나로',
-        url: 'pdf-merge.html',
-        icon: 'pdf',
-        color: 'red'
-      },
-      {
-        title: '연봉 계산',
-        desc: '실수령액 · 4대보험 계산',
-        url: 'salary.html',
-        icon: 'money',
-        color: 'green'
-      },
-      {
-        title: '주휴수당 계산',
-        desc: '주휴수당 · 시급 계산',
-        url: 'weekly-pay.html',
-        icon: 'calculator',
-        color: 'purple'
-      },
-      {
-        title: '만나이 계산',
-        desc: '생일 · 한국나이 · 다음 생일까지',
-        url: 'age.html',
-        icon: 'calendar',
-        color: 'blue',
-        keywords: '날짜 계산 만나이'
-      },
-      {
-        title: 'D-Day 계산',
-        desc: '기념일 · 시험 · 행사까지 남은 날짜',
-        url: 'dday.html',
-        icon: 'target',
-        color: 'orange',
-        keywords: '날짜 계산 dday'
-      },
-      {
-        title: '생활 변환',
-        desc: '음력변환',
-        url: 'lunar.html',
-        icon: 'moon',
-        color: 'orange',
-        keywords: '생활 변환 음력 양력'
-      },
-      {
-        title: '건강 계산',
-        desc: 'BMI',
-        url: 'bmi.html',
-        icon: 'heart',
-        color: 'pink',
-        keywords: '건강 계산 bmi 비만도'
-      }
-    ];
-
-    function iconMarkup(name, color){
-      return '<span class="ui-icon ' + (color || '') + '">' + ICONS[name] + '</span>';
-    }
-
-    function renderShortcuts(){
-      const shortcutGrid = document.getElementById('shortcutGrid');
-      const phoneGrid = document.getElementById('phoneGrid');
-
-      shortcutGrid.innerHTML = tools.filter(tool => tool.shortcut).map(tool => `
-        <a class="shortcut-card" href="${tool.url}" data-keywords="${tool.keywords}">
-          ${iconMarkup(tool.icon, tool.color)}
-          <strong>${tool.title}</strong>
-          <span class="desc">${tool.desc}</span>
-          <span class="arrow">→</span>
-        </a>
-      `).join('');
-
-      phoneGrid.innerHTML = tools.filter(tool => tool.shortcut).slice(0, 4).map(tool => `
-        <div class="phone-tool">
-          ${iconMarkup(tool.icon, tool.color)}
-          <strong>${tool.title}</strong>
-          <span>${tool.desc}</span>
-        </div>
-      `).join('');
-    }
-
-    function renderCategories(){
-      const categoryGrid = document.getElementById('categoryGrid');
-      categoryGrid.innerHTML = categories.map(category => `
-        <a class="category-card" href="${category.url}" data-keywords="${category.keywords}">
-          ${iconMarkup(category.icon, category.color)}
-          <strong>${category.title}</strong>
-          <span class="desc">${category.desc}</span>
-        </a>
-      `).join('');
-    }
-
-    renderShortcuts();
-    renderCategories();
-
-    const searchInput = document.getElementById('toolSearch');
-
-    if(searchInput){
-      searchInput.addEventListener('input', function(){
-        const keyword = this.value.trim().toLowerCase();
-        const searchableCards = Array.from(document.querySelectorAll('[data-keywords]'));
-
-        searchableCards.forEach(function(card){
-          const text = (card.innerText + ' ' + (card.dataset.keywords || '')).toLowerCase();
-          card.classList.toggle('is-hidden', Boolean(keyword) && !text.includes(keyword));
-        });
-      });
-    }
-
-    function focusTools(){
-      const target = document.getElementById('shortcuts');
-      if(target){
-        target.scrollIntoView({behavior:'smooth', block:'start'});
-      }
-    }
-  </script>
 </body>
 </html>
