@@ -1361,9 +1361,12 @@ input,textarea,select {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            model: "gpt-5-nano",
-            input: prompt,
-            max_output_tokens: 500
+            type: "hashtag",
+            topic: topic,
+            platform: platformInput.value,
+            mood: moodInput.value,
+            goal: goalInput.value,
+            count: Number(countInput.value)
           })
         });
 
