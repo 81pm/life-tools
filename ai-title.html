@@ -1038,7 +1038,7 @@ input,textarea,select {
         </select>
        </div>
        <div class="field">
-        <label for="style">제목 스타일 <span class="hint">기본 클릭유도형</span></label>
+        <label for="style">제목 스타일</label>
         <select id="style">
          <option selected value="click">클릭 유도형</option>
          <option value="seo">SEO 최적화형</option>
@@ -1275,8 +1275,7 @@ input,textarea,select {
        titleList.appendChild(item);
      });
 
-     copyText.textContent = titles.map((title, index) => `${index + 1}. ${title}`).join("
-");
+     copyText.textContent = titles.map((title, index) => `${index + 1}. ${title}`).join("\n");
      resultCount.textContent = titles.length + "개 생성";
      resultBox.style.display = "block";
    }
