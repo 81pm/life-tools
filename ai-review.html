@@ -634,6 +634,56 @@ button:disabled {
   word-break:break-all
 }
 
+
+.review-card {
+  width:100%;
+  padding:16px;
+  border-radius:20px;
+  background:#fff;
+  border:1px solid var(--line);
+}
+
+.review-card + .review-card {
+  margin-top:12px;
+}
+
+.review-card-head {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:10px;
+}
+
+.review-card-head strong {
+  font-size:13px;
+  color:#6d28d9;
+}
+
+.review-card-head button {
+  min-height:34px;
+  padding:0 11px;
+  border-radius:999px;
+  color:#334155;
+  background:#f8fafc;
+  border:1px solid var(--line);
+  box-shadow:none;
+  font-size:12px;
+  font-weight:850;
+}
+
+.review-card p {
+  margin:0;
+  color:#334155;
+  font-size:14px;
+  line-height:1.85;
+  white-space:pre-line;
+}
+
+.hidden-copy {
+  display:none !important;
+}
+
 .result-actions {
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -1043,9 +1093,9 @@ input,textarea,select {
         <div class="loading-line short"></div>
        </div>
        <div class="tagbox" id="reviewBox"></div>
-       <div class="copy" id="copyText"></div>
+       <div class="copy hidden-copy" id="copyText"></div>
        <div class="result-actions">
-        <button class="primary" onclick="copyReviews()" type="button">상품평 복사하기</button>
+        <button class="primary" onclick="copyReviews()" type="button">전체 상품평 복사하기</button>
         <button class="ghost" onclick="generateReviews(false)" type="button">다시 생성</button>
        </div>
       </section>
@@ -1205,7 +1255,7 @@ input,textarea,select {
         } else if (data.review) {
           reviews = [String(data.review).trim()].filter(Boolean);
         } else if (data.text) {
-          reviews = String(data.text).split(/\n+/).map((v) => v.trim()).filter(Boolean);
+          reviews = String(data.text).split(/\n{2,}/).map((v) => v.trim()).filter(Boolean);
         }
 
         reviews = [...new Set(reviews)].slice(0, Number(countInput.value));
@@ -1229,21 +1279,40 @@ input,textarea,select {
       }
     }
 
+    let generatedReviews = [];
+
     function renderReviews(reviews) {
+      generatedReviews = reviews;
       reviewBox.innerHTML = "";
 
       reviews.forEach((review, index) => {
         const el = document.createElement("div");
-        el.className = "copy";
-        el.style.margin = "0";
-        el.style.width = "100%";
-        el.textContent = review;
+        el.className = "review-card";
+        el.innerHTML = `
+          <div class="review-card-head">
+            <strong>상품평 ${index + 1}</strong>
+            <button type="button" onclick="copyReview(${index})">이 상품평 복사</button>
+          </div>
+          <p>${escapeHtml(review)}</p>
+        `;
         reviewBox.appendChild(el);
       });
 
       copyText.textContent = reviews.join("\n\n");
       resultCount.textContent = reviews.length + "개 생성";
       resultBox.style.display = "block";
+    }
+
+    async function copyReview(index) {
+      const text = String(generatedReviews[index] || "").trim();
+
+      if (!text) {
+        alert("복사할 상품평이 없습니다.");
+        return;
+      }
+
+      await copyToClipboard(text);
+      alert("상품평을 복사했습니다.");
     }
 
     async function copyReviews() {
@@ -1254,19 +1323,33 @@ input,textarea,select {
         return;
       }
 
-      if (navigator.clipboard) {
+      await copyToClipboard(text);
+      alert("전체 상품평을 복사했습니다.");
+    }
+
+    async function copyToClipboard(text) {
+      if (navigator.clipboard && window.isSecureContext) {
         await navigator.clipboard.writeText(text);
-        alert("상품평을 복사했습니다.");
         return;
       }
 
       const temp = document.createElement("textarea");
       temp.value = text;
+      temp.style.position = "fixed";
+      temp.style.left = "-9999px";
       document.body.appendChild(temp);
       temp.select();
       document.execCommand("copy");
       temp.remove();
-      alert("상품평을 복사했습니다.");
+    }
+
+    function escapeHtml(text) {
+      return String(text)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
     }
 
     function resetForm() {
@@ -1282,6 +1365,7 @@ input,textarea,select {
       resultBox.classList.remove("loading");
       reviewBox.innerHTML = "";
       copyText.textContent = "";
+      generatedReviews = [];
       resultCount.textContent = "0개 생성";
       productInput.focus();
     }
