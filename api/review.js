@@ -27,46 +27,57 @@ export default async function handler(req, res) {
       });
     }
 
-    const {
-      product = "",
-      feature = "",
-      tone = "natural",
-      length = "medium"
-    } = req.body || {};
+    const body = req.body || {};
 
-    if (!product.trim()) {
+    const product = String(body.product || "").trim();
+    const features = String(body.features || "").trim();
+    const tone = String(body.tone || "natural").trim();
+    const length = String(body.length || "medium").trim();
+    const count = Math.min(
+      Math.max(Number(body.count || 3), 1),
+      10
+    );
+
+    if (!product) {
       return res.status(400).json({
         error: "상품명을 입력해주세요."
       });
     }
 
     const prompt = `
-당신은 실제 구매자처럼 자연스러운 상품 후기를 작성하는 전문가입니다.
+당신은 실제 구매자 후기 작성 전문가입니다.
 
 상품명:
 ${product}
 
 특징:
-${feature}
+${features}
 
-톤:
+후기 스타일:
 ${tone}
 
-길이:
+후기 길이:
 ${length}
 
-조건:
-- 광고처럼 보이지 않게 작성
-- 실제 사용 후기처럼 작성
-- 과장 표현 금지
-- 이모지 사용 금지
-- 한국어로 작성
-- 제목 없이 본문만 작성
+후기 개수:
+${count}개
 
-길이 기준:
-short = 2~3문장
-medium = 5~7문장
-long = 10문장 이상
+규칙:
+
+- 서로 다른 후기 ${count}개 작성
+- 각 후기는 실제 사용자가 작성한 것처럼 자연스럽게 작성
+- 광고 문구 금지
+- 과장 표현 금지
+- 이모지 금지
+- 제목 금지
+- 번호 금지
+- 후기와 후기 사이는 ### 으로 구분
+
+길이 기준
+
+short : 2~3문장
+medium : 5~7문장
+long : 10문장 이상
 `;
 
     const response = await fetch(
@@ -80,7 +91,7 @@ long = 10문장 이상
         body: JSON.stringify({
           model: "gpt-4.1-mini",
           input: prompt,
-          max_output_tokens: 1000
+          max_output_tokens: 2000
         })
       }
     );
@@ -94,12 +105,26 @@ long = 10문장 이상
       });
     }
 
-    const review = extractText(data);
+    const raw = extractText(data);
+
+    let reviews = raw
+      .split("###")
+      .map(v => v.trim())
+      .filter(Boolean);
+
+    if (!reviews.length) {
+      reviews = [raw.trim()].filter(Boolean);
+    }
 
     return res.status(200).json({
       success: true,
-      review
+      review: reviews[0] || "",
+      reviews,
+      text: reviews.join("\n\n"),
+      count: reviews.length,
+      raw
     });
+
   } catch (error) {
     return res.status(500).json({
       error: "서버 오류",
@@ -109,7 +134,10 @@ long = 10문장 이상
 }
 
 function extractText(data) {
-  if (typeof data.output_text === "string") {
+  if (
+    typeof data.output_text === "string" &&
+    data.output_text.trim()
+  ) {
     return data.output_text.trim();
   }
 
