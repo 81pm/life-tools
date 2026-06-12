@@ -1202,6 +1202,8 @@ input,textarea,select {
 
         if (Array.isArray(data.reviews)) {
           reviews = data.reviews.map((v) => String(v).trim()).filter(Boolean);
+        } else if (data.review) {
+          reviews = [String(data.review).trim()].filter(Boolean);
         } else if (data.text) {
           reviews = String(data.text).split(/\n+/).map((v) => v.trim()).filter(Boolean);
         }
