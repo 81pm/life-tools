@@ -140,7 +140,7 @@
 
   <nav class="bottom-nav"><a href="index.html">홈</a><a class="active" href="pdf-merge.html">PDF</a><a href="image-compress.html">이미지</a><a href="pdf-split.html">분할</a></nav>
 
-  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@cantoo/pdf-lib@2.11.1/dist/pdf-lib.min.js"></script>
   <script>
     const fileInput = document.getElementById('fileInput');
     const dropZone = document.getElementById('dropZone');
@@ -150,6 +150,8 @@
     const resultBox = document.getElementById('result');
     let pdfFiles = [];
     let outputUrl = null;
+    let operationId = 0;
+    let merging = false;
 
     fileInput.addEventListener('change', () => addFiles(Array.from(fileInput.files || [])));
     ['dragenter','dragover'].forEach(name => dropZone.addEventListener(name, e => {e.preventDefault();dropZone.classList.add('dragover');}));
@@ -164,6 +166,9 @@
     }
 
     function renderList(){
+      operationId++;
+      setMerging(false);
+      clearOutput();
       fileList.innerHTML = '';
       pdfFiles.forEach((file, index) => {
         const row = document.createElement('div');
@@ -197,41 +202,75 @@
       renderList();
     }
 
+    function clearOutput(){
+      if(outputUrl) URL.revokeObjectURL(outputUrl);
+      outputUrl = null;
+      downloadBtn.removeAttribute('href');
+      downloadBtn.style.display = 'none';
+      resultBox.style.display = 'none';
+    }
+
+    function setMerging(value){
+      merging = value;
+      const button = actions.querySelector('.primary');
+      button.disabled = value;
+      button.textContent = value ? 'PDF 합치는 중...' : 'PDF 합치기';
+    }
+
     async function mergePdfs(){
+      if(merging) return;
+      clearOutput();
       if(!window.PDFLib){
-        alert('PDF 처리 라이브러리를 불러오지 못했습니다. 인터넷 연결 후 다시 시도해 주세요.');
+        alert('PDF 처리 라이브러리를 불러오지 못했습니다. 인터넷 연결을 확인하고 페이지를 새로고침해 주세요.');
         return;
       }
-
       if(pdfFiles.length < 2){
         alert('PDF 합치기는 2개 이상의 PDF가 필요합니다.');
         return;
       }
 
-      const mergedPdf = await PDFLib.PDFDocument.create();
-
-      for(const file of pdfFiles){
-        const bytes = await file.arrayBuffer();
-        const pdf = await PDFLib.PDFDocument.load(bytes);
-        const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-        copiedPages.forEach(page => mergedPdf.addPage(page));
+      const currentId = operationId;
+      const files = pdfFiles.slice();
+      let currentFile = null;
+      setMerging(true);
+      try{
+        const mergedPdf = await PDFLib.PDFDocument.create();
+        for(const file of files){
+          if(currentId !== operationId) return;
+          currentFile = file;
+          const bytes = await file.arrayBuffer();
+          if(currentId !== operationId) return;
+          // Explicitly decrypt PDFs that open without a password prompt.
+          const pdf = await PDFLib.PDFDocument.load(bytes, {password: ''});
+          if(currentId !== operationId) return;
+          if(pdf.getPageCount() < 1) throw new Error('PDF has no pages');
+          const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+          copiedPages.forEach(page => mergedPdf.addPage(page));
+        }
+        currentFile = null;
+        const mergedBytes = await mergedPdf.save();
+        if(currentId !== operationId) return;
+        const blob = new Blob([mergedBytes], {type:'application/pdf'});
+        outputUrl = URL.createObjectURL(blob);
+        downloadBtn.href = outputUrl;
+        downloadBtn.style.display = 'flex';
+        document.getElementById('resultTitle').textContent = 'PDF ' + files.length + '개 합치기 완료';
+        document.getElementById('detailText').innerHTML =
+          '선택한 PDF <strong>' + files.length + '개</strong>를 하나로 합쳤습니다. PDF는 <strong>서버에 업로드되지 않고</strong> 브라우저 안에서만 처리되었습니다. 결과 파일 크기는 <strong>' + formatBytes(blob.size) + '</strong>입니다.';
+        resultBox.style.display = 'block';
+        resultBox.scrollIntoView({behavior:'smooth', block:'nearest'});
+      }catch(error){
+        if(currentId !== operationId) return;
+        console.error('PDF 합치기 오류:', error);
+        const fileMessage = currentFile ? '파일: ' + currentFile.name + '\n' : '';
+        if(error && /NEEDS PASSWORD|Password incorrect|Input document to `PDFDocument\.load` is encrypted/i.test(error.message || '')){
+          alert(fileMessage + '이 PDF는 열기 비밀번호가 필요합니다. 비밀번호 보호를 해제한 사본을 선택해 주세요. 비밀번호 없이 열리는 PDF는 바로 처리할 수 있습니다.');
+        }else{
+          alert(fileMessage + 'PDF를 합치지 못했습니다. 파일이 손상되었거나 지원되지 않는 형식일 수 있습니다. 파일을 확인하고 다시 시도해 주세요.');
+        }
+      }finally{
+        if(currentId === operationId) setMerging(false);
       }
-
-      const mergedBytes = await mergedPdf.save();
-      const blob = new Blob([mergedBytes], {type:'application/pdf'});
-
-      if(outputUrl) URL.revokeObjectURL(outputUrl);
-      outputUrl = URL.createObjectURL(blob);
-
-      downloadBtn.href = outputUrl;
-      downloadBtn.style.display = 'flex';
-
-      document.getElementById('resultTitle').textContent = 'PDF ' + pdfFiles.length + '개 합치기 완료';
-      document.getElementById('detailText').innerHTML =
-        '선택한 PDF <strong>' + pdfFiles.length + '개</strong>를 하나로 합쳤습니다. PDF는 <strong>서버에 업로드되지 않고</strong> 브라우저 안에서만 처리되었습니다. 결과 파일 크기는 <strong>' + formatBytes(blob.size) + '</strong>입니다.';
-
-      resultBox.style.display = 'block';
-      resultBox.scrollIntoView({behavior:'smooth', block:'nearest'});
     }
 
     function resetTool(){
